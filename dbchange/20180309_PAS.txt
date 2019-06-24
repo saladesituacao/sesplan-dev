@@ -1,0 +1,7 @@
+ALTER TABLE sesplan.tb_pas ADD cod_inicio_efetivo INTEGER;
+ALTER TABLE sesplan.tb_pas ADD cod_fim_efetivo INTEGER;
+ALTER TABLE sesplan.tb_pas ADD cod_resultado INTEGER;
+
+ALTER TABLE sesplan.tb_pas ADD COLUMN dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+/*---------------------------------------------------------------------*/
+

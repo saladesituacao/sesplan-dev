@@ -1,0 +1,14 @@
+CREATE TABLE sesplan.tb_indicador_analise_temp
+(
+	cod_chave INTEGER,
+	cod_periodo INTEGER,
+	txt_analise TEXT,
+	txt_analise_2 TEXT,
+	txt_encaminhamento TEXT,
+	cod_usuario INTEGER,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
+ALTER TABLE sesplan.tb_indicador_analise_temp ADD PRIMARY KEY (cod_chave, cod_periodo);
+ALTER TABLE sesplan.tb_indicador_analise_temp ADD CONSTRAINT fk_tb_indicador_analise_temp_usuario FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/

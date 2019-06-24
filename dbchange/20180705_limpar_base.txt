@@ -1,0 +1,13 @@
+DELETE FROM SESPLAN.tb_indicador_analise;
+DELETE FROM SESPLAN.tb_indicador_analise_historico;
+DELETE FROM SESPLAN.tb_indicador_analise_regiao;
+DELETE FROM SESPLAN.tb_indicador_periodo;
+
+DELETE FROM SESPLAN.tb_pas_periodo;
+DELETE FROM SESPLAN.tb_pas_controle_historico;
+DELETE FROM SESPLAN.tb_pas_analise_historico;
+DELETE FROM SESPLAN.tb_pas_analise;
+
+DELETE FROM SESPLAN.tb_sag_periodo;
+DELETE FROM SESPLAN.tb_sag_analise_historico;
+DELETE FROM SESPLAN.tb_sag_analise;

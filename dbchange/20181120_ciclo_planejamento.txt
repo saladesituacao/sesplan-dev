@@ -1,0 +1,31 @@
+CREATE TABLE SESPLAN.tb_ciclo_planejamento_tipo
+(
+	cod_tipo_documento INTEGER NOT NULL,	
+	txt_tipo_documento VARCHAR(255) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_tipo_documento)
+);
+CREATE UNIQUE INDEX UQ_tb_tb_ciclo_planejamento_tipo ON sesplan.tb_ciclo_planejamento_tipo(txt_tipo_documento);
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_ciclo_planejamento_tipo(cod_tipo_documento, txt_tipo_documento, cod_ativo) VALUES(1, 'Cadeia de Valor', 1);
+INSERT INTO SESPLAN.tb_ciclo_planejamento_tipo(cod_tipo_documento, txt_tipo_documento, cod_ativo) VALUES(2, 'Mapa Estratégico', 1);
+INSERT INTO SESPLAN.tb_ciclo_planejamento_tipo(cod_tipo_documento, txt_tipo_documento, cod_ativo) VALUES(3, 'PDS', 1);
+INSERT INTO SESPLAN.tb_ciclo_planejamento_tipo(cod_tipo_documento, txt_tipo_documento, cod_ativo) VALUES(4, 'PPA', 1);
+INSERT INTO SESPLAN.tb_ciclo_planejamento_tipo(cod_tipo_documento, txt_tipo_documento, cod_ativo) VALUES(5, 'LDO', 1);
+INSERT INTO SESPLAN.tb_ciclo_planejamento_tipo(cod_tipo_documento, txt_tipo_documento, cod_ativo) VALUES(6, 'Acordo de Resultado com o Governador', 1);
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_ciclo_planejamento
+(
+	cod_tipo_documento INTEGER NOT NULL,	
+	txt_arquivo VARCHAR(255) NOT NULL,	
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+ALTER TABLE sesplan.tb_ciclo_planejamento ADD CONSTRAINT fk_tb_ciclo_planejamento_tipo FOREIGN KEY (cod_tipo_documento) REFERENCES SESPLAN.tb_ciclo_planejamento_tipo(cod_tipo_documento); 
+ALTER TABLE sesplan.tb_ciclo_planejamento ADD CONSTRAINT fk_tb_ciclo_planejamento_usu FOREIGN KEY (cod_usuario) REFERENCES SESPLAN.tb_usuario(cod_usuario); 
+
+/*-------------------------------------------------------------------------------------------------------------------*/

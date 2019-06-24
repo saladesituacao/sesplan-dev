@@ -1,0 +1,57 @@
+CREATE SEQUENCE sesplan.indicador START 1;
+CREATE TABLE sesplan.tb_indicador
+(
+	cod_chave INTEGER NOT NULL,
+	cod_eixo INTEGER NOT NULL,
+    cod_perspectiva INTEGER NOT NULL,
+    cod_diretriz INTEGER NOT NULL,
+	cod_objetivo INTEGER NOT NULL,
+	cod_objetivo_ppa INTEGER NOT NULL, 	
+	cod_indicador INTEGER NOT NULL,
+	cod_orgao INTEGER NOT NULL,
+	cod_meta INTEGER NOT NULL,
+	cod_modulo INTEGER NOT NULL,
+	txt_descricao_meta text NOT NULL
+)
+ALTER TABLE sesplan.tb_indicador ADD PRIMARY KEY ("cod_chave");
+ALTER TABLE sesplan.tb_indicador ADD CONSTRAINT fk_tb_indicador_eixo FOREIGN KEY (cod_eixo) REFERENCES sesplan.tb_eixo(cod_eixo);
+ALTER TABLE sesplan.tb_indicador ADD CONSTRAINT fk_tb_indicador_perspectiva FOREIGN KEY (cod_perspectiva) REFERENCES sesplan.tb_perspectiva(cod_perspectiva);
+ALTER TABLE sesplan.tb_indicador ADD CONSTRAINT fk_tb_indicador_diretriz FOREIGN KEY (cod_diretriz) REFERENCES sesplan.tb_diretriz(cod_diretriz);
+ALTER TABLE sesplan.tb_indicador ADD CONSTRAINT fk_tb_indicador_objetivo FOREIGN KEY (cod_objetivo) REFERENCES sesplan.tb_objetivo(cod_objetivo);
+ALTER TABLE sesplan.tb_indicador ADD CONSTRAINT fk_tb_indicador_objetivo_ppa FOREIGN KEY (cod_objetivo_ppa) REFERENCES sesplan.tb_objetivo_ppa(cod_objetivo_ppa);
+ALTER TABLE sesplan.tb_indicador ADD CONSTRAINT fk_tb_indicador_orgao FOREIGN KEY (cod_orgao) REFERENCES sesplan.tb_orgao(cod_orgao);
+ALTER TABLE sesplan.tb_indicador ADD CONSTRAINT fk_tb_indicador_modulo FOREIGN KEY (cod_modulo) REFERENCES sesplan.tb_modulo(cod_modulo);
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_indicador ADD COLUMN dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_indicador_detalhe
+(
+	cod_chave INTEGER NOT NULL,
+	cod_periodo INTEGER NOT NULL,
+    cod_numerador INTEGER NOT NULL,    
+	cod_denominador INTEGER NOT NULL,
+	cod_resultado INTEGER NOT NULL
+)
+ALTER TABLE sesplan.tb_indicador_detalhe ADD PRIMARY KEY (cod_chave, cod_periodo);
+ALTER TABLE sesplan.tb_indicador_detalhe ADD CONSTRAINT fk_tb_indicador_detalhe_chave FOREIGN KEY (cod_chave) REFERENCES sesplan.tb_indicador(cod_chave);
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+CREATE TABLE sesplan.tb_indicador_analise
+(
+	cod_chave INTEGER NOT NULL,
+	cod_periodo INTEGER NOT NULL,
+	txt_analise TEXT NOT NULL,
+	txt_ponto_forte TEXT NOT NULL,
+	txt_ponto_melhorar TEXT NOT NULL,
+	cod_orgao INTEGER NOT NULL
+)
+ALTER TABLE sesplan.tb_indicador_analise ADD PRIMARY KEY (cod_chave, cod_periodo);
+ALTER TABLE sesplan.tb_indicador_analise ADD CONSTRAINT fk_tb_indicador_analise_orgao FOREIGN KEY (cod_orgao) REFERENCES sesplan.tb_orgao(cod_orgao);
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/

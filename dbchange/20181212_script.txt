@@ -1,0 +1,11 @@
+ALTER TABLE SESPLAN.tb_modulo ADD cod_ordem INTEGER;
+ALTER TABLE SESPLAN.tb_modulo ADD txt_descricao VARCHAR(255);
+
+/*-----------------------------------------------------------*/
+
+UPDATE SESPLAN.tb_modulo SET cod_ordem = 1 WHERE cod_modulo = 3;
+UPDATE SESPLAN.tb_modulo SET cod_ordem = 2 WHERE cod_modulo = 1;
+UPDATE SESPLAN.tb_modulo SET cod_ordem = 3 WHERE cod_modulo = 2;
+UPDATE SESPLAN.tb_modulo SET cod_ordem = 4 WHERE cod_modulo = 4;
+
+/*-----------------------------------------------------------*/

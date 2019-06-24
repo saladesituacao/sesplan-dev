@@ -1,0 +1,5 @@
+ALTER TABLE SESPLAN.tb_orgao ADD cod_orgao_superior INTEGER;
+INSERT INTO SESPLAN.tb_sag_situacao_analise(cod_situacao, txt_situacao, cod_ativo) VALUES(6, 'Paralisada', 0);
+INSERT INTO SESPLAN.tb_status(cod_status, txt_status, cod_ativo) VALUES(23, 'Paralisada', 0);
+ALTER TABLE SESPLAN.tb_sag_analise ADD cod_migrado INTEGER;
+ALTER TABLE SESPLAN.tb_pas_analise ADD cod_migrado INTEGER;

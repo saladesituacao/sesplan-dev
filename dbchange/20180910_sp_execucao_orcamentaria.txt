@@ -1,0 +1,31 @@
+CREATE OR REPLACE FUNCTION SESPLAN.sp_execucao_orcamentaria() RETURNS integer AS $total$
+--DO $$
+DECLARE 	
+	v_dia INTEGER;
+	v_mes INTEGER;
+	v_ano INTEGER;
+	v_ultimo_dia INTEGER;
+	total INTEGER;
+BEGIN
+	Select INTO v_dia Extract('Day' From CURRENT_DATE) From CURRENT_DATE;
+	Select INTO v_mes Extract('Month' From CURRENT_DATE) From CURRENT_DATE;	 
+	Select INTO v_ano Extract('Year' From CURRENT_DATE) From CURRENT_DATE;	
+	
+	SELECT INTO v_ultimo_dia EXTRACT(DAY FROM ((v_ano||'/'||(v_mes + 1)||'/01'):: DATE - 1));
+	
+	IF v_dia = v_ultimo_dia THEN
+		INSERT INTO SESPLAN.tab_siggo_sesplan_historico
+		SELECT * FROM SESPLAN.tab_siggo_sesplan WHERE cast(inmes as integer) = v_mes;
+		--RAISE NOTICE 'SIM';
+		total := 1;
+	ELSE
+		--RAISE NOTICE '%', v_ultimo_dia;
+		total := 0;
+	END IF;
+	RETURN total;
+--END $$;
+END;
+$total$  LANGUAGE PLPGSQL;
+
+*/-------------------------------------------------------------------------------------*/
+GRANT EXECUTE ON FUNCTION SESPLAN.sp_execucao_orcamentaria() TO sesplan_app;

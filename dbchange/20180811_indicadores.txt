@@ -1,0 +1,28 @@
+INSERT INTO SESPLAN.tb_regiao_tipo(cod_regiao_tipo, txt_regiao_tipo, cod_ativo) VALUES(4, 'Região de Saúde', 1);
+INSERT INTO SESPLAN.tb_regiao_tipo(cod_regiao_tipo, txt_regiao_tipo, cod_ativo) VALUES(5, 'Hospitais/Hospitais Conveniados', 1);
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(0, 'Não Informada', 0);
+*----------------------------------------------------------------------------------------------------*/
+
+-- 1 = HOSPITAL; 2 = HOSPITAL CONVENIADO
+
+ALTER TABLE SESPLAN.tb_hospital ADD cod_tipo INTEGER DEFAULT 1 NOT NULL;
+
+/*--------------------------------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(12, 'Hospital Universitário de Brasília', 'HUB', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(13, 'Hospital das Forças Armadas', 'HFA', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(14, 'Hospital Santa Helena', 'HSH', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(15, 'Hospital Santa Lúcia', 'HSL', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(16, 'Hospital Santa Luzia', 'HSL', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(17, 'Hospital Anchieta', 'HA', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(18, 'Hospital Maternidade Brasília', 'HMB', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(19, 'Hospital Santa Marta', 'HSM', 0, 1, 2);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo, cod_tipo) VALUES(20, 'Hospital São Francisco', 'HSF', 0, 1, 2);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+UPDATE SESPLAN.tb_urd SET cod_ativo = 0 WHERE cod_urd = 1;
+UPDATE SESPLAN.tb_urd SET cod_ativo = 0 WHERE cod_urd = 2;
+INSERT INTO SESPLAN.tb_urd(cod_urd, txt_urd, cod_ativo, txt_sigla) VALUES(6, 'Complexo Regulador do Distrito Federal', 1, 'CRDF');
+
+/*---------------------------------------------------------------------------------------------------------*/

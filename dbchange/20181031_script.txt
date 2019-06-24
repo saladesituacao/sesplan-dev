@@ -1,0 +1,1 @@
+ALTER TABLE SESPLAN.tb_diretriz ADD txt_titulo VARCHAR(255);

@@ -1,0 +1,241 @@
+﻿CREATE TABLE SESPLAN.tb_auditoria_modulo
+(
+	cod_modulo_auditoria INTEGER NOT NULL,	
+	txt_modulo_auditoria VARCHAR(2000) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_modulo_auditoria)
+);
+
+/*----------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_auditoria_acao
+(
+	cod_acao_auditoria INTEGER NOT NULL,	
+	txt_acao_auditoria VARCHAR(2000) NOT NULL,	
+	cod_modulo_auditoria INTEGER,
+	cod_ativo INTEGER NOT NULL DEFAULT 1,	
+	PRIMARY KEY (cod_acao_auditoria)
+);
+ALTER TABLE sesplan.tb_auditoria_acao ADD CONSTRAINT fk_tb_aud_mod_aca FOREIGN KEY (cod_modulo_auditoria) REFERENCES sesplan.tb_auditoria_modulo(cod_modulo_auditoria); 
+
+/*----------------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_auditoria
+(
+	cod_auditoria INTEGER NOT NULL,	
+	cod_acao_auditoria INTEGER NOT NULL,
+	dt_auditoria TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	cod_usuario INTEGER NOT NULL,
+	cod_orgao INTEGER NOT NULL,
+	txt_historico TEXT,
+	txt_sql TEXT NOT NULL,	
+	PRIMARY KEY (cod_auditoria)
+);
+ALTER TABLE sesplan.tb_auditoria ADD CONSTRAINT fk_tb_auditoria_acao_aud FOREIGN KEY (cod_acao_auditoria) REFERENCES sesplan.tb_auditoria_acao(cod_acao_auditoria); 
+ALTER TABLE sesplan.tb_auditoria ADD CONSTRAINT fk_tb_auditoria_usuario FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario); 
+ALTER TABLE sesplan.tb_auditoria ADD CONSTRAINT fk_tb_auditoria_orgao FOREIGN KEY (cod_orgao) REFERENCES sesplan.tb_orgao(cod_orgao); 
+
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE SEQUENCE sesplan.S_AUDITORIA START 1 INCREMENT 1;
+
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(1, 'Área Responsável', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(2, 'Cargos', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(3, 'Instrumento de Planejamento', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(4, 'Produto da Etapa', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(5, 'Unidade de Medida', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(6, 'Perfis de Usuários', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(7, 'Situações', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(8, 'Usuários', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(9, 'Autenticação', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(10, 'Tabelas de Apoio', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(11, 'Relatórios', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(12, 'Programa de Trabalho', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(13, 'Eixo', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(14, 'Perspectiva', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(15, 'Diretriz', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(16, 'Objetivo', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(17, 'Objetivo PPA', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(18, 'Indicadores', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(19, 'Régua', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(20, 'PAS', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(21, 'SAG', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(22, 'Ciclo Planejamento', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(23, 'Execução Orçamentária', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(24, 'Plano de Ação', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(25, 'Estratégia Vinculada', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(26, 'Modelos de Mensagens', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(27, 'Programas', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(28, 'Saiba +', 1);
+INSERT INTO SESPLAN.tb_auditoria_modulo(cod_modulo_auditoria, txt_modulo_auditoria, cod_ativo) VALUES(29, 'Saiba + Tipo de Documento', 1);
+
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(1, 'AUTENTICAR USUÁRIO', 9);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(2, 'LISTAR ÁREA RESPONSÁVEL', 1);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(3, 'LISTAR TABELAS DE APOIO', 10);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(4, 'INCLUIR ÁREA RESPONSÁVEL', 1);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(5, 'ALTERAR ÁREA RESPONSÁVEL', 1);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(6, 'EXCLUIR ÁREA RESPONSÁVEL', 1);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(7, 'LISTAR CARGOS', 2);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(8, 'INCLUIR CARGO', 2);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(9, 'ALTERAR CARGO', 2);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(10, 'EXCLUIR CARGO', 2);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(11, 'LISTAR INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(12, 'INCLUIR INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(13, 'ALTERAR INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(14, 'EXCLUIR INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(15, 'LISTAR SITUAÇÕES DOS INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(16, 'INCLUIR SITUAÇÕES DOS INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(17, 'ALTERAR SITUAÇÕES DOS INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(18, 'EXCLUIR SITUAÇÕES DOS INSTRUMENTOS DE PLANEJAMENTO', 3);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(19, 'LISTAR PRODUTO DA ETAPA', 4);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(20, 'INCLUIR PRODUTO DA ETAPA', 4);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(21, 'ALTERAR PRODUTO DA ETAPA', 4);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(22, 'EXCLUIR PRODUTO DA ETAPA', 4);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(23, 'LISTAR UNIDADES DE MEDIDA', 5);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(24, 'INCLUIR UNIDADES DE MEDIDA', 5);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(25, 'ALTERAR UNIDADES DE MEDIDA', 5);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(26, 'EXCLUIR UNIDADES DE MEDIDA', 5);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(27, 'LISTAR SITUAÇÕES', 7);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(28, 'INCLUIR SITUAÇÕES', 7);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(29, 'ALTERAR SITUAÇÕES', 7);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(30, 'EXCLUIR SITUAÇÕES', 7);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(31, 'LISTAR PERFIS DE USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(32, 'INCLUIR PERFIS DE USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(33, 'ALTERAR PERFIS DE USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(34, 'EXCLUIR PERFIS DE USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(35, 'LISTAR USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(36, 'INCLUIR USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(37, 'VINCULAR UNIDADES DE USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(38, 'ALTERAR USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(39, 'EXCLUIR UNIDADES DE USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(40, 'EXCLUIR USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(41, 'ACESSAR RELATÓRIO DE AUDITORIA', 11);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(42, 'ACESSAR PROGRAMAS DE TRABALHO', 12);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(43, 'INCLUIR PROGRAMA DE TRABALHO', 12);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(44, 'ALTERAR PROGRAMA DE TRABALHO', 12);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(45, 'EXCLUIR PROGRAMA DE TRABALHO', 12);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(46, 'LISTAR EIXOS', 13);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(47, 'INCLUIR EIXO', 13);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(48, 'ALTERAR EIXO', 13);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(49, 'EXCLUIR EIXO', 13);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(50, 'LISTAR PERSPECTIVAS', 14);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(51, 'INCLUIR PERSPECTIVA', 14);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(52, 'ALTERAR PERSPECTIVA', 14);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(53, 'EXCLUIR PERSPECTIVA', 14);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(54, 'LISTAR DIRETRIZES', 15);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(55, 'INCLUIR DIRETRIZ', 15);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(56, 'ALTERAR DIRETRIZ', 15);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(57, 'EXCLUIR DIRETRIZ', 15);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(58, 'LISTAR OBJETIVOS', 16);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(59, 'INCLUIR OBJETIVO', 16);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(60, 'ALTERAR OBJETIVO', 16);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(61, 'EXCLUIR OBJETIVO', 16);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(62, 'LISTAR OBJETIVOS PPA', 17);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(63, 'INCLUIR OBJETIVO PPA', 17);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(64, 'ALTERAR OBJETIVO PPA', 17);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(65, 'EXCLUIR OBJETIVO PPA', 17);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(66, 'LISTAR PERÍODO DE ATUALIZAÇÃO DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(67, 'INCLUIR PERÍODO DE ATUALIZAÇÃO DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(68, 'ALTERAR PERÍODO DE ATUALIZAÇÃO DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(69, 'EXCLUIR PERÍODO DE ATUALIZAÇÃO DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(70, 'ENCERRAR PERÍODO DE ATUALIZAÇÃO DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(71, 'REABRIR PERÍODO DE ATUALIZAÇÃO DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(72, 'LISTAR INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(73, 'DETALHAR INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(74, 'INCLUIR INDICADOR', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(75, 'ALTERAR INDICADOR', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(76, 'EXCLUIR INDICADOR', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(77, 'HISTÓRICO DE ANÁLISE DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(78, 'FICHA TÉCNICA DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(79, 'ANÁLISE DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(80, 'INCLUIR ANÁLISE DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(81, 'ALTERAR ANÁLISE DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(82, 'INCLUIR HISTÓRICO DE ANÁLISE DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(83, 'EXCLUIR ANÁLISE DE INDICADORES', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(84, 'LISTAR RÉGUAS', 19);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(85, 'LISTAR PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(86, 'INCLUIR PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(87, 'ALTERAR PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(88, 'EXCLUIR PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(89, 'INCLUIR CONSIDERAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(90, 'ALTERAR CONSIDERAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(91, 'EXCLUIR CONSIDERAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(92, 'LISTAR PERÍODO DE ATUALIZAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(93, 'INCLUIR PERÍODO DE ATUALIZAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(94, 'ALTERAR PERÍODO DE ATUALIZAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(95, 'EXCLUIR PERÍODO DE ATUALIZAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(96, 'ENCERRAR PERÍODO DE ATUALIZAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(97, 'REABRIR PERÍODO DE ATUALIZAÇÃO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(98, 'FINALIZAR CADASTRO PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(99, 'INCLUIR CONTROLE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(100, 'LISTAR CONTROLE PAS', 20);	
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(101, 'ALTERAR CONTROLE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(102, 'ANÁLISE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(103, 'INCLUIR ANÁLISE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(104, 'ALTERAR ANÁLISE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(105, 'INCLUIR HISTÓRICO DE ANÁLISE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(106, 'HISTÓRICO DE ANÁLISE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(107, 'EXCLUIR CONTROLE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(108, 'EXCLUIR ANÁLISE PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(109, 'INCLUIR SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(110, 'ALTERAR SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(111, 'LISTAR SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(112, 'EXCLUIR SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(113, 'INCLUIR ANÁLISE SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(114, 'ALTERAR ANÁLISE SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(115, 'EXCLUIR ANÁLISE SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(116, 'ANÁLISE SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(117, 'LIMPAR DADOS PAS', 20);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(118, 'PERFIS DE USUÁRIOS PERMISSÃO DE ACESSO', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(119, 'LISTAR PERMISSÕES DE PERFIS DE USUÁRIOS', 6);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(120, 'LISTAR PERÍODO DE ATUALIZAÇÃO SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(121, 'INCLUIR PERÍODO DE ATUALIZAÇÃO SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(122, 'ALTERAR PERÍODO DE ATUALIZAÇÃO SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(123, 'EXCLUIR PERÍODO DE ATUALIZAÇÃO SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(124, 'ENCERRAR PERÍODO DE ATUALIZAÇÃO SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(125, 'REABRIR PERÍODO DE ATUALIZAÇÃO SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(126, 'INCLUIR HISTÓRICO DE ANÁLISE SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(127, 'HISTÓRICO DE ANÁLISE SAG', 21);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(128, 'INCLUIR HISTÓRICO DE ANÁLISE DE INDICADORES POR REGIÃO', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(129, 'LISTAR CICLO PLANEJAMENTO', 22);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(130, 'LISTAR EXECUÇÃO ORÇAMENTÁRIA', 23);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(131, 'INCLUIR ARQUIVO CICLO PLANEJAMENTO', 22);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(132, 'EXCLUIR ARQUIVO CICLO PLANEJAMENTO', 22);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(133, 'BLOQUEAR ANÁLISE', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(134, 'DESBLOQUEAR ANÁLISE', 18);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(135, 'HABILITAR PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(136, 'DESABILITAR PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(137, 'INCLUIR PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(138, 'ALTERAR PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(139, 'LISTAR PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(140, 'LISTAR TAREFAS PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(141, 'INCLUIR TAREFA PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(142, 'ALTERAR TAREFA PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(143, 'HABILITAR TAREFA PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(144, 'DESABILITAR TAREFA PLANO DE AÇÃO', 24);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(145, 'LISTAR ESTRATÉGIAS VINCULADAS', 25);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(146, 'INCLUIR ESTRATÉGIA VINCULADA', 25);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(147, 'EXCLUIR ESTRATÉGIA VINCULADA', 25);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(148, 'ALTERAR ESTRATÉGIA VINCULADA', 25);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(149, 'LISTAR MODELOS DE MENSAGENS', 26);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(150, 'INCLUIR MODELO DE MENSAGEM', 26);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(151, 'ALTERAR MODELO DE MENSAGEM', 26);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(152, 'EXCLUIR MODELO DE MENSAGEM', 26);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(153, 'LISTAR PROGRAMAS', 27);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(154, 'INCLUIR PROGRAMA', 27);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(155, 'EXCLUIR PROGRAMA', 27);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(156, 'ALTERAR PROGRAMA', 27);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(157, 'LISTAR SAIBA +', 28);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(158, 'INCLUIR ARQUIVO SAIBA +', 28);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(159, 'EXCLUIR ARQUIVO SAIBA +', 28);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(160, 'LISTAR TIPOS DE DOCUMENTOS', 29);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(161, 'INCLUIR TIPO DE DOCUMENTO', 29);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(162, 'ALTERAR TIPO DE DOCUMENTO', 29);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(163, 'EXCLUIR TIPO DE DOCUMENTO', 29);
+INSERT INTO SESPLAN.tb_auditoria_acao(cod_acao_auditoria, txt_acao_auditoria, cod_modulo_auditoria) VALUES(164, 'ACESSAR RELATÓRIO ANALÍTICO', 11);
+
+/*-------------------------------------------------------------------------------------------------------------------------------------*/

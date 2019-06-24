@@ -1,0 +1,17 @@
+CREATE TABLE SESPLAN.tb_pas_controle_historico
+(	
+	cod_pas INTEGER NOT NULL,	
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	txt_justificativa VARCHAR(20000),	
+	cod_usuario_autorizar INTEGER,
+	cod_autorizar INTEGER,
+	dt_autorizar TIMESTAMP,	
+	PRIMARY KEY (cod_pas)
+);
+
+ALTER TABLE sesplan.tb_pas_controle_historico ADD CONSTRAINT fk_tb_pas_hist_pas FOREIGN KEY (cod_pas) REFERENCES sesplan.tb_pas(cod_pas);
+
+ALTER TABLE sesplan.tb_pas_controle_historico ADD CONSTRAINT fk_tb_pas_hist_usu FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+
+ALTER TABLE sesplan.tb_pas_controle_historico ADD CONSTRAINT fk_tb_pas_hist_usu2 FOREIGN KEY (cod_usuario_autorizar) REFERENCES sesplan.tb_usuario(cod_usuario);

@@ -1,0 +1,135 @@
+ALTER TABLE sesplan.tb_perspectiva 
+   ADD CONSTRAINT fk_tb_perspectiva_eixo
+   FOREIGN KEY (cod_eixo) 
+   REFERENCES sesplan.tb_eixo(cod_eixo);
+   
+/*----------------------------------------------------------------------------------------------------------------------*/
+ALTER TABLE sesplan.tb_diretriz 
+   ADD CONSTRAINT fk_tb_diretriz_eixo
+   FOREIGN KEY (cod_eixo) 
+   REFERENCES sesplan.tb_eixo(cod_eixo);
+
+/*----------------------------------------------------------------------------------------------------------------------*/
+ALTER TABLE sesplan.tb_diretriz 
+   ADD CONSTRAINT fk_tb_diretriz_perspectiva
+   FOREIGN KEY (cod_perspectiva) 
+   REFERENCES sesplan.tb_perspectiva(cod_perspectiva);  
+   
+/*----------------------------------------------------------------------------------------------------------------------*/
+ALTER TABLE sesplan.tb_objetivo 
+   ADD CONSTRAINT fk_tb_objetivo_eixo
+   FOREIGN KEY (cod_eixo) 
+   REFERENCES sesplan.tb_eixo(cod_eixo);  
+   
+/*----------------------------------------------------------------------------------------------------------------------*/
+ALTER TABLE sesplan.tb_objetivo 
+   ADD CONSTRAINT fk_tb_objetivo_perspectiva
+   FOREIGN KEY (cod_perspectiva) 
+   REFERENCES sesplan.tb_perspectiva(cod_perspectiva);
+   
+/*----------------------------------------------------------------------------------------------------------------------*/
+ALTER TABLE sesplan.tb_diretriz 
+   ADD CONSTRAINT fk_tb_objetivo_diretriz
+   FOREIGN KEY (cod_diretriz) 
+   REFERENCES sesplan.tb_diretriz(cod_diretriz);
+   
+/*----------------------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE "sesplan"."tb_mes" (
+"cod_mes" int4 NOT NULL,
+"txt_mes" varchar(50) COLLATE "default" NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "sesplan"."tb_mes" ADD PRIMARY KEY ("cod_mes");
+
+/*-----------------------------------------------------------------------*/
+
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(1, 'Janeiro');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(2, 'Fevereiro');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(3, 'Março');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(4, 'Abril');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(5, 'Maio');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(6, 'Junho');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(7, 'Julho');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(8, 'Agosto');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(9, 'Setembro');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(10, 'Outubro');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(11, 'Novembro');
+INSERT INTO "sesplan".tb_mes(cod_mes, txt_mes) VALUES(12, 'Dezembro');
+
+/*-----------------------------------------------------------------------*/
+
+CREATE TABLE "sesplan"."tb_orgao" (
+"cod_orgao" int4 NOT NULL,
+"txt_sigla" varchar(200) COLLATE "default" NOT NULL,
+"cod_ativo" int4 NOT NULL 
+)
+WITH (OIDS=FALSE);
+
+CREATE UNIQUE INDEX UQ_tb_orgao ON sesplan.tb_orgao(txt_sigla) TABLESPACE pg_default;
+ALTER TABLE "sesplan"."tb_orgao" ADD PRIMARY KEY ("cod_orgao");
+ALTER TABLE sesplan.tb_orgao ALTER COLUMN cod_ativo SET DEFAULT 1;
+
+/*-----------------------------------------------------------------------*/
+
+INSERT INTO "sesplan"."tb_orgao"(cod_orgao, txt_sigla, cod_ativo) VALUES(1, 'SAIS/COAPS/DAEAP', 1);
+INSERT INTO "sesplan"."tb_orgao"(cod_orgao, txt_sigla, cod_ativo) VALUES(2, 'SAIS/COAPS/DAEAP/GCV', 1);
+INSERT INTO "sesplan"."tb_orgao"(cod_orgao, txt_sigla, cod_ativo) VALUES(3, 'SAIS/CORIS/DIAM/GEO', 1);
+
+/*-----------------------------------------------------------------------*/
+
+CREATE SEQUENCE sesplan.pas START 1;
+
+CREATE TABLE sesplan.tb_pas
+(
+	cod_pas integer NOT NULL,
+    cod_eixo integer NOT NULL,
+    cod_perspectiva integer NOT NULL,
+    cod_diretriz integer NOT NULL,
+	cod_objetivo integer NOT NULL,
+	cod_objetivo_ppa integer NOT NULL,    
+	txt_acao varchar(1000) NOT NULL,
+	cod_orgao integer NOT NULL,
+	cod_inicio_previsto integer NOT NULL,
+	cod_fim_previsto integer NOT NULL,
+	cod_ativo integer NOT NULL,
+    PRIMARY KEY (cod_pas)
+)
+WITH (
+    OIDS = FALSE
+)
+
+ALTER TABLE sesplan.tb_pas ALTER COLUMN cod_ativo SET DEFAULT 1;
+
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_eixo
+   FOREIGN KEY (cod_eixo) 
+   REFERENCES sesplan.tb_eixo(cod_eixo);
+   
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_perspectiva
+   FOREIGN KEY (cod_perspectiva) 
+   REFERENCES sesplan.tb_perspectiva(cod_perspectiva);
+   
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_diretriz
+   FOREIGN KEY (cod_diretriz) 
+   REFERENCES sesplan.tb_diretriz(cod_diretriz);
+   
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_objetivo
+   FOREIGN KEY (cod_objetivo) 
+   REFERENCES sesplan.tb_objetivo(cod_objetivo);
+   
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_objetivo_ppa
+   FOREIGN KEY (cod_objetivo_ppa) 
+   REFERENCES sesplan.tb_objetivo_ppa(cod_objetivo_ppa);
+   
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_orgao
+   FOREIGN KEY (cod_orgao) 
+   REFERENCES sesplan.tb_orgao(cod_orgao);
+   
+   /*-----------------------------------------------------------------------*/

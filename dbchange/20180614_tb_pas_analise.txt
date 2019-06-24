@@ -1,0 +1,27 @@
+CREATE TABLE SESPLAN.tb_pas_analise
+(
+	cod_pas INTEGER NOT NULL,	
+	cod_bimestre INTEGER NOT NULL,	
+	txt_justificativa VARCHAR(2000),
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,	
+	PRIMARY KEY (cod_pas, cod_bimestre)
+);
+
+ALTER TABLE sesplan.tb_pas_analise ADD CONSTRAINT fk_tb_pas_ana FOREIGN KEY (cod_pas) REFERENCES sesplan.tb_pas(cod_pas);
+ALTER TABLE sesplan.tb_pas_analise ADD CONSTRAINT fk_tb_pas_bim FOREIGN KEY (cod_bimestre) REFERENCES sesplan.tb_pas_mes(cod_mes);
+ALTER TABLE sesplan.tb_pas_analise ADD CONSTRAINT fk_tb_pas_usua FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_pas_analise_historico
+(
+	cod_pas INTEGER NOT NULL,	
+	cod_bimestre INTEGER NOT NULL,	
+	txt_justificativa VARCHAR(2000),
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL,
+	dt_inclusao_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP	
+);
+
+/*---------------------------------------------------------------------------------------------------------*/

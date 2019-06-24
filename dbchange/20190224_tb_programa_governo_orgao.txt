@@ -1,0 +1,28 @@
+CREATE SEQUENCE "sesplan"."cod_programa_governo_orgao_seq"
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+ 
+/*-----------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_programa_governo_orgao
+(
+	cod_programa_governo_orgao integer DEFAULT nextval('"sesplan".cod_programa_governo_orgao_seq'::regclass) NOT NULL,
+	cod_programa_governo integer NOT NULL,        
+	cod_orgao integer NOT NULL,	
+    PRIMARY KEY (cod_programa_governo_orgao)
+)
+WITH (
+    OIDS = FALSE
+);
+
+CREATE UNIQUE INDEX UQ_tb_programa_governo_orgao ON sesplan.tb_programa_governo_orgao(cod_programa_governo, cod_orgao);
+
+/*-----------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_programa_governo_orgao ADD CONSTRAINT fk_tb_prg_gov_orgao_prg_gov FOREIGN KEY (cod_programa_governo)  REFERENCES sesplan.tb_programa_governo(cod_programa_governo);
+ALTER TABLE sesplan.tb_programa_governo_orgao ADD CONSTRAINT fk_tb_prg_gov_orgao_orgao FOREIGN KEY (cod_orgao)  REFERENCES sesplan.tb_orgao(cod_orgao);
+
+/*-----------------------------------------------------------------------*/

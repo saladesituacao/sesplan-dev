@@ -1,0 +1,4 @@
+ALTER TABLE SESPLAN.tb_orgao ADD txt_descricao VARCHAR(500);
+ALTER TABLE SESPLAN.tb_orgao ADD txt_codigo VARCHAR(50);
+ALTER TABLE SESPLAN.tb_indicador ADD cod_responsavel_tecnico INTEGER;
+ALTER TABLE SESPLAN.tb_indicador ADD CONSTRAINT fk_tb_indicador_respon FOREIGN KEY (cod_responsavel_tecnico) REFERENCES SESPLAN.tb_orgao(cod_orgao); 

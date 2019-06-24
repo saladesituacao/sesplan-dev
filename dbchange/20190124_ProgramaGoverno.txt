@@ -1,0 +1,323 @@
+CREATE TABLE SESPLAN.tb_secretaria
+( 
+	cod_secretaria INTEGER NOT NULL,	
+	txt_secretaria VARCHAR(255) NOT NULL,	
+	txt_sigla VARCHAR(255) NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_secretaria)
+);
+CREATE UNIQUE INDEX UQ_tb_secretaria ON sesplan.tb_secretaria(txt_secretaria);
+
+/*--------------------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_secretaria(cod_secretaria, txt_secretaria, cod_ativo) VALUES(1, 'Casa Civil', 1);
+INSERT INTO SESPLAN.tb_secretaria(cod_secretaria, txt_secretaria, cod_ativo) VALUES(2, 'Secretaria de Saúde', 1);
+
+/*--------------------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_programa_governo
+(
+	cod_programa_governo INTEGER NOT NULL,	
+	txt_programa_governo VARCHAR(255) NOT NULL,			
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_programa_governo)
+);
+CREATE UNIQUE INDEX UQ_tb_programa_governo ON sesplan.tb_programa_governo(cod_programa_governo);
+
+/*--------------------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_programa_governo(cod_programa_governo, txt_programa_governo, cod_ativo) VALUES(1, 'SOS DF', 1);
+INSERT INTO SESPLAN.tb_programa_governo(cod_programa_governo, txt_programa_governo, cod_ativo) VALUES(2, '100 Dias', 1);
+
+/*--------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+DROP TABLE IF EXISTS "sesplan"."tb_fonte_recurso";
+CREATE TABLE "sesplan"."tb_fonte_recurso" (
+"cod_fonte_recurso" int4 NOT NULL,
+"txt_fonte_recurso" varchar(500) COLLATE "default" NOT NULL
+)
+WITH (OIDS=FALSE)
+
+;
+
+-- ----------------------------
+ALTER TABLE "sesplan"."tb_fonte_recurso" ADD PRIMARY KEY ("cod_fonte_recurso");
+
+
+
+DROP TABLE IF EXISTS "sesplan"."tb_fonte_recurso_orcamento";
+CREATE TABLE "sesplan"."tb_fonte_recurso_orcamento" (
+"cod_fonte_recurso_orcamento" int4 NOT NULL,
+"cod_fonte_recurso" int4 NOT NULL,
+"txt_fonte_recurso_orcamento" varchar(500) COLLATE "default" NOT NULL
+)
+WITH (OIDS=FALSE)
+
+;
+
+
+CREATE SEQUENCE "sesplan"."cod_plano_acao_seq"
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+
+CREATE SEQUENCE "sesplan"."cod_atividade_plano_acao_seq"
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+
+ CREATE SEQUENCE "sesplan"."cod_tarefa_atividade_seq"
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+
+
+
+-- ----------------------------
+-- Table structure for tb_plano_acao
+-- ----------------------------
+DROP TABLE IF EXISTS "sesplan"."tb_plano_acao";
+CREATE TABLE "sesplan"."tb_plano_acao" (
+"cod_plano_acao" int4 DEFAULT nextval('"sesplan".cod_plano_acao_seq'::regclass) NOT NULL,
+"nr_acao" varchar(20) COLLATE "default" NOT NULL,
+"cod_secretaria" int4 NOT NULL,
+"cod_programa_governo" int4 NOT NULL,
+"txt_projeto_acao" varchar(8000) COLLATE "default" NOT NULL,
+"txt_escopo_atividade" varchar(8000) COLLATE "default",
+"dt_inicial" date,
+"dt_final" date,
+"nr_valor" numeric(10,2),
+"txt_valor" varchar(255) COLLATE "default",
+"dt_inauguracao_lancamento" date,
+"nr_status_percentual_execucao" varchar(50) COLLATE "default",
+"nr_processo_sei" varchar(50) COLLATE "default",
+"txt_reporte_execucao" varchar(1000) COLLATE "default",
+"txt_entraves_riscos" varchar(1000) COLLATE "default",
+"txt_desburocratizacao" varchar(1000) COLLATE "default",
+"cod_usuario_responsavel" int4,
+"ind_habilitado" char(1) COLLATE "default" DEFAULT 'S'::bpchar,
+"cod_usuario" int4 NOT NULL,
+"dt_atualizacao" timestamp(6) NOT NULL,
+"cod_fonte_recurso_orcamento" int4,
+"cod_fonte_recurso" int4,
+"cod_orgao" int4,
+"cod_objetivo" int4 NOT NULL
+)
+WITH (OIDS=FALSE)
+
+;
+
+-- ----------------------------
+-- Alter Sequences Owned By 
+-- ----------------------------
+
+-- ----------------------------
+-- Primary Key structure for table tb_plano_acao
+-- ----------------------------
+ALTER TABLE "sesplan"."tb_plano_acao" ADD PRIMARY KEY ("cod_plano_acao");
+
+-- ----------------------------
+-- Foreign Key structure for table "sesplan"."tb_plano_acao"
+-- ----------------------------
+ALTER TABLE "sesplan"."tb_plano_acao" ADD FOREIGN KEY ("cod_objetivo") REFERENCES "sesplan"."tb_objetivo" ("cod_objetivo") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "sesplan"."tb_plano_acao" ADD FOREIGN KEY ("cod_fonte_recurso") REFERENCES "sesplan"."tb_fonte_recurso" ("cod_fonte_recurso") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "sesplan"."tb_plano_acao" ADD FOREIGN KEY ("cod_orgao") REFERENCES "sesplan"."tb_orgao" ("cod_orgao") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+-- ----------------------------
+ALTER TABLE "sesplan"."tb_fonte_recurso_orcamento" ADD PRIMARY KEY ("cod_fonte_recurso_orcamento");
+-- Foreign Key structure for table "sesplan"."tb_plano_acao"
+-- ----------------------------
+
+
+/*----------------------------------------------------------------------------------------------*/
+
+
+ALTER TABLE "sesplan"."tb_objetivo" ADD PRIMARY KEY ("cod_objetivo");
+
+/*----------------------------------------------------------------------------------------------------*/
+
+CREATE SEQUENCE "sesplan"."cod_cod_acao_estrategia_seq"
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+
+CREATE TABLE sesplan.tb_plano_acao_estrategia_vinculada
+(
+	cod_acao_estrategia integer DEFAULT nextval('"sesplan".cod_cod_acao_estrategia_seq'::regclass) NOT NULL,
+	cod_estrategia integer NOT NULL,        
+	cod_plano_acao integer NOT NULL,	
+    PRIMARY KEY (cod_acao_estrategia)
+)
+WITH (
+    OIDS = FALSE
+);
+CREATE UNIQUE INDEX UQ_tb_plano_acao_estrategia_vinculada ON sesplan.tb_plano_acao_estrategia_vinculada(cod_estrategia, cod_plano_acao);
+
+
+/*----------------------------------------------------------------------------------------------------*/
+
+
+
+
+-- ----------------------------
+-- Table structure for tb_atividade_plano_acao
+-- ----------------------------
+DROP TABLE IF EXISTS "sesplan"."tb_atividade_plano_acao";
+CREATE TABLE "sesplan"."tb_atividade_plano_acao" (
+"cod_atividade_plano_acao" int4 DEFAULT nextval('"sesplan".cod_atividade_plano_acao_seq'::regclass) NOT NULL,
+"cod_plano_acao" int4 NOT NULL,
+"nr_atividade" varchar(20) COLLATE "default",
+"txt_atividade" varchar(8000) COLLATE "default",
+"nr_valor" numeric(10,2),
+"cod_fonte_recurso" int4,
+"cod_fonte_recurso_orcamento" int4,
+"dt_inicial" date,
+"dt_final" date,
+"dt_inauguracao_lancamento" date,
+"nr_status_percentual_execucao" varchar(50) COLLATE "default",
+"nr_processo_sei" varchar(50) COLLATE "default",
+"txt_reporte_execucao" varchar(8000) COLLATE "default",
+"txt_entraves_riscos" varchar(8000) COLLATE "default",
+"txt_desburocratizacao" varchar(8000) COLLATE "default",
+"cod_orgao" int4,
+"cod_usuario_responsavel" int4,
+"cod_usuario" int4 NOT NULL,
+"dt_atualizacao" timestamp(6) NOT NULL,
+"ind_habilitado" char(1) COLLATE "default" DEFAULT 'S'::bpchar
+)
+WITH (OIDS=FALSE)
+
+;
+
+-- ----------------------------
+-- Alter Sequences Owned By 
+-- ----------------------------
+
+-- ----------------------------
+-- Primary Key structure for table tb_atividade_plano_acao
+-- ----------------------------
+ALTER TABLE "sesplan"."tb_atividade_plano_acao" ADD PRIMARY KEY ("cod_atividade_plano_acao");
+
+
+
+
+
+-- ----------------------------
+-- Table structure for tb_tarefa_atividade
+-- ----------------------------
+DROP TABLE IF EXISTS "sesplan"."tb_tarefa_atividade";
+CREATE TABLE "sesplan"."tb_tarefa_atividade" (
+"cod_tarefa_atividade" int4 DEFAULT nextval('"sesplan".cod_tarefa_atividade_seq'::regclass) NOT NULL,
+"cod_atividade_plano_acao" int4 NOT NULL,
+"nr_tarefa" varchar(20) COLLATE "default",
+"txt_tarefa" varchar(8000) COLLATE "default",
+"nr_valor" numeric(10,2),
+"cod_fonte_recurso" int4,
+"cod_fonte_recurso_orcamento" int4,
+"dt_inicial" date,
+"dt_final" date,
+"dt_inauguracao_lancamento" date,
+"nr_status_percentual_execucao" varchar(50) COLLATE "default",
+"nr_processo_sei" varchar(50) COLLATE "default",
+"txt_reporte_execucao" varchar(8000) COLLATE "default",
+"txt_entraves_riscos" varchar(8000) COLLATE "default",
+"txt_desburocratizacao" varchar(8000) COLLATE "default",
+"cod_orgao" int4,
+"cod_usuario_responsavel" int4,
+"cod_usuario" int4 NOT NULL,
+"dt_atualizacao" timestamp(6) NOT NULL,
+"ind_habilitado" char(1) COLLATE "default" DEFAULT 'S'::bpchar
+)
+WITH (OIDS=FALSE)
+
+;
+
+-- ----------------------------
+-- Alter Sequences Owned By 
+-- ----------------------------
+
+-- ----------------------------
+-- Primary Key structure for table tb_tarefa_atividade
+-- ----------------------------
+ALTER TABLE "sesplan"."tb_tarefa_atividade" ADD PRIMARY KEY ("cod_tarefa_atividade");
+
+
+
+
+
+GRANT ALL ON TABLE sesplan.tb_plano_acao TO postgres;
+GRANT ALL ON TABLE SESPLAN.tb_programa_governo TO postgres;
+GRANT ALL ON TABLE SESPLAN.tb_secretaria TO postgres;
+GRANT ALL ON TABLE SESPLAN.tb_atividade_plano_acao TO postgres;
+GRANT ALL ON TABLE SESPLAN.tb_tarefa_atividade TO postgres;
+GRANT ALL ON TABLE SESPLAN.tb_fonte_recurso TO postgres;
+GRANT ALL ON TABLE SESPLAN.tb_fonte_recurso_orcamento TO postgres;
+
+
+
+GRANT ALL ON TABLE sesplan.tb_plano_acao TO sesplan_app;
+GRANT ALL ON TABLE SESPLAN.tb_programa_governo  TO sesplan_app;
+GRANT ALL ON TABLE SESPLAN.tb_secretaria TO sesplan_app;
+GRANT ALL ON TABLE SESPLAN.tb_atividade_plano_acao TO sesplan_app;
+GRANT ALL ON TABLE SESPLAN.tb_tarefa_atividade TO sesplan_app;
+GRANT ALL ON TABLE SESPLAN.tb_fonte_recurso TO sesplan_app;
+GRANT ALL ON TABLE SESPLAN.tb_fonte_recurso_orcamento TO sesplan_app;
+
+
+
+
+
+ALTER SEQUENCE sesplan.cod_plano_acao_seq
+    OWNER TO postgres;
+GRANT ALL ON SEQUENCE sesplan.cod_plano_acao_seq TO postgres;
+GRANT ALL ON SEQUENCE sesplan.cod_plano_acao_seq TO sesplan_app;
+
+
+ ALTER SEQUENCE sesplan.cod_atividade_plano_acao_seq
+    OWNER TO postgres;
+
+GRANT ALL ON SEQUENCE sesplan.cod_atividade_plano_acao_seq TO postgres;
+GRANT ALL ON SEQUENCE sesplan.cod_atividade_plano_acao_seq TO sesplan_app;
+
+
+ALTER SEQUENCE sesplan.cod_tarefa_atividade_seq
+    OWNER TO postgres;
+
+GRANT ALL ON SEQUENCE sesplan.cod_tarefa_atividade_seq TO postgres;
+GRANT ALL ON SEQUENCE sesplan.cod_tarefa_atividade_seq TO sesplan_app;
+
+
+GRANT ALL ON SEQUENCE sesplan.cod_cod_acao_estrategia_seq TO postgres;
+GRANT ALL ON SEQUENCE sesplan.cod_cod_acao_estrategia_seq TO sesplan_app;
+
+
+
+GRANT ALL ON TABLE sesplan.tb_plano_acao TO postgres;
+GRANT ALL ON TABLE sesplan.tb_atividade_plano_acao TO postgres;
+GRANT ALL ON TABLE sesplan.tb_tarefa_atividade TO postgres;
+GRANT ALL ON TABLE sesplan.tb_plano_acao_estrategia_vinculada TO postgres;
+
+GRANT ALL ON TABLE sesplan.tb_plano_acao TO sesplan_app;
+GRANT ALL ON TABLE sesplan.tb_atividade_plano_acao TO sesplan_app;
+GRANT ALL ON TABLE sesplan.tb_tarefa_atividade TO sesplan_app;
+GRANT ALL ON TABLE sesplan.tb_plano_acao_estrategia_vinculada TO sesplan_app;
+
+GRANT ALL ON SEQUENCE sesplan.cod_cod_acao_estrategia_seq TO postgres;
+GRANT ALL ON SEQUENCE sesplan.cod_cod_acao_estrategia_seq TO sesplan_app;

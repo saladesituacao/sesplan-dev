@@ -1,0 +1,32 @@
+ALTER TABLE sesplan.tb_orgao ADD cod_exibir_consulta INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE sesplan.tb_modulo ADD cod_exibir_consulta INTEGER NOT NULL DEFAULT 0;
+
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_modulo ADD cod_ativo INTEGER DEFAULT 1;
+
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_pas ADD cod_parceiro INTEGER;
+
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_parce
+   FOREIGN KEY (cod_parceiro) 
+   REFERENCES sesplan.tb_orgao(cod_orgao);
+   
+  
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+
+ALTER TABLE sesplan.tb_pas ADD cod_modulo INTEGER NOT NULL;
+
+ALTER TABLE sesplan.tb_pas 
+   ADD CONSTRAINT fk_tb_pas_modulo
+   FOREIGN KEY (cod_modulo) 
+   REFERENCES sesplan.tb_modulo(cod_modulo);
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_pas ADD cod_meta INTEGER NOT NULL;
+
+/*-----------------------------------------------------------------------------------------------------------------*/

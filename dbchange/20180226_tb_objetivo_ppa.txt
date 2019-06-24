@@ -1,0 +1,28 @@
+CREATE TABLE sesplan.tb_objetivo_ppa
+(
+    cod_objetivo_ppa integer NOT NULL,
+	cod_eixo integer NOT NULL REFERENCES sesplan.tb_eixo (cod_eixo),
+	cod_perspectiva integer NOT NULL REFERENCES sesplan.tb_perspectiva (cod_perspectiva),
+	cod_diretriz integer NOT NULL REFERENCES sesplan.tb_diretriz (cod_diretriz),
+	cod_objetivo integer NOT NULL REFERENCES sesplan.tb_objetivo (cod_objetivo),
+    txt_objetivo_ppa varchar(500) NOT NULL,
+    txt_descricao CHAR(200) NULL,
+    cod_ativo integer NOT NULL,
+    PRIMARY KEY (cod_objetivo_ppa)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_objetivo_ppa
+    OWNER to postgres;
+
+CREATE UNIQUE INDEX UQ_tb_objetivo_ppa ON sesplan.tb_objetivo_ppa(cod_eixo, cod_perspectiva, cod_diretriz, cod_objetivo, txt_objetivo_ppa) TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_objetivo_ppa ALTER COLUMN cod_ativo SET DEFAULT 1;
+/*----------------------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_objetivo_ppa ALTER COLUMN txt_objetivo_ppa TYPE text;
+
+/*----------------------------------------------------------------------------------------------------------------------*/

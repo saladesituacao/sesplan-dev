@@ -1,0 +1,10 @@
+CREATE TABLE sesplan.tb_indicador_hospital
+(
+	cod_chave INTEGER NOT NULL,
+	cod_hospital INTEGER NOT NULL
+)
+ALTER TABLE sesplan.tb_indicador_hospital ADD PRIMARY KEY (cod_chave, cod_hospital);
+ALTER TABLE sesplan.tb_indicador_hospital ADD CONSTRAINT fk_tb_indicador_hospital_indic FOREIGN KEY (cod_chave) 
+	REFERENCES sesplan.tb_indicador(cod_chave);
+ALTER TABLE sesplan.tb_indicador_hospital ADD CONSTRAINT fk_tb_indicador_hospital_hosp FOREIGN KEY (cod_hospital) 
+	REFERENCES sesplan.tb_hospital(cod_hospital);

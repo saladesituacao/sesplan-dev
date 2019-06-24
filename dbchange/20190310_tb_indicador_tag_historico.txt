@@ -1,0 +1,11 @@
+CREATE TABLE sesplan.tb_indicador_tag_historico
+(
+	ds_tag_categoria varchar(255),
+	ds_tag varchar(255),
+    co_indicador varchar(255),
+	data_extracao timestamp,
+	ds_titulo varchar(255),
+	ds_periodicidade varchar(255),
+	ds_polaridade varchar(255),
+	cod_ano integer not null
+)

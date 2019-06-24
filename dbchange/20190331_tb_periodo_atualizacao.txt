@@ -1,0 +1,74 @@
+DROP TABLE sesplan.tb_pas_periodo
+
+/*-------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_ano (
+	cod_ano INTEGER NOT NULL
+);
+ALTER TABLE sesplan.tb_ano ADD PRIMARY KEY (cod_ano);
+
+/*-------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_ano VALUES(2018);
+INSERT INTO SESPLAN.tb_ano VALUES(2019);
+
+/*-------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_pas_periodo (
+	cod_periodo INTEGER NOT NULL,
+	cod_ano INTEGER NOT NULL,
+	dt_inicio DATE NOT NULL,
+	dt_fim DATE NOT NULL,
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+/*------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_pas_periodo ADD PRIMARY KEY (cod_periodo);
+ALTER TABLE sesplan.tb_pas_periodo ADD CONSTRAINT fk_tb_pas_periodo_usuario FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+ALTER TABLE sesplan.tb_pas_periodo ADD CONSTRAINT fk_tb_pas_periodo_ano FOREIGN KEY (cod_ano) REFERENCES sesplan.tb_ano(cod_ano);
+
+/*-----------------------------------------------------------------*/
+
+DROP TABLE sesplan.tb_sag_periodo;
+
+/*-----------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_sag_periodo (
+	cod_periodo INTEGER NOT NULL,
+	cod_ano INTEGER NOT NULL,
+	dt_inicio DATE NOT NULL,
+	dt_fim DATE NOT NULL,
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+/*--------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_sag_periodo ADD PRIMARY KEY (cod_periodo);
+ALTER TABLE sesplan.tb_sag_periodo ADD CONSTRAINT fk_tb_sag_periodo_usuario FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+ALTER TABLE sesplan.tb_sag_periodo ADD CONSTRAINT fk_tb_sag_periodo_ano FOREIGN KEY (cod_ano) REFERENCES sesplan.tb_ano(cod_ano);
+
+/*------------------------------------------------------------------*/
+
+DROP TABLE sesplan.tb_indicador_periodo;
+
+/*-------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_indicador_periodo (
+	cod_periodo INTEGER NOT NULL,
+	cod_ano INTEGER NOT NULL,
+	dt_inicio DATE NOT NULL,
+	dt_fim DATE NOT NULL,
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+/*---------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_indicador_periodo ADD PRIMARY KEY (cod_periodo);
+ALTER TABLE sesplan.tb_indicador_periodo ADD CONSTRAINT fk_tb_indicador_periodo_usuario FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+ALTER TABLE sesplan.tb_indicador_periodo ADD CONSTRAINT fk_tb_indicador_periodo_ano FOREIGN KEY (cod_ano) REFERENCES sesplan.tb_ano(cod_ano);
+
+/*-----------------------------------------------------------------------------*/

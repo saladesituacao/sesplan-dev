@@ -1,0 +1,154 @@
+ALTER TABLE SESPLAN.tb_indicador ADD cod_regiao_tipo INTEGER;
+ALTER TABLE SESPLAN.tb_indicador ADD CONSTRAINT fk_tb_indicador_reg_tipo FOREIGN KEY (cod_regiao_tipo) REFERENCES SESPLAN.tb_regiao_tipo(cod_regiao_tipo);
+
+/*------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_regiao
+(
+	cod_regiao INTEGER NOT NULL,	
+	txt_regiao VARCHAR(2000) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_regiao)
+);
+
+/*------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(1, 'Central', 1);
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(2, 'Leste', 1);
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(3, 'Oeste', 1);
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(4, 'Norte', 1);
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(5, 'Sul', 1);
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(6, 'Centro-Sul', 1);
+INSERT INTO SESPLAN.tb_regiao(cod_regiao, txt_regiao, cod_ativo) VALUES(7, 'Sudoeste', 1);
+
+/*------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_regiao_administrativa
+(
+	cod_ra INTEGER NOT NULL,	
+	txt_ra VARCHAR(2000) NOT NULL,	
+	cod_regiao INTEGER NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_ra)
+);
+ALTER TABLE sesplan.tb_regiao_administrativa ADD CONSTRAINT fk_tb_ra_regiao FOREIGN KEY (cod_regiao) REFERENCES sesplan.tb_regiao(cod_regiao); 
+
+/*------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(1, 'Asa Norte', 1, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(2, 'Asa Sul', 1, 1);	
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(3, 'Cruzeiro', 1, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(4, 'Lago Norte', 1, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(5, 'Lago Sul', 1, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(6, 'Sudoeste/Octogonal', 1, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(7, 'Varjão do Torto', 1, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(8, 'Candangolândia', 6, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(9, 'Guará', 6, 1);	
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(10, 'Núcleo Bandeirante', 6, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(11, 'Park Way', 6, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(12, 'Riacho Fundo I', 6, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(13, 'Riacho Fundo II', 6, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(14, 'SCIA (Estrutural)', 6, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(15, 'SIA', 6, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(16, 'Itapoã', 2, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(17, 'Jardim Botânico', 2, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(18, 'Paranoá', 2, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(19, 'São Sebastião', 2, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(20, 'Fercal', 4, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(21, 'Sobradinho', 4, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(22, 'Sobradinho II', 4, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(23, 'Planaltina', 4, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(24, 'Brazlândia', 3, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(25, 'Ceilândia', 3, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(26, 'Águas Claras', 7, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(27, 'Recanto das Emas', 7, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(28, 'Samambaia', 7, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(29, 'Taguatinga', 7, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(30, 'Vicente Pires', 7, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(31, 'Gama', 5, 1);
+INSERT INTO SESPLAN.tb_regiao_administrativa(cod_ra, txt_ra, cod_regiao, cod_ativo) VALUES(32, 'Santa Maria', 5, 1);
+
+/*------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_urd
+(
+	cod_urd INTEGER NOT NULL,	
+	txt_urd VARCHAR(2000) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_urd)
+);
+
+ALTER TABLE SESPLAN.tb_urd ADD txt_sigla VARCHAR(255);
+/*------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_urd(cod_urd, txt_urd, txt_sigla, cod_ativo) VALUES(1, 'Instituto Hospital de Base', 'IHBDF', 1);
+INSERT INTO SESPLAN.tb_urd(cod_urd, txt_urd, txt_sigla, cod_ativo) VALUES(2, 'Hospital da Criança de Brasília', 'HCB', 1);
+INSERT INTO SESPLAN.tb_urd(cod_urd, txt_urd, txt_sigla, cod_ativo) VALUES(3, 'Hospital de Apoio de Brasília', 'HAB', 1);
+INSERT INTO SESPLAN.tb_urd(cod_urd, txt_urd, txt_sigla, cod_ativo) VALUES(4, 'Hospital São Vicente de Paulo', 'HSVP', 1);
+INSERT INTO SESPLAN.tb_urd(cod_urd, txt_urd, txt_sigla, cod_ativo) VALUES(5, 'Hospital Materno Infantil de Brasília', 'HMIB', 1);
+
+/*------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_regiao_tipo
+(
+	cod_regiao_tipo INTEGER NOT NULL,	
+	txt_regiao_tipo VARCHAR(255) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_regiao_tipo)
+);
+
+/*------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_regiao_tipo(cod_regiao_tipo, txt_regiao_tipo, cod_ativo) VALUES(1, 'Região de Saúde/URD', 1);
+INSERT INTO SESPLAN.tb_regiao_tipo(cod_regiao_tipo, txt_regiao_tipo, cod_ativo) VALUES(2, 'Hospitais/URD', 1);
+INSERT INTO SESPLAN.tb_regiao_tipo(cod_regiao_tipo, txt_regiao_tipo, cod_ativo) VALUES(3, 'RA', 1);
+
+/*------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_hospital
+(
+	cod_hospital INTEGER NOT NULL,	
+	txt_hospital VARCHAR(255) NOT NULL,
+	txt_sigla_hospital VARCHAR(255) NOT NULL,	
+	cod_regiao INTEGER NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_hospital)
+);
+ALTER TABLE sesplan.tb_hospital ADD CONSTRAINT fk_tb_hospital_regiao FOREIGN KEY (cod_regiao) REFERENCES sesplan.tb_regiao(cod_regiao); 
+
+/*------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(1, 'Hospital Regional da Asa Norte', 'HRAN', 1, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(2, 'Hospital Regional do Guará', 'HRGU', 6, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(3, 'Hospital Reigional do Paranoa', 'HRPA', 2, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(4, 'Hospital Regional de Sobradinho', 'HRS', 4, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(5, 'Hospital Regional de Planaltina', 'HRPL', 4, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(6, 'Hospital Regional de Taguatinga', 'HRT', 7, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(7, 'Hospital Regional de Samambaia', 'HRSAM', 7, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(8, 'Hospital Regional do Gama', 'HRG', 5, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(9, 'Hospital Regional de Santa Maria', 'HRSM', 5, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(10, 'Hospital Regional de Ceilândia', 'HRC', 3, 1);
+INSERT INTO SESPLAN.tb_hospital(cod_hospital, txt_hospital, txt_sigla_hospital, cod_regiao, cod_ativo) VALUES(11, 'Hospital Regional de Brazlândia', 'HRBZ', 3, 1);
+
+/*------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_indicador_analise_regiao
+(
+	cod_chave INTEGER NOT NULL,	
+	cod_periodo INTEGER NOT NULL,	
+	cod_numerador VARCHAR(50) NOT NULL,	
+	cod_denominador VARCHAR(50) NOT NULL,	
+	cod_resultado VARCHAR(50) NOT NULL,	
+	cod_usuario INTEGER NOT NULL,
+	dt_extracao DATE NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	cod_regiao_tipo INTEGER
+);
+
+/*---------------------------------------------------------------------------------------------------------*/
+ALTER TABLE SESPLAN.tb_indicador_analise_regiao ADD cod_ra INTEGER;
+ALTER TABLE SESPLAN.tb_indicador_analise_regiao ADD cod_urd INTEGER;
+ALTER TABLE SESPLAN.tb_indicador_analise_regiao ADD cod_hospital INTEGER;
+ALTER TABLE SESPLAN.tb_indicador_analise_regiao ADD cod_reg INTEGER;
+
+/*---------------------------------------------------------------------------------------------------------*/

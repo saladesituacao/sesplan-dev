@@ -1,0 +1,25 @@
+CREATE TABLE "sesplan"."tb_sag_analise_historico" (
+"cod_sag" INTEGER NOT NULL,
+"cod_bimestre" INTEGER NOT NULL,
+"nr_mes_1" INTEGER,
+"nr_mes_2" INTEGER,
+"txt_analise" varchar(8000),
+cod_situacao INTEGER,
+cod_controle INTEGER,
+cod_causa_desvio INTEGER,
+cod_natureza_desvio INTEGER,
+txt_analise_desvio VARCHAR(2000),
+txt_realizado_1 VARCHAR(2000),
+txt_realizado_2 VARCHAR(2000),
+cod_percentual INTEGER,
+txt_analise_obra VARCHAR(2000),
+dt_inclusao TIMESTAMP, 
+cod_usuario INTEGER,
+dt_inclusao_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP	
+);
+
+/*---------------------------------------------------------------------------------------------*/
+
+ALTER TABLE "sesplan"."tb_sag_analise_historico" ADD cod_status INTEGER;
+ALTER TABLE "sesplan"."tb_sag_analise" ADD cod_status INTEGER;
+ALTER TABLE sesplan.tb_sag_analise ADD CONSTRAINT fk_tb_sag_an FOREIGN KEY (cod_status) REFERENCES sesplan.tb_status(cod_status); 

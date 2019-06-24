@@ -1,0 +1,5 @@
+CREATE TABLE SESPLAN.tb_indicador_analise_bloquear (
+	cod_chave integer NOT NULL,
+	cod_periodo INTEGER NOT NULL
+)
+ALTER TABLE sesplan.tb_indicador_analise_bloquear ADD PRIMARY KEY (cod_chave, cod_periodo);

@@ -1,0 +1,44 @@
+CREATE TABLE sesplan.tab_siggo_sesplan_historico 
+(
+    cogestao character varying(255) COLLATE pg_catalog."default",
+    inesfera character varying(255) COLLATE pg_catalog."default",
+    couo character varying(255) COLLATE pg_catalog."default",
+    cofuncao character varying(255) COLLATE pg_catalog."default",
+    cosubfuncao character varying(255) COLLATE pg_catalog."default",
+    coprograma character varying(255) COLLATE pg_catalog."default",
+    coprojeto character varying(255) COLLATE pg_catalog."default",
+    cosubtitulo character varying(255) COLLATE pg_catalog."default",
+    cofonte character varying(255) COLLATE pg_catalog."default",
+    fonte character varying(255) COLLATE pg_catalog."default",
+    i_desc_subfuncao character varying(255) COLLATE pg_catalog."default",
+    i_desc_origem character varying(255) COLLATE pg_catalog."default",
+    desc_cod_fonte character varying(255) COLLATE pg_catalog."default",
+    conatureza character varying(255) COLLATE pg_catalog."default",
+    i_ano_exercicio character varying(255) COLLATE pg_catalog."default",
+    inmes character varying(255) COLLATE pg_catalog."default",
+    lei character varying(255) COLLATE pg_catalog."default",
+    suplementacao character varying(255) COLLATE pg_catalog."default",
+    cancelamento character varying(255) COLLATE pg_catalog."default",
+    alteracao character varying(255) COLLATE pg_catalog."default",
+    movimentacao character varying(255) COLLATE pg_catalog."default",
+    movimentacao2 character varying(255) COLLATE pg_catalog."default",
+    indisponivel character varying(255) COLLATE pg_catalog."default",
+    empenhado character varying(255) COLLATE pg_catalog."default",
+    disponivel character varying(255) COLLATE pg_catalog."default",
+    liquidado character varying(255) COLLATE pg_catalog."default",
+    bloqueado character varying(255) COLLATE pg_catalog."default",
+    cota character varying(255) COLLATE pg_catalog."default",
+    preempenhado character varying(255) COLLATE pg_catalog."default",
+    contingenciado character varying(255) COLLATE pg_catalog."default",
+    autorizado character varying(255) COLLATE pg_catalog."default",
+    data_extracao character varying(255) COLLATE pg_catalog."default"
+)
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tab_siggo_sesplan_historico ADD COLUMN dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA sesplan TO sesplan_app;
+GRANT ALL ON TABLE sesplan.tab_siggo_sesplan_historico TO sesplan_app;

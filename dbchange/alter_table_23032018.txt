@@ -1,0 +1,27 @@
+ALTER TABLE "sesplan"."tb_unidade_medida"
+ADD COLUMN "cod_ativo" int4;
+
+
+
+ALTER TABLE "sesplan"."tb_produto_etapa"
+ADD COLUMN "cod_ativo" int4;
+
+
+
+
+
+ALTER TABLE "sesplan"."tb_programa_trabalho"
+ALTER COLUMN "nr_programa_trabalho" SET NOT NULL,
+ALTER COLUMN "txt_programa_trabalho" SET NOT NULL,
+ADD COLUMN "cod_eixo" int4 NOT NULL,
+ADD COLUMN "cod_perspectiva" int4 NOT NULL,
+ADD COLUMN "cod_diretriz" int4 NOT NULL,
+ADD COLUMN "cod_objetivo" int4 NOT NULL,
+ADD COLUMN "cod_objetivo_ppa" int4 NOT NULL,
+ADD COLUMN "cod_ativo" int4,
+ADD CONSTRAINT "tb_programa_trabalho_cod_eixo_fkey" FOREIGN KEY ("cod_eixo") REFERENCES "sesplan"."tb_eixo" ("cod_eixo") ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT "tb_programa_trabalho_cod_perspectiva_fkey" FOREIGN KEY ("cod_perspectiva") REFERENCES "sesplan"."tb_perspectiva" ("cod_perspectiva") ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT "tb_programa_trabalho_cod_diretriz_fkey" FOREIGN KEY ("cod_diretriz") REFERENCES "sesplan"."tb_diretriz" ("cod_diretriz") ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT "tb_programa_trabalho_cod_objetivo_fkey" FOREIGN KEY ("cod_objetivo") REFERENCES "sesplan"."tb_objetivo" ("cod_objetivo") ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT "tb_programa_trabalho_cod_objetivo_ppa_fkey" FOREIGN KEY ("cod_objetivo_ppa") REFERENCES "sesplan"."tb_objetivo_ppa" ("cod_objetivo_ppa") ON DELETE NO ACTION ON UPDATE NO ACTION;
+

@@ -1,0 +1,19 @@
+CREATE TABLE SESPLAN.tb_pas_controle_historico_2
+(	
+	cod_pas INTEGER NOT NULL,	
+	cod_usuario INTEGER NOT NULL,
+	dt_inclusao TIMESTAMP NOT NULL, 
+	txt_justificativa VARCHAR(20000),	
+	cod_usuario_autorizar INTEGER,
+	cod_autorizar INTEGER,
+	dt_autorizar TIMESTAMP	
+);
+
+/*---------------------------------------------------------------------*/
+
+ALTER TABLE SESPLAN.tb_pas_controle_historico_2 ADD dt_operacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE SESPLAN.tb_pas_controle_historico_2 ADD cod_controle INTEGER NOT NULL;
+ALTER TABLE SESPLAN.tb_pas_controle_historico_2 ADD cod_inicio_previsto INTEGER;
+ALTER TABLE SESPLAN.tb_pas_controle_historico_2 ADD cod_fim_previsto INTEGER;
+
+/*---------------------------------------------------------------------*/

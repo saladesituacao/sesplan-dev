@@ -1,0 +1,89 @@
+CREATE TABLE sesplan.tb_eixo
+(
+    cod_eixo integer NOT NULL,
+    txt_eixo varchar(500) NOT NULL,
+    txt_descricao CHAR(200) NULL,
+    cod_ativo integer NOT NULL,
+    PRIMARY KEY (cod_eixo)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_eixo
+    OWNER to postgres;
+
+CREATE UNIQUE INDEX UQ_tb_eixo ON sesplan.tb_eixo(txt_eixo) TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_eixo ALTER COLUMN cod_ativo SET DEFAULT 1;
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_perspectiva
+(
+    cod_perspectiva integer NOT NULL,
+	cod_eixo integer NOT NULL REFERENCES sesplan.tb_eixo (cod_eixo),
+    txt_perspectiva varchar(500) NOT NULL,
+    txt_descricao CHAR(200) NULL,
+    cod_ativo integer NOT NULL,
+    PRIMARY KEY (cod_perspectiva)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_perspectiva
+    OWNER to postgres;
+
+CREATE UNIQUE INDEX UQ_tb_perspectiva ON sesplan.tb_perspectiva(cod_eixo, txt_perspectiva) TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_eixo ALTER COLUMN cod_ativo SET DEFAULT 1;
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_diretriz
+(
+    cod_diretriz integer NOT NULL,
+	cod_eixo integer NOT NULL REFERENCES sesplan.tb_eixo (cod_eixo),
+	cod_perspectiva integer NOT NULL REFERENCES sesplan.tb_perspectiva (cod_perspectiva),
+    txt_diretriz varchar(500) NOT NULL,
+    txt_descricao CHAR(200) NULL,
+    cod_ativo integer NOT NULL,
+    PRIMARY KEY (cod_diretriz)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_diretriz
+    OWNER to postgres;
+
+CREATE UNIQUE INDEX UQ_tb_diretriz ON sesplan.tb_diretriz(cod_eixo, cod_perspectiva, txt_diretriz) TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_diretriz ALTER COLUMN cod_ativo SET DEFAULT 1;
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_objetivo
+(
+    cod_objetivo integer NOT NULL,
+	cod_eixo integer NOT NULL REFERENCES sesplan.tb_eixo (cod_eixo),
+	cod_perspectiva integer NOT NULL REFERENCES sesplan.tb_perspectiva (cod_perspectiva),
+	cod_diretriz integer NOT NULL REFERENCES sesplan.tb_diretriz (cod_diretriz),
+    txt_objetivo varchar(500) NOT NULL,
+    txt_descricao CHAR(200) NULL,
+    cod_ativo integer NOT NULL,
+    PRIMARY KEY (cod_objetivo)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_objetivo
+    OWNER to postgres;
+
+CREATE UNIQUE INDEX UQ_tb_objetivo ON sesplan.tb_objetivo(cod_eixo, cod_perspectiva, cod_diretriz, txt_objetivo) TABLESPACE pg_default;
+
+ALTER TABLE sesplan.tb_objetivo ALTER COLUMN cod_ativo SET DEFAULT 1;
+/*-----------------------------------------------------------------------------------------------------------------*/

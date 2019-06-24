@@ -1,0 +1,68 @@
+CREATE TABLE "sesplan"."tb_modulo" (
+"cod_modulo" int4 NOT NULL,
+"txt_modulo" varchar(100) COLLATE "default" NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "sesplan"."tb_modulo" ADD PRIMARY KEY ("cod_modulo");
+
+/*-----------------------------------------------------------------------*/
+
+INSERT INTO "sesplan".tb_modulo(cod_modulo, txt_modulo) VALUES(1, 'PAS');
+INSERT INTO "sesplan".tb_modulo(cod_modulo, txt_modulo) VALUES(2, 'SAG');
+INSERT INTO "sesplan".tb_modulo(cod_modulo, txt_modulo) VALUES(3, 'INDICADORES');
+INSERT INTO "sesplan".tb_modulo(cod_modulo, txt_modulo) VALUES(4, 'EXECUÇÃO ORÇAMENTÁRIA');
+
+/*-----------------------------------------------------------------------*/
+
+CREATE TABLE "sesplan"."tb_status" (
+"cod_status" int4 NOT NULL,
+"txt_status" varchar(100) COLLATE "default" NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "sesplan"."tb_status" ADD PRIMARY KEY ("cod_status");
+
+/*-----------------------------------------------------------------------*/
+
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(1, 'A ser iniciada');
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(2, 'Andamento Normal');
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(3, 'Andamento Fora do Prazo');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(4, 'Concluído');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(5, 'Atrasada');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(6, 'Cancelada');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(7, 'Crítico');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(8, 'Alerta');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(9, 'Normal');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(10, 'Muito crítico');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(11, 'Esperado');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(12, 'Superado');	
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(13, 'Baixa Execução');
+INSERT INTO "sesplan".tb_status(cod_status, txt_status) VALUES(14, 'Recurso Insuficiente');
+
+/*-----------------------------------------------------------------------*/
+
+
+CREATE TABLE "sesplan"."tb_status_modulo" (
+"cod_status" int4 NOT NULL,
+"cod_modulo" int4 NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "sesplan"."tb_status_modulo" ADD PRIMARY KEY ("cod_status", "cod_modulo");
+
+ALTER TABLE sesplan.tb_status_modulo 
+   ADD CONSTRAINT fk_tb_pas_status_mod
+   FOREIGN KEY (cod_status) 
+   REFERENCES sesplan.tb_status(cod_status); 
+   
+ALTER TABLE sesplan.tb_status_modulo 
+   ADD CONSTRAINT fk_tb_pas_modulo_stat
+   FOREIGN KEY (cod_modulo) 
+   REFERENCES sesplan.tb_modulo(cod_modulo); 
+
+/*-----------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_status_modulo ADD cod_exibir_consulta INTEGER NOT NULL DEFAULT 0;
+
+/*-----------------------------------------------------------------------*/

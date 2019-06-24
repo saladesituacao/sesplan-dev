@@ -1,0 +1,13 @@
+CREATE TABLE sesplan.tb_estrategia_vinculada
+(
+	cod_estrategia integer NOT NULL,        
+	txt_estrategia varchar(255) NOT NULL,
+	txt_descricao varchar(255),	
+	cod_ativo integer NOT NULL,
+    PRIMARY KEY (cod_estrategia)
+)
+WITH (
+    OIDS = FALSE
+)
+ALTER TABLE sesplan.tb_estrategia_vinculada ALTER COLUMN cod_ativo SET DEFAULT 1;
+CREATE UNIQUE INDEX UQ_tb_estrategia_vinculada ON sesplan.tb_estrategia_vinculada(txt_estrategia);

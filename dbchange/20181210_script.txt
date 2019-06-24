@@ -1,0 +1,2 @@
+INSERT INTO SESPLAN.tb_status(cod_status, txt_status, cod_ativo) VALUES(24, 'Não analisado', 1);
+INSERT INTO SESPLAN.tb_status_modulo(cod_status, cod_modulo, cod_exibir_consulta) VALUES(24, 3, 1);

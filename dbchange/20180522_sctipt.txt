@@ -1,0 +1,18 @@
+ALTER TABLE sesplan.tb_programa_trabalho ADD txt_titulo_programa VARCHAR(2000);
+/*-----------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_indicador_analise_historico 
+(
+	cod_chave INTEGER,
+	cod_periodo INTEGER,
+	txt_analise TEXT,
+	cod_numerador VARCHAR(200),
+	cod_denominador VARCHAR(200),
+	cod_resultado VARCHAR(200),
+	cod_usuario INTEGER,
+	txt_encaminhamento TEXT,	
+	cod_status INTEGER,
+	dt_extracao DATE,
+	txt_variacao VARCHAR(2000),
+	dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
+);

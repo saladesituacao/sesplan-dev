@@ -1,0 +1,71 @@
+ALTER TABLE SESPLAN.tb_programa_trabalho ADD cod_emenda INTEGER;
+ALTER TABLE SESPLAN.tb_pas DROP COLUMN cod_modulo;
+ALTER TABLE SESPLAN.tb_pas ADD codigo_acao VARCHAR(2000);
+ALTER TABLE SESPLAN.tb_pas ADD txt_medida VARCHAR(50);
+/*------------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_pas_periodo (
+cod_chave INTEGER NOT NULL,
+dt_inicio DATE NOT NULL,
+dt_fim DATE NOT NULL,
+cod_usuario INTEGER NOT NULL,
+dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE sesplan.tb_pas_periodo ADD PRIMARY KEY (cod_chave);
+ALTER TABLE sesplan.tb_pas_periodo ADD CONSTRAINT fk_tb_pas_periodo_usuario FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_pas_periodo ADD dt_reabrir TIMESTAMP;
+ALTER TABLE sesplan.tb_pas_periodo ADD cod_usuario_reabrir INTEGER;
+ALTER TABLE sesplan.tb_pas_periodo ADD CONSTRAINT fk_tb_pas_periodo_usuario_reabrir FOREIGN KEY (cod_usuario_reabrir) REFERENCES sesplan.tb_usuario(cod_usuario);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_pas_controle (
+	cod_controle INTEGER NOT NULL,
+	txt_controle VARCHAR(50) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1	
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE sesplan.tb_pas_controle ADD PRIMARY KEY (cod_controle);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+INSERT INTO sesplan.tb_pas_controle(cod_controle, txt_controle, cod_ativo) VALUES(1, 'Pendente', 1);
+INSERT INTO sesplan.tb_pas_controle(cod_controle, txt_controle, cod_ativo) VALUES(2, 'Cancelado', 1);
+INSERT INTO sesplan.tb_pas_controle(cod_controle, txt_controle, cod_ativo) VALUES(3, 'Prorrogado', 1);
+INSERT INTO sesplan.tb_pas_controle(cod_controle, txt_controle, cod_ativo) VALUES(4, 'Postergado', 1);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE SESPLAN.tb_pas ADD cod_controle INTEGER;
+ALTER TABLE sesplan.tb_pas ADD CONSTRAINT fk_tb_pas_controle FOREIGN KEY (cod_controle) REFERENCES sesplan.tb_pas_controle(cod_controle); 
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+CREATE TABLE sesplan.tb_pas_mes (
+cod_mes INTEGER NOT NULL,
+txt_mes VARCHAR(50) NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE SESPLAN.tb_pas_mes ADD PRIMARY KEY (cod_mes);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_pas_mes(cod_mes, txt_mes) VALUES(1, 'Janeiro/Fevereiro');
+INSERT INTO SESPLAN.tb_pas_mes(cod_mes, txt_mes) VALUES(2, 'Março/Abril');
+INSERT INTO SESPLAN.tb_pas_mes(cod_mes, txt_mes) VALUES(3, 'Maio/Junho');
+INSERT INTO SESPLAN.tb_pas_mes(cod_mes, txt_mes) VALUES(4, 'Julho/Agosto');
+INSERT INTO SESPLAN.tb_pas_mes(cod_mes, txt_mes) VALUES(5, 'Setembro/Outubro');
+INSERT INTO SESPLAN.tb_pas_mes(cod_mes, txt_mes) VALUES(6, 'Novembro/Dezembro');
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+
+
+

@@ -1,0 +1,126 @@
+ALTER TABLE SESPLAN.tb_sag ADD cod_obra INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE SESPLAN.tb_sag ADD cod_acumulativo INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE SESPLAN.tb_sag ADD nr_meta_1 INTEGER;
+ALTER TABLE SESPLAN.tb_sag ADD nr_meta_2 INTEGER;
+ALTER TABLE SESPLAN.tb_sag ADD nr_meta_3 INTEGER;
+ALTER TABLE SESPLAN.tb_sag ADD nr_meta_4 INTEGER;
+ALTER TABLE SESPLAN.tb_sag ADD nr_meta_5 INTEGER;
+ALTER TABLE SESPLAN.tb_sag ADD nr_meta_6 INTEGER;
+
+/*--------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_sag_situacao_analise
+(
+	cod_situacao INTEGER NOT NULL,	
+	txt_situacao VARCHAR(50) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_situacao)
+);
+
+/*--------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_sag_situacao_analise(cod_situacao, txt_situacao, cod_ativo) VALUES(1, 'Andamento normal', 1);
+INSERT INTO SESPLAN.tb_sag_situacao_analise(cod_situacao, txt_situacao, cod_ativo) VALUES(2, 'Concluída', 1);
+INSERT INTO SESPLAN.tb_sag_situacao_analise(cod_situacao, txt_situacao, cod_ativo) VALUES(3, 'A ser iniciada', 1);
+INSERT INTO SESPLAN.tb_sag_situacao_analise(cod_situacao, txt_situacao, cod_ativo) VALUES(4, 'Não iniciada', 1);
+INSERT INTO SESPLAN.tb_sag_situacao_analise(cod_situacao, txt_situacao, cod_ativo) VALUES(5, 'Atrasada', 1);
+
+/*--------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_sag_controle_analise
+(
+	cod_controle INTEGER NOT NULL,	
+	txt_controle VARCHAR(50) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_controle)
+);
+
+/*--------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_sag_controle_analise(cod_controle, txt_controle, cod_ativo) VALUES(1, 'Pendente', 1);
+INSERT INTO SESPLAN.tb_sag_controle_analise(cod_controle, txt_controle, cod_ativo) VALUES(2, 'Cancelada', 1);
+INSERT INTO SESPLAN.tb_sag_controle_analise(cod_controle, txt_controle, cod_ativo) VALUES(3, 'Empenho a executar', 0);
+
+/*--------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_sag_causa_desvio
+(
+	cod_causa INTEGER NOT NULL,	
+	txt_causa VARCHAR(255) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_causa)
+);
+
+/*--------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(1, 'Alteração na programação da unidade executiva', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(2, 'Crédito cancelado', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(3, 'Crédito contigenciado ou bloqueado', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(4, 'Insuficiência de créditos orçamentários', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(5, 'Indefinição ou reavaliação de projetos técnicos', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(6, 'Insuficiência de recursos financeiros', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(7, 'Insuficiência de recursos humanos', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(8, 'Insuficiência de recursos materiais', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(9, 'Morosidade em procedimentos administrativos', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(10, 'Necessidade de ação de outros órgãos', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(11, 'Outras causas de desvio', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(12, 'Problemas ou morosidade no processo licitatório', 1);
+INSERT INTO SESPLAN.tb_sag_causa_desvio(cod_causa, txt_causa, cod_ativo) VALUES(13, 'Variações climáticas', 1);
+
+/*--------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_sag_natureza_desvio
+(
+	cod_natureza INTEGER NOT NULL,	
+	txt_natureza VARCHAR(255) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_natureza)
+);
+
+/*--------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_sag_natureza_desvio(cod_natureza, txt_natureza, cod_ativo) VALUES(1, 'Administrativa', 1);
+INSERT INTO SESPLAN.tb_sag_natureza_desvio(cod_natureza, txt_natureza, cod_ativo) VALUES(2, 'Técnica', 1);
+INSERT INTO SESPLAN.tb_sag_natureza_desvio(cod_natureza, txt_natureza, cod_ativo) VALUES(3, 'Financeira', 1);
+INSERT INTO SESPLAN.tb_sag_natureza_desvio(cod_natureza, txt_natureza, cod_ativo) VALUES(4, 'Jurídica', 1);
+INSERT INTO SESPLAN.tb_sag_natureza_desvio(cod_natureza, txt_natureza, cod_ativo) VALUES(5, 'Política', 1);
+INSERT INTO SESPLAN.tb_sag_natureza_desvio(cod_natureza, txt_natureza, cod_ativo) VALUES(6, 'Orçamentária', 1);
+INSERT INTO SESPLAN.tb_sag_natureza_desvio(cod_natureza, txt_natureza, cod_ativo) VALUES(7, 'Fenômenos Naturais', 1);
+
+/*--------------------------------------------------------------------------*/
+
+DROP TABLE SESPLAN.tb_sag_analise;
+
+/*--------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_sag_analise
+(
+	cod_sag INTEGER NOT NULL,
+	cod_bimestre INTEGER NOT NULL,
+	nr_mes_1 INTEGER,
+	nr_mes_2 INTEGER,
+	txt_analise VARCHAR(2000),
+	cod_situacao INTEGER,
+	cod_controle INTEGER,
+	cod_causa_desvio INTEGER,
+	cod_natureza_desvio INTEGER,
+	txt_analise_desvio VARCHAR(2000),
+	txt_realizado_1 VARCHAR(2000),
+	txt_realizado_2 VARCHAR(2000),
+	cod_percentual INTEGER,
+	txt_analise_obra VARCHAR(2000),
+	
+	PRIMARY KEY (cod_sag, cod_bimestre)
+);
+ALTER TABLE sesplan.tb_sag_analise ADD CONSTRAINT fk_tb_sag_sag FOREIGN KEY (cod_sag) REFERENCES sesplan.tb_sag(cod_sag); 
+ALTER TABLE sesplan.tb_sag_analise ADD CONSTRAINT fk_tb_sag_an_s FOREIGN KEY (cod_situacao) REFERENCES sesplan.tb_sag_situacao_analise(cod_situacao); 
+ALTER TABLE sesplan.tb_sag_analise ADD CONSTRAINT fk_tb_sag_an_co FOREIGN KEY (cod_controle) REFERENCES sesplan.tb_sag_controle_analise(cod_controle); 
+ALTER TABLE sesplan.tb_sag_analise ADD CONSTRAINT fk_tb_sag_an_causa_des FOREIGN KEY (cod_causa_desvio) REFERENCES sesplan.tb_sag_causa_desvio(cod_causa); 
+ALTER TABLE sesplan.tb_sag_analise ADD CONSTRAINT fk_tb_sag_an_natur_des FOREIGN KEY (cod_natureza_desvio) REFERENCES sesplan.tb_sag_natureza_desvio(cod_natureza); 
+
+/*--------------------------------------------------------------------------*/
+
+ALTER TABLE SESPLAN.tb_sag_analise ADD dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE SESPLAN.tb_sag_analise ADD cod_usuario INTEGER;
+
+/*--------------------------------------------------------------------------*/

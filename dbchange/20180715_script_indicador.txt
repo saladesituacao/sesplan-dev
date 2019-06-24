@@ -1,0 +1,7 @@
+ALTER TABLE SESPLAN.tb_indicador ADD cod_responsavel_tecnico_2 INTEGER 
+ALTER TABLE SESPLAN.tb_indicador ADD CONSTRAINT fk_tb_indic_tecnic FOREIGN KEY (cod_responsavel_tecnico_2) REFERENCES SESPLAN.tb_orgao(cod_orgao)
+
+/*----------------------------------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE SESPLAN.tb_indicador_analise ADD txt_analise_2 TEXT
+ALTER TABLE SESPLAN.tb_indicador_analise_historico ADD txt_analise_2 TEXT 

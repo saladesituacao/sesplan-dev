@@ -1,0 +1,18 @@
+CREATE TABLE sesplan.tb_indicador_periodo (
+cod_chave INTEGER NOT NULL,
+dt_inicio DATE NOT NULL,
+dt_fim DATE NOT NULL,
+cod_usuario INTEGER NOT NULL,
+dt_inclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE sesplan.tb_indicador_periodo ADD PRIMARY KEY (cod_chave);
+ALTER TABLE sesplan.tb_indicador_periodo ADD CONSTRAINT fk_tb_indicador_periodo_usuario FOREIGN KEY (cod_usuario) REFERENCES sesplan.tb_usuario(cod_usuario);
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+ALTER TABLE sesplan.tb_indicador_periodo ADD dt_reabrir TIMESTAMP;
+ALTER TABLE sesplan.tb_indicador_periodo ADD cod_usuario_reabrir INTEGER;
+ALTER TABLE sesplan.tb_indicador_periodo ADD CONSTRAINT fk_tb_indicador_periodo_usuario_reabrir FOREIGN KEY (cod_usuario_reabrir) REFERENCES sesplan.tb_usuario(cod_usuario);
+

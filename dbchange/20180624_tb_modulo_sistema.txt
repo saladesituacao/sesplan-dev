@@ -1,0 +1,243 @@
+﻿CREATE TABLE SESPLAN.tb_modulo_sistema
+(
+	cod_modulo_sistema INTEGER NOT NULL,	
+	txt_modulo_sistema VARCHAR(2000) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_modulo_sistema)
+);
+
+ALTER TABLE SESPLAN.tb_modulo_sistema ADD cod_tipo INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE SESPLAN.tb_modulo_sistema ADD cod_modulo_superior INTEGER;
+
+/*----------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(1, 'Eixo', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(2, 'Perspectiva', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(3, 'Objetivo', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(4, 'Objetivo PPA', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(5, 'Programa de Trabalho', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo, cod_tipo) VALUES(6, 'Tabelas de Apoio', 1, 2);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo, cod_tipo) VALUES(7, 'Relatórios', 1, 2);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(8, 'Régua', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo, cod_tipo) VALUES(9, 'Monitoramento', 1, 2);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(10, 'Área Responsável', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(11, 'Cargos', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(12, 'Instrumento de Planejamento', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(13, 'Produto da Etapa', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(14, 'Unidade de Medida', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(15, 'Perfis de Usuários', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(16, 'Situações', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(17, 'Usuários', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(18, 'Auditoria', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(19, 'Execução Orçamentária', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(20, 'Indicador', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(21, 'PAS', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(22, 'SAG', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(23, 'DIRETRIZ', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(24, 'Ciclo Planejamento', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(25, 'Plano de Ação', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(26, 'Estratégia Vinculada', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(27, 'Modelos de Mensagem', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(28, 'Programas', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(29, 'Saiba +', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema(cod_modulo_sistema, txt_modulo_sistema, cod_ativo) VALUES(30, 'Saiba + Tipo de Documento', 1);
+
+/*----------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_modulo_sistema_acao
+(
+	cod_modulo_sistema_acao INTEGER NOT NULL,	
+	txt_modulo_sistema_acao VARCHAR(2000) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_modulo_sistema_acao)
+);
+/*----------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(1, 'Incluir', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(2, 'Editar', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(3, 'Excluir', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(4, 'Acessar', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(5, 'Situações', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(6, 'Permissões', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(7, 'Unidades', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(8, 'Histórico', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(9, 'Ficha', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(10, 'Análise', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(11, 'Período de Atualização', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(12, 'Controle', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(13, 'Salvar', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(14, 'Limpar', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(15, 'Listagem', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(16, 'Visualizar Análise', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(17, 'Bloquear Análise', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(18, 'Desabilitar', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(19, 'Habilitar', 1);
+INSERT INTO SESPLAN.tb_modulo_sistema_acao(cod_modulo_sistema_acao, txt_modulo_sistema_acao, cod_ativo) VALUES(20, 'Tarefas', 1);
+
+/*----------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_sistema_modulo_acao
+(
+	cod_chave INTEGER NOT NULL,	
+	cod_modulo_sistema INTEGER NOT NULL,	
+	cod_modulo_sistema_acao INTEGER NOT NULL,		
+	PRIMARY KEY (cod_modulo_sistema, cod_modulo_sistema_acao)
+);
+
+ALTER TABLE sesplan.tb_sistema_modulo_acao ADD CONSTRAINT fk_tb_sis_mod_ac FOREIGN KEY (cod_modulo_sistema) REFERENCES sesplan.tb_modulo_sistema(cod_modulo_sistema); 
+ALTER TABLE sesplan.tb_sistema_modulo_acao ADD CONSTRAINT fk_tb_sis_mod_ac2 FOREIGN KEY (cod_modulo_sistema_acao) REFERENCES sesplan.tb_modulo_sistema_acao(cod_modulo_sistema_acao); 
+
+/*----------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(1, 1, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(2, 1, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(3, 1, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(4, 1, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(5, 2, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(6, 2, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(7, 2, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(8, 2, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(9, 3, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(10, 3, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(11, 3, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(12, 3, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(13, 4, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(14, 4, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(15, 4, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(16, 4, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(17, 5, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(18, 5, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(19, 5, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(20, 5, 3); 
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(21, 8, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(22, 9, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(23, 6, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(24, 7, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(25, 10, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(26, 10, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(27, 10, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(28, 10, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(29, 11, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(30, 11, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(31, 11, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(32, 11, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(33, 12, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(34, 12, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(35, 12, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(36, 12, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(37, 12, 5);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(38, 13, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(39, 13, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(40, 13, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(41, 13, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(42, 14, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(43, 14, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(44, 14, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(45, 14, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(46, 15, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(47, 15, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(48, 15, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(49, 15, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(50, 15, 6);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(51, 16, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(52, 16, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(53, 17, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(54, 17, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(55, 17, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(56, 17, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(57, 17, 7);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(58, 18, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(59, 19, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(60, 20, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(61, 20, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(62, 20, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(63, 20, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(64, 20, 8);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(65, 20, 9);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(66, 20, 10);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(67, 21, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(68, 21, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(69, 21, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(70, 21, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(71, 21, 11);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(72, 21, 12);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(73, 21, 8);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(74, 21, 13);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(75, 21, 14);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(76, 22, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(77, 22, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(78, 22, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(79, 22, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(80, 22, 11);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(81, 22, 10);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(82, 22, 8);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(83, 21, 10);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(84, 23, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(85, 23, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(86, 23, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(87, 23, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(88, 16, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(89, 21, 15);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(90, 22, 15);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(91, 20, 11);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(92, 24, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(93, 20, 16);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(94, 24, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(95, 24, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(96, 20, 17);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(97, 25, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(98, 25, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(99, 25, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(100, 25, 18);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(101, 25, 19);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(102, 25, 20);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(103, 26, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(104, 26, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(105, 26, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(106, 26, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(107, 27, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(108, 27, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(109, 27, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(110, 27, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(111, 28, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(112, 28, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(113, 28, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(114, 28, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(115, 29, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(116, 29, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(117, 29, 3);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(118, 30, 4);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(119, 30, 1);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(120, 30, 2);
+INSERT INTO SESPLAN.tb_sistema_modulo_acao(cod_chave, cod_modulo_sistema, cod_modulo_sistema_acao) VALUES(121, 30, 3);
+
+/*----------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_permissao_perfil
+(
+	cod_permissao INTEGER NOT NULL,	
+	cod_perfil INTEGER NOT NULL,		
+	PRIMARY KEY (cod_permissao, cod_perfil)
+);
+ALTER TABLE SESPLAN.tb_permissao_perfil ADD CONSTRAINT fk_tb_permissao_perfil FOREIGN KEY (cod_perfil) REFERENCES sesplan.tb_perfil(cod_perfil); 
+
+/*----------------------------------------------------------------------------------*/
+
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 10;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 11;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 12;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 13;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 14;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 15;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 16;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 17;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 7 WHERE cod_modulo_sistema = 18;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 9 WHERE cod_modulo_sistema = 19;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 9 WHERE cod_modulo_sistema = 20;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 9 WHERE cod_modulo_sistema = 21;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 9 WHERE cod_modulo_sistema = 22;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 26;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 27;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 28;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 29;
+UPDATE SESPLAN.tb_modulo_sistema SET cod_modulo_superior = 6 WHERE cod_modulo_sistema = 30;

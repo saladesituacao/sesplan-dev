@@ -1,0 +1,2 @@
+ALTER TABLE sesplan.tb_indicador_analise ADD cod_status integer;
+ALTER TABLE sesplan.tb_indicador_analise ADD CONSTRAINT fk_tb_indicador_analise_status FOREIGN KEY (cod_status) REFERENCES sesplan.tb_status(cod_status);

@@ -1,0 +1,40 @@
+ALTER TABLE SESPLAN.tb_usuario ADD cod_notificacao integer NOT NULL DEFAULT 0;
+
+/*-------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_mensagem
+(
+	cod_mensagem INTEGER NOT NULL,	
+	txt_titulo VARCHAR(255) NOT NULL,
+	txt_mensagem VARCHAR(2000) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_mensagem)
+);
+
+/*-------------------------------------------------------------------------------*/
+
+CREATE TABLE SESPLAN.tb_tipo_mensagem
+(
+	cod_tipo_mensagem INTEGER NOT NULL,	
+	txt_tipo_mensagem VARCHAR(255) NOT NULL,	
+	cod_ativo INTEGER NOT NULL DEFAULT 1,
+	PRIMARY KEY (cod_tipo_mensagem)
+);
+CREATE UNIQUE INDEX UQ_tb_tipo_mensagem ON SESPLAN.tb_tipo_mensagem(txt_tipo_mensagem);
+
+/*-------------------------------------------------------------------------------*/
+
+ALTER TABLE SESPLAN.tb_mensagem ADD cod_tipo_mensagem INTEGER;
+
+ALTER TABLE sesplan.tb_mensagem ADD CONSTRAINT fk_tb_mensagem_tipo_mens FOREIGN KEY (cod_tipo_mensagem) REFERENCES SESPLAN.tb_tipo_mensagem(cod_tipo_mensagem); 
+
+CREATE UNIQUE INDEX UQ_tb_mensagem ON sesplan.tb_mensagem(txt_titulo, cod_tipo_mensagem);
+
+/*-------------------------------------------------------------------------------*/
+
+INSERT INTO SESPLAN.tb_tipo_mensagem(cod_tipo_mensagem, txt_tipo_mensagem, cod_ativo) VALUES(1, 'Alerta', 1);
+INSERT INTO SESPLAN.tb_tipo_mensagem(cod_tipo_mensagem, txt_tipo_mensagem, cod_ativo) VALUES(2, 'Cobrança', 1);
+
+/*-------------------------------------------------------------------------------*/
+
+ALTER TABLE SESPLAN.tb_mensagem ADD cod_dia INTEGER;

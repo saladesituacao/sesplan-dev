@@ -181,7 +181,7 @@ $cod_acumulativo = $rs1['cod_acumulativo'];
             </div>
             <div class="col-md-6">
                 <label for="exampleInputEmail1">Região:</label>                
-                <select id="cod_regiao" name="cod_regiao" class="form-control">                     
+                <select id="cod_regiao" name="cod_regiao" class="form-control" onchange="fn_hospital();">                     
                     <option></option>
                     <?php                        
                         $q = pg_query("SELECT cod_regiao_tipo, txt_regiao_tipo FROM tb_regiao_tipo WHERE cod_ativo = 1 ORDER BY cod_regiao_tipo");
@@ -192,7 +192,8 @@ $cod_acumulativo = $rs1['cod_acumulativo'];
                         } ?>			
                 </select>
             </div>
-        </div><!--row-->  
+        </div><!--row-->
+        <div id="div_hospital"></div>  
         <br />       
         <div class="row">
             <div class="col-md-12">
@@ -200,7 +201,7 @@ $cod_acumulativo = $rs1['cod_acumulativo'];
                 <div id="div_meta_monitoramento"></div>
             </div><!--col-md-12-->
         </div><!--row-->          
-        <br />
+        <br />        
         <div class="row">
             <div class="col-md-12">
                 <button type="submit" id="btn_salvar" class="btn btn-primary" onclick="return ValidarIncluir();">Salvar</button>

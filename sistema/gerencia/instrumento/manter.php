@@ -9,6 +9,7 @@ $cod_ativo = $_REQUEST['cod_ativo'];
 $cod_exibir_consulta = $_REQUEST['cod_exibir_consulta'];
 $cod_status = $_REQUEST['cod_status'];
 $cod_exibir_consulta = $_REQUEST['cod_exibir_consulta'];
+$txt_descricao = $_REQUEST['txt_descricao'];
 
 switch ($acao) {
     case 'incluir':
@@ -16,6 +17,7 @@ switch ($acao) {
         $clsInstrumento->txt_modulo = $txt_modulo;
         $clsInstrumento->cod_ativo = $cod_ativo;
         $clsInstrumento->cod_exibir_consulta = $cod_exibir_consulta;
+        $clsInstrumento->txt_descricao = $txt_descricao;
         $clsInstrumento->IncluirModulo();
 
         js_go('default.php');                      
@@ -34,6 +36,7 @@ switch ($acao) {
         $clsInstrumento->txt_modulo = $txt_modulo;
         $clsInstrumento->cod_ativo = $cod_ativo;
         $clsInstrumento->cod_exibir_consulta = $cod_exibir_consulta;
+        $clsInstrumento->txt_descricao = $txt_descricao;
         $clsInstrumento->AlterarModulo();   
                         
         js_go('incluir.php?id='.$cod_modulo.'&status=sucesso');

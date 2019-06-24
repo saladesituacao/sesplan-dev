@@ -4,7 +4,7 @@ function menu() {
 ?>
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">                
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -21,6 +21,7 @@ function menu() {
                 <a href="#" data-toggle="modal" data-target="#exampleModal">
                     <span class="hidden-xs"><?php echo($_SESSION['txt_usuario']) ?></span>
                 </a>
+                <a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/logout.php" title="SAIR COM SEGURANÇA" class="btn btn-default">Sair</a>
                 <?php                
                 include_once (__DIR__ . "/combo_usuario_orgao.php");                 
                 ?>                                  
@@ -29,47 +30,47 @@ function menu() {
                 <ul class="nav navbar-nav">                                                                                             
                     <li class="dropdown">
                         <br />
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>CADASTROS</strong><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>Administrador</strong><span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <?php if (permissao_acesso(1)) { ?>
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/eixo/default.php">EIXOS</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/eixo/default.php">Eixos</a></li>
                             <?php
                             } ?>   
                             <?php if (permissao_acesso(5)) { ?>                         
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/perspectiva/default.php">PERSPECTIVAS</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/perspectiva/default.php">Perspectivas</a></li>
                             <?php
                             } ?> 
                             <?php if (permissao_acesso(84)) { ?>  
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/diretriz/default.php">DIRETRIZES</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/diretriz/default.php">Diretrizes</a></li>
                             <?php
                             } ?> 
                             <?php if (permissao_acesso(9)) { ?>
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/objetivo/default.php">OBJETIVOS</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/objetivo/default.php">Objetivos</a></li>
                             <?php
                             } ?> 
                             <?php if (permissao_acesso(13)) { ?> 
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/objetivo_ppa/default.php">OBJETIVOS PPA</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/objetivo_ppa/default.php">Objetivos PPA</a></li>
                             <?php
                             } ?>    
                             <?php if (permissao_acesso(17)) { ?> 
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/programa_trabalho/default.php">PROGRAMA DE TRABALHO</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/programa_trabalho/default.php">Programa de Trabalho</a></li>
                             <?php
                             } ?> 
                             <?php if (permissao_acesso(23)) { ?>
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/default.php">TABELAS DE APOIO</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/default.php">Tabelas de Apoio</a></li>
                             <?php
                             } ?>
                         </ul>
                     </li>                      
                     <li class="dropdown">
                         <br />
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>MONITORAMENTO</strong><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>Monitoramento</strong><span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <?php if (permissao_acesso(22)) { ?>
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/indicador/default.php">LISTAGEM</a></li>
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/indicador/default.php">Filtro por Objetivo Estratégico</a></li>
                             <?php } ?> 
                             <?php if (permissao_acesso(60)) { ?>   
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/indicador/opcao.php">INDICADOR</a></li>  
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/indicador/opcao.php">Indicador</a></li>  
                             <?php } ?> 
                             <?php if (permissao_acesso(67)) { ?>                   
                                 <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/pas/opcao.php">PAS</a></li>
@@ -78,22 +79,43 @@ function menu() {
                                 <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/sag/opcao.php">SAG</a></li>
                             <?php } ?> 
                             <?php if (permissao_acesso(59)) { ?>
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/execucao_orcamentaria/default.php">EXECUÇÃO ORÇAMENTÁRIA</a></li>                         
-                            <?php } ?>                            
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/execucao_orcamentaria/default.php">Execução Orçamentária</a></li>                         
+                            <?php } ?>  
+                            <?php if (permissao_acesso(97)) { ?>                          
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/plano_acao/default.php">Plano de Ação</a></li>                         
+                            <?php } ?> 
                         </ul>
                     </li>  
-                    <li><br /><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/ciclo/default.php"><strong>CICLO PLANEJAMENTO</strong></a></li>                                            
+                    <li><br /><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/ciclo/default.php"><strong>Ciclo Planejamento</strong></a></li>                                            
                     <li class="dropdown">
                         <br />
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>RELATÓRIOS</strong><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>Relatórios</strong><span class="caret"></span></a>
                         <?php if (permissao_acesso(24)) { ?>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/relatorio/auditoria.php">AUDITORIA</a></li>                            
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/relatorio/auditoria.php">Auditoria</a></li>                                
+                                <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/relatorio/analitico.php">Analítico</a></li>
                             </ul>
                         <?php } ?>
-                    </li>                    
-                    <li><br /><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/regua/default.php"><strong>RÉGUA</strong></a></li>
-                    <li><br /><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/logout.php" title="SAIR COM SEGURANÇA" class="btn btn-default">Sair</a> </li>
+                    </li>  
+                    <li class="dropdown">
+                        <br />
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>Saiba +</strong><span class="caret"></span></a>
+                        <ul class="dropdown-menu"> 
+                            <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/saiba/informacao.php">O que é SESPlan?</a></li>
+                            <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/gerencia/regua/default.php">Régua</a></li> 
+                            <!--<li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"])?>/visualizador/web/viewer.html?file=<?php echo(urlencode($_SESSION["txt_caminho_aplicacao"]));?>/manual/Conceitos_Indicadores.pdf">Indicadores</a></li>-->
+                            <?php     
+                            $qsaiba = pg_query("SELECT cod_tipo_documento, txt_tipo_documento FROM tb_saiba_tipo WHERE cod_ativo = 1 ORDER BY txt_tipo_documento");                            
+                            if (pg_num_rows($qsaiba) > 0) {
+                                while($rs1Saiba = pg_fetch_array($qsaiba)) {
+                                ?>
+                                    <li><a href="<?php echo($_SESSION["txt_caminho_aplicacao"])?>/gerencia/saiba/manter.php?acao=temp&cod_tipo_documento=<?php echo($rs1Saiba['cod_tipo_documento'])?>"><?php echo($rs1Saiba['txt_tipo_documento'])?></a></li>
+                                <?php 
+                                }                            
+                            }
+                            ?>                            
+                        </ul>
+                    </li>                      
                 </ul>                
             </div><!--/.nav-collapse -->
         </div>
@@ -146,7 +168,7 @@ function menu() {
                     $('#div_dados_usuario').html(div_dados_usuario);                                
                 }
             });
-        });              
+        });          
     </script>
 <?php
 }

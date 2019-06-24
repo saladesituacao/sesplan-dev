@@ -39,7 +39,7 @@ else {
         <input type="hidden" name="status" id="status" value="<?=$_REQUEST['status']?>" />
         <div class="row">
             <div class="form-group col-md-12">
-                <label for="exampleInputEmail1">Perfil:</label>
+                <label for="exampleInputEmail1">Situação:</label>
                 <input type="text" class="form-control" id="txt_status" name="txt_status" value="<?=$txt_status?>" placeholder="Obrigatório">
             </div><!--form-group-->
         </div><!--row-->   

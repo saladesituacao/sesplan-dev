@@ -23,6 +23,14 @@ function destacar_ativo($valor) {
     }
 }
 
+function destacar_habilitado($valor) {
+    if ($valor == "S") {
+        return "<font color=\"green\"><b>SIM</b></font>";
+    } else {
+        return "<font color=\"red\"><b>NÃO</b></font>";
+    }
+}
+
 function destacar_ativo2($valor) {
     if ($valor == "1") {
         return "SIM";
@@ -130,7 +138,127 @@ function DataBanco($dateSql){
     $ano= substr($dateSql, 6);
     $mes= substr($dateSql, 3,-5);
     $dia= substr($dateSql, 0,-8);
-    return $ano."-".$mes."-".$dia;
+    return $ano."-".$mes."-".$dia;    
 }
+
+function formatarDataBrasil($data){    
+    $ano = substr($data,0,4);
+    $mes = substr($data,5,2);
+    $dia = substr($data,8,2);
+
+    return $dia . "/" . $mes . "/" . $ano;
+}
+
+function ObjetoData($data) {
+    $retorno = new DateTime($data, new DateTimeZone( 'America/Sao_Paulo'));
+    $retorno = $retorno->format("d/m/Y");
+
+    return $retorno;
+}
+
+function remove_acento($textos) {
+	if (isset($textos)) {
+		$textos=str_replace("á", "a",$textos);
+		$textos=str_replace("â", "a",$textos);
+		$textos=str_replace("ã", "a",$textos);
+		$textos=str_replace("à", "a",$textos);
+		$textos=str_replace("ä", "a",$textos);
+		$textos=str_replace("Â", "A",$textos);
+		$textos=str_replace("À", "A",$textos);
+		$textos=str_replace("Á", "A",$textos);
+		$textos=str_replace("Ä", "A",$textos);
+		$textos=str_replace("Ã", "A",$textos);
+		$textos=str_replace("Ê", "E",$textos);
+		$textos=str_replace("È", "E",$textos);
+		$textos=str_replace("É", "E",$textos);
+		$textos=str_replace("Ë", "E",$textos);
+		$textos=str_replace("é", "e",$textos);
+		$textos=str_replace("ê", "e",$textos);
+		$textos=str_replace("è", "e",$textos);
+		$textos=str_replace("ë", "e",$textos);
+		$textos=str_replace("í", "i",$textos);
+		$textos=str_replace("ì", "i",$textos);
+		$textos=str_replace("ï", "i",$textos);
+		$textos=str_replace("î", "i",$textos);
+		$textos=str_replace("Í", "I",$textos);
+		$textos=str_replace("Ì", "I",$textos);
+		$textos=str_replace("Ï", "I",$textos);
+		$textos=str_replace("Î", "I",$textos);
+		$textos=str_replace("ó", "o",$textos);
+		$textos=str_replace("ò", "o",$textos);
+		$textos=str_replace("ô", "o",$textos);
+		$textos=str_replace("õ", "o",$textos);
+		$textos=str_replace("ö", "o",$textos);
+		$textos=str_replace("Ó", "O",$textos);
+		$textos=str_replace("Ô", "O",$textos);
+		$textos=str_replace("Ò", "O",$textos);
+		$textos=str_replace("Õ", "O",$textos);
+		$textos=str_replace("Ö", "O",$textos);
+		$textos=str_replace("ú", "u",$textos);
+		$textos=str_replace("ù", "u",$textos);
+		$textos=str_replace("û", "u",$textos);
+		$textos=str_replace("ü", "u",$textos);
+		$textos=str_replace("Ú", "U",$textos);
+		$textos=str_replace("Ù", "U",$textos);
+		$textos=str_replace("Ü", "U",$textos);
+		$textos=str_replace("Û", "U",$textos);
+		$textos=str_replace("ç", "c",$textos);
+		$textos=str_replace("Ç", "C",$textos);
+		$textos=str_replace(" ", "_",$textos);
+		$textos=str_replace("!", "_",$textos);
+		$textos=str_replace("@", "_",$textos);
+		$textos=str_replace("#", "_",$textos);
+		$textos=str_replace("$", "_",$textos);
+		$textos=str_replace("%", "_",$textos);
+		$textos=str_replace("¨", "_",$textos);
+		$textos=str_replace("&", "_",$textos);
+		$textos=str_replace("*", "_",$textos);
+		$textos=str_replace("(", "_",$textos);
+		$textos=str_replace(")", "_",$textos);
+		$textos=str_replace("-", "_",$textos);
+		$textos=str_replace("+", "_",$textos);
+		$textos=str_replace("=", "_",$textos);
+		$textos=str_replace("§", "_",$textos);
+		$textos=str_replace("'", "_",$textos);
+		$textos=str_replace("´", "_",$textos);
+		$textos=str_replace("`", "_",$textos);
+		$textos=str_replace("{", "_",$textos);
+		$textos=str_replace("}", "_",$textos);
+		$textos=str_replace("[", "_",$textos);
+		$textos=str_replace("]", "_",$textos);
+		$textos=str_replace("ª", "_",$textos);
+		$textos=str_replace("º", "_",$textos);
+		$textos=str_replace("°", "_",$textos);
+		$textos=str_replace("|", "_",$textos);
+		$textos=str_replace(",", "_",$textos);
+		$textos=str_replace(":", "_",$textos);
+		$textos=str_replace(";", "_",$textos);
+		$textos=str_replace("^", "_",$textos);
+		$textos=str_replace("~", "_",$textos);
+		$textos=str_replace(",", "_",$textos);
+		$textos=str_replace(chr(166), "_",$textos);
+		$textos=str_replace(chr(167), "_",$textos);
+		$textos=str_replace(chr(248), "_",$textos);
+		$textos=str_replace(chr(176), "_",$textos);
+		$textos=str_replace(chr(186), "_",$textos);
+    }
+    return $textos ;
+}
+
+function fn_owner($sql) {
+    return str_replace('tb_', 'SESPLAN.tb_', $sql);
+}
+
+
+function limitarTexto($texto, $limite){
+    $contador = strlen($texto);
+    if ( $contador >= $limite ) {
+        $texto = substr($texto, 0, strrpos(substr($texto, 0, $limite), ' ')) . '...';
+        return $texto;
+    }
+    else{
+      return $texto;
+    }
+  }
 
 ?>

@@ -38,8 +38,8 @@ $txt_pesquisa = isset($_REQUEST["txt_pesquisa"]) ? $_REQUEST["txt_pesquisa"] : n
 				<?php if (permissao_acesso(54)) { ?>
 					<a href="incluir.php" class="btn btn-primary pull-right h2">Novo Usuário</a>
 				<?php } ?>
-			</div>
-		</div><!-- #top -->	
+			</div> 
+		</div><!-- #top -->	 
         <hr />	
         <div id="list" class="row">
             <?php
@@ -49,10 +49,14 @@ $txt_pesquisa = isset($_REQUEST["txt_pesquisa"]) ? $_REQUEST["txt_pesquisa"] : n
 				$condicao = " WHERE (LOWER(txt_perfil) LIKE '%" .trim(strtolower($txt_pesquisa)). "%' OR LOWER(txt_usuario) LIKE '%" .trim(strtolower($txt_pesquisa)). "%' ";
 				$condicao .= " OR txt_cpf LIKE '%" .preg_replace('/\W+/u', '', trim($txt_pesquisa)). "%' OR LOWER(txt_cargo) LIKE '%" .trim(strtolower($txt_pesquisa)). "%' OR LOWER(txt_sigla) LIKE '%" .trim(strtolower($txt_pesquisa)). "%')";
             }			
-			$sql = "SELECT tb_usuario.*, txt_perfil, txt_cargo, txt_sigla FROM tb_usuario "; 
+			$sql = "SELECT tb_usuario.*, txt_perfil, txt_cargo, txt_sigla, txt_regiao, txt_hospital FROM tb_usuario "; 
 			$sql .= " INNER JOIN tb_perfil ON tb_perfil.cod_perfil = tb_usuario.cod_perfil ";
 			$sql .= " LEFT JOIN tb_orgao ON tb_orgao.cod_orgao = tb_usuario.cod_orgao ";
-			$sql .= " LEFT JOIN tb_cargo ON tb_cargo.cod_cargo = tb_usuario.cod_cargo " .$condicao. " ORDER BY txt_usuario";
+			$sql .= " LEFT JOIN tb_cargo ON tb_cargo.cod_cargo = tb_usuario.cod_cargo ";
+			$sql .= " LEFT JOIN tb_regiao ON tb_regiao.cod_regiao = tb_usuario.cod_regiao ";
+			$sql .= " LEFT JOIN tb_hospital ON tb_hospital.cod_hospital = tb_usuario.cod_hospital " .$condicao. " ORDER BY txt_usuario";
+ 
+			 
 			$q1 = pg_query($sql);
 			if (pg_num_rows($q1) > 0) {
 			?>
@@ -68,6 +72,9 @@ $txt_pesquisa = isset($_REQUEST["txt_pesquisa"]) ? $_REQUEST["txt_pesquisa"] : n
 								<th>Perfil</th>
 								<!--<th>Cargo</th>-->
 								<th>Lotação</th>
+								<th>Região</th>
+								<th>Hospital</th>
+								<th>Alertas</th>
                                 <th>Ativo</th>
 								<th class="actions">Ações</th>
 							</tr>
@@ -85,6 +92,9 @@ $txt_pesquisa = isset($_REQUEST["txt_pesquisa"]) ? $_REQUEST["txt_pesquisa"] : n
 									<td><?php echo($rs1['txt_perfil']) ?></td>					
 									<!--<td><?php echo($rs1['txt_cargo']) ?></td>-->
 									<td><?php echo($rs1['txt_sigla']) ?></td>					
+									<td><?php echo($rs1['txt_regiao']) ?></td>	
+									<td><?php echo($rs1['txt_hospital']) ?></td>	
+									<td><?php echo(destacar_ativo($rs1['cod_notificacao'])) ?></td>   
 									<td><?php echo(destacar_ativo($rs1['cod_ativo'])) ?></td>                                    
 									<td class="actions">	
 										<select name="teste" class="form-control_select" onchange="javascript:go(this)">                                                                            

@@ -69,7 +69,7 @@ if (empty($_REQUEST['log'])) {
                     <label for="exampleInputEmail1">Data Fim:</label>
                     <div class="form-group">
                         <div class='input-group date' >
-                            <input type='text' class="form-control" id='dt_fim' name='dt_fim' autocomplete="off" value="<?=$dt_fim?>" placeholder='DD/MM/AAAA' onkeypress="return isNumberKey(event)"/>
+                            <input type='text' class="form-control" id='dt_fim' name='dt_fim' autocomplete="off" value="<?=$dt_fim?>" placeholder='DD/MM/AAAA' onkeydown="FormataData(this, event)" onkeypress="return isNumberKey(event)"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -121,15 +121,15 @@ if (empty($_REQUEST['log'])) {
                                         if (empty($rs1['dt_reabrir'])) { ?>
                                             <a class="btn btn-warning btn-xs" href="periodo_atualizacao.php?id=<?php echo($rs1['cod_chave']) ?>">Editar</a>
                                         <?php
-                                        } ?>
+                                        } ?> 
                                         <a class="btn btn-danger btn-xs" onclick="return Excluir(<?php echo($rs1['cod_chave']) ?>);" >Excluir</a>
-                                        <?php 
-                                        if (!$clsPas->RegraPeriodo() && empty($rs1['dt_reabrir'])) { 
+                                        <?php                                         
+                                        if (empty($rs1['dt_reabrir'])) { 
                                         ?>
                                             <a class="btn btn-primary btn-xs" onclick="return Reabrir(<?php echo($rs1['cod_chave']) ?>);" >Reabrir Período</a>
                                         <?php
                                         }?>
-                                        <?php 
+                                        <?php                                        
                                         if (!empty($rs1['dt_reabrir'])) { 
                                         ?>
                                             <a class="btn btn-primary btn-xs" onclick="return Fechar(<?php echo($rs1['cod_chave']) ?>);" >Encerrar Período</a>

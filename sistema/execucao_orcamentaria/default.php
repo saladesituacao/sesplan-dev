@@ -33,6 +33,19 @@ if (!empty($cod_programa_trabalho)) {
 if (empty($_REQUEST['log'])) {
 	Auditoria(130, "Listar Execução Orçamentária", "");
 }
+
+if (empty($_SESSION['ano_corrente'])) {
+    /*
+    $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+    $rs = pg_fetch_array(pg_query($sql));  
+    $_SESSION['ano_corrente'] = $rs['ano'];
+    */
+    $_SESSION['ano_corrente'] = "2018";
+}
+
+if (!empty($_REQUEST['cod_ano_corrente'])) {
+    $_SESSION['ano_corrente'] = $_REQUEST['cod_ano_corrente'];
+}
 ?>
 
 <div id="main" class="container-fluid" style="margin-top: 50px">
@@ -41,10 +54,26 @@ if (empty($_REQUEST['log'])) {
         <div id="top" class="row">
 			<div class="col-sm-12">
 				<h2>EXECUÇÃO ORÇAMENTÁRIA</h2>
-			</div>			
+			</div>		            
 		</div> <!-- /#top -->
         <div class="row">         
-            <div class="col-sm-12"><h3>Filtros</h3></div>             
+            <div class="col-sm-1"><h3>Filtros</h3></div>  
+            <div class="col-sm-6">			                
+				<div class="input-group h2">                    
+                    <select id="cod_ano_corrente" name="cod_ano_corrente" class="chosen-select">
+                        <option value="2019" <?php
+                                        if (strval($_SESSION['ano_corrente']) == "2019") {
+                                            echo("selected");
+                                        }
+                                        ?>>2019</option>
+                        <option value="2018" <?php
+                                        if (strval($_SESSION['ano_corrente']) == "2018") {
+                                            echo("selected");
+                                        }
+                                        ?>>2018</option>
+                    </select>
+				</div>			
+			</div>	           
         </div>
         <div class="row">
             <div class="col-sm-2">                
@@ -118,7 +147,11 @@ if (empty($_REQUEST['log'])) {
         <?php
         //EIXO
         $sql = "SELECT DISTINCT(txt_eixo) AS txt_eixo, tb_programa_trabalho.cod_eixo, codigo_eixo FROM tb_programa_trabalho ";         
-        $sql .= " INNER JOIN tb_eixo ON tb_eixo.cod_eixo = tb_programa_trabalho.cod_eixo WHERE tb_programa_trabalho.cod_ativo = 1 ".$condicao_objetivo;
+        $sql .= " INNER JOIN tb_eixo ON tb_eixo.cod_eixo = tb_programa_trabalho.cod_eixo ";
+        $sql .= " INNER JOIN tab_siggo_sesplan ON tb_programa_trabalho.nr_programa_trabalho IN ";
+        $sql .= " (SELECT cofuncao || '.' || cosubfuncao || '.' || coprograma || '.' || coprojeto || '.' || cosubtitulo ";
+        $sql .= " FROM tab_siggo_sesplan WHERE i_ano_exercicio = '".$_SESSION['ano_corrente']."') ";
+        $sql .= " WHERE tb_programa_trabalho.cod_ativo = 1 ".$condicao_objetivo;
         $sql .= " ORDER BY codigo_eixo";                        
         $q1 = pg_query($sql);
         if (pg_num_rows($q1) > 0) { ?>
@@ -134,6 +167,9 @@ if (empty($_REQUEST['log'])) {
                     $sql = "SELECT DISTINCT(txt_perspectiva) AS txt_perspectiva, tb_programa_trabalho.cod_perspectiva, codigo_perspectiva ";
                     $sql .= " FROM tb_programa_trabalho ";                                     
                     $sql .= " INNER JOIN tb_perspectiva ON tb_perspectiva.cod_perspectiva = tb_programa_trabalho.cod_perspectiva ";
+                    $sql .= " INNER JOIN tab_siggo_sesplan ON tb_programa_trabalho.nr_programa_trabalho IN ";
+                    $sql .= " (SELECT cofuncao || '.' || cosubfuncao || '.' || coprograma || '.' || coprojeto || '.' || cosubtitulo ";
+                    $sql .= " FROM tab_siggo_sesplan WHERE i_ano_exercicio = '".$_SESSION['ano_corrente']."') ";
                     $sql .= " WHERE tb_programa_trabalho.cod_eixo = ".$rs1['cod_eixo'].$condicao_objetivo;
                     $sql .= " ORDER BY codigo_perspectiva";                                        
                     $qPerspectiva = pg_query($sql);
@@ -150,7 +186,10 @@ if (empty($_REQUEST['log'])) {
                                 //DIRETRIZ
                                 $sql = "SELECT DISTINCT(txt_diretriz) AS txt_diretriz, tb_programa_trabalho.cod_diretriz, codigo_diretriz ";
                                 $sql .= " FROM tb_programa_trabalho ";                                
-                                $sql .= " INNER JOIN tb_diretriz ON tb_diretriz.cod_diretriz = tb_programa_trabalho.cod_diretriz ";                                
+                                $sql .= " INNER JOIN tb_diretriz ON tb_diretriz.cod_diretriz = tb_programa_trabalho.cod_diretriz ";
+                                $sql .= " INNER JOIN tab_siggo_sesplan ON tb_programa_trabalho.nr_programa_trabalho IN ";
+                                $sql .= " (SELECT cofuncao || '.' || cosubfuncao || '.' || coprograma || '.' || coprojeto || '.' || cosubtitulo ";
+                                $sql .= " FROM tab_siggo_sesplan WHERE i_ano_exercicio = '".$_SESSION['ano_corrente']."') ";                                
                                 $sql .= " WHERE tb_programa_trabalho.cod_eixo = ".$rs1['cod_eixo']; 
                                 $sql .= " AND tb_programa_trabalho.cod_perspectiva = ".$rsPerspectiva['cod_perspectiva'].$condicao_objetivo;
                                 $sql .= " ORDER BY codigo_diretriz";                                                                                             
@@ -166,7 +205,10 @@ if (empty($_REQUEST['log'])) {
                                             //OBJETIVOS
                                             $sql = "SELECT DISTINCT(txt_objetivo) AS txt_objetivo, tb_programa_trabalho.cod_objetivo, ";
                                             $sql .= " codigo_objetivo, CAST(Replace(substring(codigo_objetivo,4,6), '.', '') AS INT) AS T FROM tb_programa_trabalho ";
-                                            $sql .= " INNER JOIN tb_objetivo ON tb_objetivo.cod_objetivo = tb_programa_trabalho.cod_objetivo ";                                                            
+                                            $sql .= " INNER JOIN tb_objetivo ON tb_objetivo.cod_objetivo = tb_programa_trabalho.cod_objetivo ";
+                                            $sql .= " INNER JOIN tab_siggo_sesplan ON tb_programa_trabalho.nr_programa_trabalho IN ";
+                                            $sql .= " (SELECT cofuncao || '.' || cosubfuncao || '.' || coprograma || '.' || coprojeto || '.' || cosubtitulo ";
+                                            $sql .= " FROM tab_siggo_sesplan WHERE i_ano_exercicio = '".$_SESSION['ano_corrente']."') ";
                                             $sql .= " WHERE tb_programa_trabalho.cod_eixo = ".$rs1['cod_eixo'];
                                             $sql .= " AND tb_programa_trabalho.cod_perspectiva = ".$rsPerspectiva['cod_perspectiva'];
                                             $sql .= " AND tb_programa_trabalho.cod_diretriz = ".$rs2['cod_diretriz'].$condicao_objetivo;
@@ -182,10 +224,13 @@ if (empty($_REQUEST['log'])) {
                                                     $sql = "SELECT DISTINCT(txt_objetivo_ppa) AS txt_objetivo_ppa, tb_programa_trabalho.cod_objetivo_ppa, codigo_objetivo_ppa ";
                                                     $sql .= " FROM tb_programa_trabalho ";
                                                     $sql .= " INNER JOIN tb_objetivo_ppa ON tb_objetivo_ppa.cod_objetivo_ppa = tb_programa_trabalho.cod_objetivo_ppa "; 
+                                                    $sql .= " INNER JOIN tab_siggo_sesplan ON tb_programa_trabalho.nr_programa_trabalho IN ";
+                                                    $sql .= " (SELECT cofuncao || '.' || cosubfuncao || '.' || coprograma || '.' || coprojeto || '.' || cosubtitulo ";
+                                                    $sql .= " FROM tab_siggo_sesplan WHERE i_ano_exercicio = '".$_SESSION['ano_corrente']."') ";
                                                     $sql .= " WHERE tb_programa_trabalho.cod_eixo = ".$rs1['cod_eixo'];
                                                     $sql .= " AND tb_programa_trabalho.cod_perspectiva = ".$rsPerspectiva['cod_perspectiva'];
                                                     $sql .= " AND tb_programa_trabalho.cod_diretriz = ".$rs2['cod_diretriz'];
-                                                    $sql .= " AND tb_programa_trabalho.cod_objetivo = ".$rsObjetivo['cod_objetivo'];
+                                                    $sql .= " AND tb_programa_trabalho.cod_objetivo = ".$rsObjetivo['cod_objetivo'].$condicao_objetivo;
                                                     $sql .= " ORDER BY codigo_objetivo_ppa";                                                   
                                                     $qObjetivoPpa = pg_query($sql);
                                                     if (pg_num_rows($qObjetivoPpa) > 0) {
@@ -198,11 +243,16 @@ if (empty($_REQUEST['log'])) {
                                                             <div class="row">
                                                                 <div class="table-responsive col-md-12">
                                                                     <?php
-                                                                    $sql = "SELECT * FROM tb_programa_trabalho WHERE cod_ativo = 1 AND cod_eixo = ".$rs1['cod_eixo'];
+                                                                    $sql = "SELECT * FROM tb_programa_trabalho ";                                                                    
+                                                                    $sql .= " WHERE cod_ativo = 1 AND cod_eixo = ".$rs1['cod_eixo'];
                                                                     $sql .= " AND cod_perspectiva = ".$rsPerspectiva['cod_perspectiva'];
                                                                     $sql .= " AND cod_diretriz = ".$rs2['cod_diretriz'];
                                                                     $sql .= " AND cod_objetivo = ".$rsObjetivo['cod_objetivo'];
-                                                                    $sql .= " AND cod_objetivo_ppa = ".$rsObjetivoPpa['cod_objetivo_ppa'];                                                                     
+                                                                    $sql .= " AND cod_objetivo_ppa = ".$rsObjetivoPpa['cod_objetivo_ppa'].$condicao_objetivo;
+                                                                    $sql .= " AND EXISTS(SELECT cofuncao || '.' || cosubfuncao || '.' || coprograma || '.' || coprojeto || '.' || cosubtitulo ";
+                                                                    $sql .= " FROM tab_siggo_sesplan WHERE i_ano_exercicio = '".$_SESSION['ano_corrente']."' AND ";
+                                                                    $sql .= " nr_programa_trabalho = cofuncao || '.' || cosubfuncao || '.' || coprograma || '.' || coprojeto || '.' || cosubtitulo) ";  
+                                                                    //echo($sql);                                                                   
                                                                     $qProg = pg_query($sql);  
                                                                     
                                                                     while ($rsProg = pg_fetch_array($qProg)) {
@@ -222,11 +272,12 @@ if (empty($_REQUEST['log'])) {
                                                                             $nr_2 = substr($nr_programa_trabalho, 3, 3);
                                                                             $nr_3 = substr($nr_programa_trabalho, 7, 4);
                                                                             $nr_4 = substr($nr_programa_trabalho, 12, 4);
-                                                                            $nr_5 = substr($nr_programa_trabalho, 17, 4);
+                                                                            $nr_5 = substr($nr_programa_trabalho, 17, 4);  
                                                                                                                                                                                                      
                                                                             $sql = "SELECT SUM(cast(cast(LEI as text) as integer)) AS lei FROM tab_siggo_sesplan WHERE cofuncao  = '".$nr_1."' ";
                                                                             $sql .= " AND cosubfuncao = '".$nr_2."' AND coprograma = '".$nr_3."' ";
-                                                                            $sql .= " AND coprojeto = '".$nr_4."' AND cosubtitulo = '".$nr_5."'";                                                                                                                                                                                                                                
+                                                                            $sql .= " AND coprojeto = '".$nr_4."' AND cosubtitulo = '".$nr_5."' "; 
+                                                                            $sql .= " AND i_ano_exercicio = '".$_SESSION['ano_corrente']."'";                                                                                                                                                                                                                                                                                                          
                                                                             $qStage = pg_query($sql); 
                                                                             while ($rsStage = pg_fetch_array($qStage)) {
                                                                                 $lei = $rsStage['lei'];
@@ -273,11 +324,12 @@ if (empty($_REQUEST['log'])) {
                                                                                                 $css_1 = "tab-pane fade";
                                                                                             } ?>
                                                                                             <div id="menu_<?php echo($cod_programa_trabalho) ?>_<?=$ct_1?>" class="<?=$css_1?>">
-                                                                                                <?php
-                                                                                                $sql = "SELECT disponivel, empenhado, liquidado, autorizado FROM tab_siggo_sesplan WHERE cofuncao  = '".$nr_1."' ";
+                                                                                                <?php                                                                                                
+                                                                                                $sql = "SELECT disponivel, empenhado, liquidado, autorizado, contingenciado, bloqueado, data_extracao";
+                                                                                                $sql .= " FROM tab_siggo_sesplan WHERE cofuncao  = '".$nr_1."' ";
                                                                                                 $sql .= " AND cosubfuncao = '".$nr_2."' AND coprograma = '".$nr_3."' ";
                                                                                                 $sql .= " AND coprojeto = '".$nr_4."' AND cosubtitulo = '".$nr_5."'";
-                                                                                                $sql .= " AND CAST(inmes as integer) = ".$ct_1;                                                                                                                                                                                                                                                          
+                                                                                                $sql .= " AND CAST(inmes as integer) = ".$ct_1." AND i_ano_exercicio = '".$_SESSION['ano_corrente']."'";                                                                                                                                                                                                                                                          
                                                                                                 $qStage2 = pg_query($sql); 
                                                                                                 ?>
                                                                                                 <table class="table table-striped" cellspacing="0" cellpadding="0">
@@ -288,8 +340,11 @@ if (empty($_REQUEST['log'])) {
                                                                                                             <th>EmpenhadoR$</th>
                                                                                                             <th>LiquidadoR$</th>    
                                                                                                             <th>Recurso empenhado/autorizado%</th>
-                                                                                                            <th>Recurso liquidado/empenhado%</th>                                                                                                        
+                                                                                                            <th>Recurso liquidado/empenhado%</th>  
+                                                                                                            <th>Contingenciado</th>
+                                                                                                            <th>Bloqueado</th>                                                                                                      
                                                                                                             <th>Situação</th>
+                                                                                                            <th>Data Extração</th>
                                                                                                         </tr>
                                                                                                     </thead>	
                                                                                                     <?php
@@ -298,13 +353,17 @@ if (empty($_REQUEST['log'])) {
                                                                                                             $autorizado = $autorizado + $rsStage2['autorizado'];
                                                                                                             $disponivel = $disponivel + $rsStage2['disponivel'];
                                                                                                             $empenhado = $empenhado + $rsStage2['empenhado'];
-                                                                                                            $liquidado = $liquidado + $rsStage2['liquidado'];  
+                                                                                                            $liquidado = $liquidado + $rsStage2['liquidado'];
+                                                                                                            $contingenciado = $contingenciado + $rsStage2['contingenciado'];
+                                                                                                            $bloqueado = $bloqueado + $rsStage2['bloqueado'];  
                                                                                                             
                                                                                                             $empenhado_autorizado = $clsExecucaoOrcamentaria->RecursoEmpenhadoAutorizado($empenhado, $autorizado);
                                                                                                             $liquidado_empenhado = $clsExecucaoOrcamentaria->RecursoLiquidadoEmpenhado($liquidado, $empenhado);
 
                                                                                                             $situacao_execucao = $clsExecucaoOrcamentaria->Situacao($empenhado_autorizado, $ct_1);
-                                                                                                            $a_situacao_execucao = explode("|", $situacao_execucao);                                                                                                            
+                                                                                                            $a_situacao_execucao = explode("|", $situacao_execucao);     
+                                                                                                            
+                                                                                                            $data_extracao = formatarDataBrasil($rsStage2['data_extracao']);
                                                                                                         }
                                                                                                         ?> 
                                                                                                         <tbody>                                                                                                            
@@ -315,9 +374,12 @@ if (empty($_REQUEST['log'])) {
                                                                                                                 <td><?php echo(number_format($liquidado, 2, ',', '.')) ?></td>
                                                                                                                 <td><?php echo($empenhado_autorizado) ?></td>
                                                                                                                 <td><?php echo($liquidado_empenhado) ?></td>
+                                                                                                                <td><?php echo($contingenciado) ?></td>
+                                                                                                                <td><?php echo($bloqueado) ?></td>
                                                                                                                 <td>
-                                                                                                                    <font color="<?php echo($a_situacao_execucao[0]); ?>"><b><?php echo($a_situacao_execucao[1]); ?></b></font>
+                                                                                                                    <input type="text" class="form-control_custom" name="txt_ultimo_status" style="background-color:<?php echo($a_situacao_execucao[0]) ?>;" value="<?php echo($a_situacao_execucao[1]) ?>" disabled="disabled">                                                                                                                    
                                                                                                                 </td>
+                                                                                                                <td><?php echo($data_extracao) ?></td>
                                                                                                             </tr>                                                                                                                                                                                                                  
                                                                                                         </tbody>
                                                                                                         <?php	

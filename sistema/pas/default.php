@@ -9,6 +9,19 @@ if (empty($_REQUEST['log'])) {
 	Auditoria(85, "Listar PAS", "");
 }
 
+if (empty($_SESSION['ano_corrente'])) {
+    /*
+    $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+    $rs = pg_fetch_array(pg_query($sql));  
+    $_SESSION['ano_corrente'] = $rs['ano'];
+    */
+    $_SESSION['ano_corrente'] = "2018";
+}
+
+if (!empty($_REQUEST['cod_ano_corrente'])) {
+    $_SESSION['ano_corrente'] = $_REQUEST['cod_ano_corrente'];
+}
+
 $txt_pesquisa = $_REQUEST['txt_pesquisa'];
 $cod_objetivo_url = $_REQUEST['cod_objetivo_url'];
 $txt_filtro = $_REQUEST['txt_filtro'];
@@ -32,12 +45,6 @@ if (!empty($txt_filtro_responsavel)) {
 
 $clsPas = new clsPas();
 $clsStatus = new clsStatus();
-
-if($clsPas->RegraPeriodo()) {
-    $css_periodo = "";
-} else {
-    $css_periodo = "disabled";
-}
 ?>
 
 <div id="main" class="container-fluid" style="margin-top: 50px">
@@ -45,15 +52,26 @@ if($clsPas->RegraPeriodo()) {
         <input type="hidden" name="log" id="log" value="1" />       
         <input type="hidden" name="cod_objetivo_url" id="cod_objetivo_url" value="<?php echo($cod_objetivo_url) ?>" />       
         <div id="top" class="row">
-			<div class="col-sm-3">
-				<h2>PAS</h2>
+			<div class="col-sm-1">
+                <h2>PAS</h2>                
 			</div>
-			<div class="col-sm-6">				
-				<div class="input-group h2">
-					
+			<div class="col-sm-6">			                
+				<div class="input-group h2">                    
+                    <select id="cod_ano_corrente" name="cod_ano_corrente" class="chosen-select">
+                        <option value="2019" <?php
+                                        if (strval($_SESSION['ano_corrente']) == "2019") {
+                                            echo("selected");
+                                        }
+                                        ?>>2019</option>
+                        <option value="2018" <?php
+                                        if (strval($_SESSION['ano_corrente']) == "2018") {
+                                            echo("selected");
+                                        }
+                                        ?>>2018</option>
+                    </select>
 				</div>			
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-5">
                 <?php if (permissao_acesso(68)) { ?>
 				    <a href="incluir.php" class="btn btn-primary pull-right h2">Incluir</a>
                 <?php } ?>
@@ -96,7 +114,8 @@ if($clsPas->RegraPeriodo()) {
         //EIXO
         $sql = "SELECT DISTINCT(txt_eixo) AS txt_eixo, tb_objetivo.cod_eixo, codigo_eixo FROM tb_pas ";
         $sql .= " INNER JOIN tb_objetivo ON tb_objetivo.cod_objetivo = tb_pas.cod_objetivo ";
-        $sql .= " INNER JOIN tb_eixo ON tb_eixo.cod_eixo = tb_objetivo.cod_eixo WHERE tb_eixo.cod_ativo = 1 ".$condicao." ORDER BY codigo_eixo";
+        $sql .= " INNER JOIN tb_eixo ON tb_eixo.cod_eixo = tb_objetivo.cod_eixo WHERE tb_eixo.cod_ativo = 1 ".$condicao;
+        $sql .= " AND EXTRACT(YEAR from tb_pas.dt_inclusao) = ".$_SESSION['ano_corrente']." ORDER BY codigo_eixo";
         $q1 = pg_query($sql);
         if (pg_num_rows($q1) > 0) { ?>
             <p align="justify">
@@ -110,7 +129,8 @@ if($clsPas->RegraPeriodo()) {
                             $sql = "SELECT DISTINCT(txt_perspectiva) AS txt_perspectiva, tb_perspectiva.cod_perspectiva, codigo_perspectiva FROM tb_pas ";
                             $sql .= " INNER JOIN tb_objetivo ON tb_objetivo.cod_objetivo = tb_pas.cod_objetivo ";
                             $sql .= " INNER JOIN tb_perspectiva ON tb_perspectiva.cod_perspectiva = tb_objetivo.cod_perspectiva ";
-                            $sql .= " WHERE tb_perspectiva.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'].$condicao." ORDER BY codigo_perspectiva";
+                            $sql .= " WHERE tb_perspectiva.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'].$condicao;
+                            $sql .= " AND EXTRACT(YEAR from tb_pas.dt_inclusao) = ".$_SESSION['ano_corrente']." ORDER BY codigo_perspectiva";
                             ?>                            
                             &nbsp;&nbsp;
                             <?php 
@@ -123,7 +143,8 @@ if($clsPas->RegraPeriodo()) {
                                 $sql .= " INNER JOIN tb_objetivo ON tb_objetivo.cod_objetivo = tb_pas.cod_objetivo ";
                                 $sql .= " INNER JOIN tb_diretriz ON tb_diretriz.cod_diretriz = tb_objetivo.cod_diretriz ";
                                 $sql .= " WHERE tb_diretriz.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'];
-                                $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'].$condicao." ORDER BY codigo_diretriz";
+                                $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'].$condicao;
+                                $sql .= " AND EXTRACT(YEAR from tb_pas.dt_inclusao) = ".$_SESSION['ano_corrente']." ORDER BY codigo_diretriz";
                                 ?>
                                 <br />
                                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -137,7 +158,8 @@ if($clsPas->RegraPeriodo()) {
                                     $sql .= " INNER JOIN tb_objetivo ON tb_objetivo.cod_objetivo = tb_pas.cod_objetivo ";
                                     $sql .= " WHERE tb_objetivo.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'];
                                     $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'];
-                                    $sql .= " AND tb_objetivo.cod_diretriz = ".$rs3['cod_diretriz'].$condicao." ORDER BY codigo_objetivo";
+                                    $sql .= " AND tb_objetivo.cod_diretriz = ".$rs3['cod_diretriz'].$condicao;
+                                    $sql .= " AND EXTRACT(YEAR from tb_pas.dt_inclusao) = ".$_SESSION['ano_corrente']." ORDER BY codigo_objetivo";
                                     ?>
                                     <br />
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -153,7 +175,8 @@ if($clsPas->RegraPeriodo()) {
                                         $sql .= " WHERE tb_objetivo_ppa.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'];
                                         $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'];
                                         $sql .= " AND tb_objetivo.cod_diretriz = ".$rs3['cod_diretriz'];
-                                        $sql .= " AND tb_pas.cod_objetivo = ".$rs4['cod_objetivo'].$condicao." ORDER BY codigo_objetivo_ppa";
+                                        $sql .= " AND tb_pas.cod_objetivo = ".$rs4['cod_objetivo'].$condicao;
+                                        $sql .= " AND EXTRACT(YEAR from tb_pas.dt_inclusao) = ".$_SESSION['ano_corrente']." ORDER BY codigo_objetivo_ppa";
                                         ?>
                                         <br />
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -187,6 +210,7 @@ if($clsPas->RegraPeriodo()) {
                                             $sql .= " WHERE cod_eixo = ".$rs1['cod_eixo'];                                            
                                             $sql .= " AND cod_perspectiva = ".$rs2['cod_perspectiva']. " AND cod_diretriz = ".$rs3['cod_diretriz'];
                                             $sql .= " AND tb_pas.cod_objetivo = ".$rs4['cod_objetivo']. " AND cod_objetivo_ppa = ".$rs5['cod_objetivo_ppa'].$condicao;
+                                            $sql .= " AND EXTRACT(YEAR from tb_pas.dt_inclusao) = ".$_SESSION['ano_corrente'];
                                             $sql .= " ORDER BY CAST(LEFT(tb_pas.codigo_acao||'.', STRPOS(tb_pas.codigo_acao||'.','.') - 1) AS INT)";                                            
                                             //echo($sql);
                                             $qAcao = pg_query($sql);
@@ -196,7 +220,7 @@ if($clsPas->RegraPeriodo()) {
                                                 while ($rsAcao = pg_fetch_array($qAcao)) {                                                                                                                         
                                                     $id = $rsAcao['cod_pas'];
                                                     $cod_status = $clsPas->SituacaoPAS($id);                                                                                                                                                                                             
-                                                    if ($cod_status != '') {
+                                                    if ($cod_status != '') {                                                        
                                                         $txt_cor = $clsStatus->RetornaCorStatus($cod_status);                                                                        
                                                         $txt_status = $clsStatus->RetornaStatus($cod_status);                                                                        
                                                     } else {
@@ -208,6 +232,12 @@ if($clsPas->RegraPeriodo()) {
                                                         $disabled_controle = "disabled";
                                                     } else {
                                                         $disabled_controle = "";
+                                                    }
+
+                                                    if($clsPas->RegraPeriodo($id)) {
+                                                        $css_periodo = "";
+                                                    } else {
+                                                        $css_periodo = "disabled";
                                                     }
                                                     
                                                     ?>                                                    
@@ -236,7 +266,7 @@ if($clsPas->RegraPeriodo()) {
                                                                         <th>Controle</th>                                                                        
                                                                         <th>Responsável</th>
                                                                         <!--<th>Parceiro</th>-->
-                                                                        <th class="actions"></th>                                                                        
+                                                                        <th class="actions">Ações</th>                                                                        
                                                                     </tr>                                                            
                                                                 </thead>
                                                                 <tbody>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
@@ -381,7 +411,7 @@ if($clsPas->RegraPeriodo()) {
 
 <script type="text/javascript">
     function SubmitForm() {    
-        self.location.href = 'default.php?txt_filtro=' + $('#txt_filtro').val() + '&cod_objetivo_url=' + $('#cod_objetivo_url').val() + '&txt_filtro_responsavel=' + $('#txt_filtro_responsavel').val();
+        self.location.href = 'default.php?txt_filtro=' + $('#txt_filtro').val() + '&cod_objetivo_url=' + $('#cod_objetivo_url').val() + '&txt_filtro_responsavel=' + $('#txt_filtro_responsavel').val() + '&cod_ano_corrente=' + $('#cod_ano_corrente').val();
     }
 
     function LimparForm() {    

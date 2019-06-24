@@ -8,11 +8,14 @@ $txt_cpf = $_REQUEST['txt_cpf'];
 $cod_ativo = $_REQUEST['cod_ativo'];
 $txt_usuario = $_REQUEST['txt_usuario'];
 $txt_email = $_REQUEST['txt_email'];
-$cod_perfil = $_REQUEST['cod_perfil'];
+$cod_perfil = $_REQUEST['cod_perfil']; 
 $txt_login = $_REQUEST['txt_login'];
 $txt_matricula = $_REQUEST['txt_matricula'];
-$cod_orgao = $_REQUEST['cod_orgao'];
+$cod_orgao = $_REQUEST['cod_orgao']; 
 $cod_cargo = $_REQUEST['cod_cargo'];
+$cod_notificacao = $_REQUEST['cod_notificacao'];
+$cod_regiao = $_REQUEST['cod_regiao']; 
+$cod_hospital = $_REQUEST['cod_hospital'];
 
 switch ($acao) {
     case 'validacao_incluir':                  
@@ -24,7 +27,7 @@ switch ($acao) {
         else {
             echo("sucesso");
         }
-        break;
+        break; 
 
     case 'validacao_alterar':
         $clsUsuario = new clsUsuario();        
@@ -48,6 +51,9 @@ switch ($acao) {
         $clsUsuario->txt_matricula = $txt_matricula;
         $clsUsuario->cod_cargo = $cod_cargo;
         $clsUsuario->cod_orgao = $cod_orgao;
+        $clsUsuario->cod_notificacao = $cod_notificacao;
+        $clsUsuario->cod_regiao = $cod_regiao;
+        $clsUsuario->cod_hospital = $cod_hospital;
         $clsUsuario->IncluirUsuario();
 
         js_go('default.php');                      
@@ -65,6 +71,9 @@ switch ($acao) {
         $clsUsuario->txt_matricula = $txt_matricula;
         $clsUsuario->cod_cargo = $cod_cargo;
         $clsUsuario->cod_orgao = $cod_orgao;
+        $clsUsuario->cod_notificacao = $cod_notificacao;
+        $clsUsuario->cod_regiao = $cod_regiao;
+        $clsUsuario->cod_hospital = $cod_hospital;
         $clsUsuario->AlterarUsuario();   
                         
         js_go('default.php');

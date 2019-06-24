@@ -12,7 +12,7 @@ if(empty($id)) {
 }
 
 if (empty($verificado) && !empty($id)) {
-    $q1 = pg_query("SELECT tb_sag.*, txt_programa_trabalho FROM tb_sag LEFT JOIN tb_programa_trabalho ON tb_programa_trabalho.cod_programa_trabalho = tb_sag.cod_programa_trabalho WHERE cod_sag = " .$id);
+    $q1 = pg_query("SELECT tb_sag.*, txt_programa_trabalho, txt_titulo_programa FROM tb_sag LEFT JOIN tb_programa_trabalho ON tb_programa_trabalho.cod_programa_trabalho = tb_sag.cod_programa_trabalho WHERE cod_sag = " .$id);
     $rs1 = pg_fetch_array($q1);        
     $cod_objetivo =  limpar_comparacao($rs1['cod_objetivo']);
     $cod_objetivo_ppa =  limpar_comparacao($rs1['cod_objetivo_ppa']);
@@ -37,6 +37,7 @@ if (empty($verificado) && !empty($id)) {
     $nr_meta_4 =  limpar_comparacao($rs1['nr_meta_4']);
     $nr_meta_5 =  limpar_comparacao($rs1['nr_meta_5']);
     $nr_meta_6 =  limpar_comparacao($rs1['nr_meta_6']);
+    $txt_titulo_programa = limpar_comparacao($rs1['txt_titulo_programa']);    
 }
 else {    
     $cod_objetivo = $_REQUEST['cod_objetivo'];

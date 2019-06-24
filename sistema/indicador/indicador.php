@@ -20,20 +20,49 @@ $clsOrgao = new clsOrgao();
 if (empty($_REQUEST['log'])) {
 	Auditoria(73, "Detalhar Indicador", "");
 }
+
+if (empty($_SESSION['ano_corrente'])) {
+	/*
+    $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+    $rs = pg_fetch_array(pg_query($sql));  
+	$_SESSION['ano_corrente'] = $rs['ano'];
+	*/
+	$_SESSION['ano_corrente'] = "2018";
+}
+
+if (!empty($_REQUEST['cod_ano_corrente'])) {
+    $_SESSION['ano_corrente'] = $_REQUEST['cod_ano_corrente'];
+}
 ?>
 <div id="main" class="container-fluid" style="margin-top: 50px">
     <form id="frm1">
 		<input type="hidden" name="log" id="log" value="1" />
+		<input type="hidden" name="cod_eixo" id="cod_eixo" value="<?php echo($cod_eixo) ?>" />
+		<input type="hidden" name="cod_perspectiva" id="cod_perspectiva" value="<?php echo($cod_perspectiva) ?>" />
+		<input type="hidden" name="cod_diretriz" id="cod_diretriz" value="<?php echo($cod_diretriz) ?>" />
+		<input type="hidden" name="cod_objetivo" id="cod_objetivo" value="<?php echo($cod_objetivo) ?>" />
         <div id="top" class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-1">
 				<h2>Indicador</h2>
 			</div>		
 			<div class="col-sm-6">				
                 <div class="input-group h2">
-                                       
+					&nbsp;
+					<select id="cod_ano_corrente" name="cod_ano_corrente" class="chosen-select" onchange="frm1.submit();">
+						<option value="2019" <?php
+										if (strval($_SESSION['ano_corrente']) == "2019") {
+											echo("selected");
+										}
+										?>>2019</option>
+						<option value="2018" <?php
+										if (strval($_SESSION['ano_corrente']) == "2018") {
+											echo("selected");
+										}
+										?>>2018</option>
+					</select>      
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-5">
 				<?php if (permissao_acesso(61)) { ?>
                 	<a href="incluir.php" class="btn btn-primary h2">Incluir</a> 
 				<?php } ?> 
@@ -54,6 +83,7 @@ if (empty($_REQUEST['log'])) {
 			$sql .= " AND tb_objetivo.cod_perspectiva = ".$cod_perspectiva;
 			$sql .= " AND tb_objetivo.cod_diretriz = ".$cod_diretriz;
 			$sql .= " AND tb_indicador.cod_objetivo = ".$cod_objetivo;
+			$sql .= " AND EXTRACT(YEAR from tb_indicador.dt_inclusao) = ".$_SESSION['ano_corrente'];
 			$sql .= " GROUP BY codigo_eixo, txt_eixo, codigo_diretriz, txt_diretriz, codigo_perspectiva, ";
 			$sql .= " txt_perspectiva, codigo_objetivo, txt_objetivo, codigo_objetivo_ppa, txt_objetivo_ppa, ";
 			$sql .= " tb_indicador.cod_objetivo_ppa ";
@@ -80,6 +110,7 @@ if (empty($_REQUEST['log'])) {
 							$sql .= " AND tb_objetivo.cod_diretriz = ".$cod_diretriz;
 							$sql .= " AND tb_indicador.cod_objetivo = ".$cod_objetivo;
 							$sql .= " AND tb_indicador.cod_objetivo_ppa = ".$rs['cod_objetivo_ppa'];
+							$sql .= " AND EXTRACT(YEAR from tb_indicador.dt_inclusao) = ".$_SESSION['ano_corrente'];
 							$q1 = pg_query($sql);
 							if (pg_num_rows($q1) > 0) { ?>
 									<br />
@@ -95,7 +126,7 @@ if (empty($_REQUEST['log'])) {
 														<!--<th>Unidade Medida</th>
 														<th>Polaridade</th>-->
 														<th>Status</th>
-														<th></th>
+														<th>Ações</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -211,6 +242,11 @@ if (empty($_REQUEST['log'])) {
 					<br />
 				<?php
 				}
+			}
+			else { ?>
+				<hr>
+				<center><h4>NÃO EXISTEM REGISTROS CADASTRADOS.</h4></center>
+			<?php
 			}
 			?>
 		</div><!--row-->

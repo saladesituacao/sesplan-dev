@@ -10,12 +10,6 @@ $clsSag = new clsSag();
 
 $now = new DateTime;
 
-if($clsSag->RegraPeriodo()) {
-    $css_periodo = "";
-} else {
-    $css_periodo = "disabled";
-}
-
 if (empty($_REQUEST['log'])) {
 	Auditoria(79, "Análise de Indicador", "");
 }
@@ -23,6 +17,12 @@ if (empty($_REQUEST['log'])) {
 $cod_sag = $_REQUEST['cod_sag'];
 $cod_objetivo_url = $_REQUEST['cod_objetivo_url'];
 $verificado = $_REQUEST['verificado'];
+
+if($clsSag->RegraPeriodo($cod_sag)) {
+    $css_periodo = "";
+} else {
+    $css_periodo = "disabled";
+}
 
 $sql = "SELECT tb_sag.*, codigo_eixo, txt_eixo, codigo_perspectiva, txt_perspectiva, codigo_diretriz, txt_diretriz, ";
 $sql .= " codigo_objetivo, txt_objetivo, codigo_objetivo_ppa, txt_objetivo_ppa, nr_programa_trabalho, txt_titulo_programa ";

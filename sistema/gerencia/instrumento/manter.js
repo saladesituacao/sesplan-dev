@@ -3,6 +3,7 @@ function ValidarIncluir() {
     var txt_modulo = $('#txt_modulo').val();
     var cod_ativo = $('#cod_ativo').val();
     var cod_exibir_consulta = $('#cod_exibir_consulta').val();
+    var txt_descricao = $('#txt_descricao').val();
 
     if(retorno && txt_modulo == '') {
         js_alert('', 'Campo INSTRUMENTO DE PLANEJAMENTO não pode ser vazio.');

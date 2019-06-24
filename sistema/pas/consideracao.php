@@ -29,7 +29,7 @@ $rsAcao = pg_fetch_array($q);
 $clsUsuario = new clsUsuario();
 $clsPas = new clsPas();
 
-if($clsPas->RegraPeriodo()) {
+if($clsPas->RegraPeriodo($cod_pas)) {
     $css_periodo = "";
 } else {
     $css_periodo = "disabled";
@@ -92,7 +92,7 @@ if($clsPas->RegraPeriodo()) {
                         <div class="row">
                             <div class="col-md-12">
                                 <label for="exampleInputEmail1">Justificativa:</label>
-                                <textarea class="form-control" rows="5" id="txt_justificativa<?=$rs1['cod_mes']?>" name="txt_justificativa<?=$rs1['cod_mes']?>"><?=$txt_justificativa?></textarea>
+                                <textarea class="form-control" rows="5" id="txt_justificativa<?=$rs1['cod_mes']?>" name="txt_justificativa<?=$rs1['cod_mes']?>" <?php echo($css_periodo) ?>><?=$txt_justificativa?></textarea>
                             </div>
                         </div><br />
                         <div class="row">
@@ -102,7 +102,8 @@ if($clsPas->RegraPeriodo()) {
                             </div>
                         </div>
                     </div>
-                <?php                    
+                <?php 
+                    $cod_usuario_analise = "";                   
                 }
 
                 ?>

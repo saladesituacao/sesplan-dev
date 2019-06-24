@@ -34,6 +34,7 @@ $cod_autorizar = $_REQUEST['cod_autorizar'];
 $cod_inicio_previsto = $_REQUEST['cod_inicio_previsto'];
 $cod_fim_previsto = $_REQUEST['cod_fim_previsto'];
 $txt_justificativa = $_REQUEST['txt_justificativa'];
+$cod_ano = $_REQUEST['cod_ano'];
 $retorno = array();
 
 switch ($acao) {
@@ -119,12 +120,8 @@ switch ($acao) {
 
     case "incluir_periodo_atualizacao":
         $clsPas = new clsPas();
-        if (empty($cod_id)) {
-            $clsPas->IncluirPeriodoAtualizacao($dt_inicio, $dt_fim);
-        } else {
-            $clsPas->AlterarPeriodoAtualizacao($cod_id, $dt_inicio, $dt_fim);
-        }        
-        js_go("periodo_atualizacao.php");
+        $clsPas->IncluirPeriodoAtualizacao($cod_ano, $dt_inicio, $dt_fim);        
+        js_go("periodo.php");
         break;
 
     case "excluir_periodo_atualizacao":
@@ -158,6 +155,13 @@ switch ($acao) {
         $clsPas->cod_inicio_efetivo = $cod_inicio_efetivo;
         $clsPas->cod_fim_efetivo = $cod_fim_efetivo;        
         echo($clsPas->AtualizarSituacao());
+        break;
+
+    case 'fn_resultado_ano':
+        $clsPas = new clsPas();
+        $clsPas->cod_pas = $cod_id;          
+        $clsPas->cod_fim_efetivo = $cod_fim_efetivo; 
+        echo($clsPas->fn_resultado_ano());
         break;
 
     case 'controle':
@@ -206,6 +210,10 @@ switch ($acao) {
         }
         else if (intval($a_dt_atual[1]) == 11 || intval($a_dt_atual[1]) == 12) {
             $cod_bimeste = 6;
+        }
+
+        if ($cod_bimeste > 1) {
+            $cod_bimeste = $cod_bimeste - 1;
         }
 
         $cod_pas = $_REQUEST['id'];

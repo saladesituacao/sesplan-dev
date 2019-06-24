@@ -7,7 +7,7 @@
 </head>
 <body onload="Mensagem()">
     <div class="overlay">
-        <div class="container">
+        <div class="container-fluid">
             <div class="col-md-12">            
                 <div class="col-md-5">
                     <img src="assets/img/icones-home-page.png" class="img-responsive" />
@@ -21,10 +21,10 @@
                                 </a>-->	                                
                                 <img src="assets/img/sesplan-logo-para-fundo-branco.png" class="img-responsive" />
                             </div><!-- / LOGO -->                            
-                            <form action="autenticar.php">								
+                            <form action="autenticar.php" method="post">								
                                 <div class="form-group">
                                     <label for="field_login" class="label-control">Login:</label>
-                                    <input type="text" id="field_login" name="field_login" class="form-control" placeholder="Usuário LDAP">
+                                    <input type="text" id="field_login" name="field_login" class="form-control" placeholder="Digite seu usuário da Rede SES/DF">
                                 </div>
                                 <div class="form-group">
                                     <label for="field_password" class="label-control">Senha:</label>
@@ -66,13 +66,19 @@
             alert('USUÁRIO INATIVO NO SESPLAN.'); 
             self.location.href = 'login.php';  
         } else if (res[1] == 'mensagem=2') {
-            alert("FALHA AO AUTENTICAR NO LDAP.");
+            alert("FALHA AO AUTENTICAR NA REDE SES.");
             self.location.href = 'login.php';
         } else if (res[1] == 'mensagem=3') {
             alert("USUÁRIO NÃO CADASTRADO NO SESPLAN.");
             self.location.href = 'login.php';
         } else if (res[1] == 'mensagem=4') {
             alert("LDAP BIND FAILED.");
+            self.location.href = 'login.php';
+        } else if (res[1] == 'mensagem=5') {
+            alert("FALHA AO AUTENTICAR NA API.");
+            self.location.href = 'login.php';
+        } else if (res[1] == 'mensagem=6') {
+            alert("TIPO DE AUTENTICAÇÃO NÃO DEFINIDO.");
             self.location.href = 'login.php';
         }               
     }

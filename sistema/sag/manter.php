@@ -52,12 +52,17 @@ $txt_variacao = $_REQUEST['txt_variacao'];
 $dt_inicio = $_REQUEST['dt_inicio'];
 $dt_fim = $_REQUEST['dt_fim'];
 $cod_status_analise = $_REQUEST['cod_status_analise'];
-
+$cod_ano = $_REQUEST['cod_ano'];
 $retorno = array();
 
 switch ($acao) {
     case 'incluir':
-        $sql = "SELECT nr_etapa_trabalho FROM tb_sag WHERE nr_etapa_trabalho = ".$nr_etapa_trabalho;        
+        $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+        $rs = pg_fetch_array(pg_query($sql));  
+        $ano_atual = $rs['ano'];
+
+        $sql = "SELECT nr_etapa_trabalho FROM tb_sag WHERE nr_etapa_trabalho = ".$nr_etapa_trabalho.
+                " AND TO_CHAR(dt_inclusao, 'YYYY') = '".$ano_atual."'";
         $query = pg_query($sql);
         if(pg_num_rows($query) > 0) {
             js_go_back('ETAPA SAG já está cadastrada');
@@ -89,16 +94,21 @@ switch ($acao) {
             if (strval($cod_continuar) == '1') {
                 js_go('incluir.php?cod_objetivo_url='.$cod_objetivo.'&cod_objetivo_ppa_url='.$cod_objetivo_ppa);
             } else {
-                js_go('default.php');                         
+                js_go('default.php');
             }
         }                           
         
         break; 
 
     case 'alterar':
-        $sql = "SELECT nr_etapa_trabalho FROM tb_sag WHERE nr_etapa_trabalho = ".$nr_etapa_trabalho. " AND cod_sag <> ".$cod_id;
+        $sql = "SELECT TO_CHAR(dt_inclusao, 'YYYY') AS dt_inclusao FROM tb_sag WHERE cod_sag = ".$cod_id;
+        $rs = pg_fetch_array(pg_query($sql));
+
+        $sql = "SELECT nr_etapa_trabalho FROM tb_sag WHERE nr_etapa_trabalho = ".$nr_etapa_trabalho.
+                " AND cod_sag <> ".$cod_id." AND TO_CHAR(dt_inclusao, 'YYYY') = '".$rs["dt_inclusao"]."'";
         $query = pg_query($sql);
         if(pg_num_rows($query) > 0) {
+            $rs = pg_fetch_array($query);        
             js_go_back('ETAPA SAG já está cadastrada');            
         } else {
             $clsSag = new clsSag();
@@ -252,13 +262,9 @@ switch ($acao) {
         break;  
 
     case "incluir_periodo_atualizacao":
-        $clsSag = new clsSag();
-        if (empty($cod_id)) {
-            $clsSag->IncluirPeriodoAtualizacao($dt_inicio, $dt_fim);
-        } else {
-            $clsSag->AlterarPeriodoAtualizacao($cod_id, $dt_inicio, $dt_fim);
-        }        
-        js_go("periodo_atualizacao.php");
+        $clsSag = new clsSag();        
+        $clsSag->IncluirPeriodoAtualizacao($cod_ano, $dt_inicio, $dt_fim);        
+        js_go("periodo.php");
         break;
 
     case "excluir_periodo_atualizacao":

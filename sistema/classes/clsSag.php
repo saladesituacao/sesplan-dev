@@ -292,28 +292,33 @@ class clsSag{
         return $q; 
     }
 
-    public function RegraPeriodo() {
-        $retorno = true;
-        
-        $clsSag = new clsSag();
-        $q2 = $clsSag->ListaPeriodo();        
-        if (pg_num_rows($q2) > 0) {
-            $rs = pg_fetch_array($q2);
+    public function RegraPeriodo($cod_sag) {
+        $retorno = false;
 
-            if (strtotime("now") > strtotime($rs['dt_fim']) || strtotime("now") < strtotime($rs['dt_inicio'])) {
-                $retorno = false;
-            }    
-            
-            if (!empty($rs['dt_reabrir'])) {
-                $retorno = true;
-            }
-        } 
+        $sql = "SELECT TO_CHAR(CURRENT_TIMESTAMP, 'DD/MM/YYYY') AS dt_atual";
+        $rs = pg_fetch_array(pg_query($sql));  
+        $dt_atual = $rs['dt_atual'];
+
+        $sql = "SELECT TO_CHAR(dt_inclusao, 'YYYY') AS dt_inclusao FROM tb_sag WHERE cod_sag = ".$cod_sag;
+        $rs = pg_fetch_array(pg_query($sql));
+        $cod_ano = $rs['dt_inclusao'];
+
+        $sql = "SELECT count(*) AS qtd FROM tb_sag_periodo WHERE cod_ano = ".$cod_ano." AND ";
+        $sql .= " (TO_DATE('".$dt_atual."', 'DD/MM/YYYY') >= CAST(dt_inicio AS DATE) ";
+        $sql .= " AND TO_DATE('".$dt_atual."', 'DD/MM/YYYY') <= CAST(dt_fim AS DATE) )";
+        
+        $rs = pg_fetch_array(pg_query($sql));
+        $qtd = $rs['qtd'];
+
+        if ($qtd > 0) {
+            $retorno = true;
+        }         
 
         return $retorno;
     }
 
-    public function IncluirPeriodoAtualizacao($dt_inicio, $dt_fim) {
-        $rs=pg_fetch_array(pg_query("SELECT MAX(cod_chave) FROM tb_sag_periodo"));
+    public function IncluirPeriodoAtualizacao($cod_ano, $dt_inicio, $dt_fim) {
+        $rs=pg_fetch_array(pg_query("SELECT MAX(cod_periodo) FROM tb_sag_periodo"));
         if (!isset($rs[0])) {
             $id = 1;
         } else {
@@ -321,8 +326,8 @@ class clsSag{
         }
 
 
-        $sql = "INSERT INTO tb_sag_periodo(cod_chave, dt_inicio, dt_fim, cod_usuario) ";
-        $sql .= " VALUES(".$id.", '".trim(DataBanco($dt_inicio))."', '".trim(DataBanco($dt_fim))."', ".$_SESSION['cod_usuario'].")";        
+        $sql = "INSERT INTO tb_sag_periodo(cod_periodo, cod_ano, dt_inicio, dt_fim, cod_usuario) ";
+        $sql .= " VALUES(".$id.", ".$cod_ano.", '".trim(DataBanco($dt_inicio))."', '".trim(DataBanco($dt_fim))."', ".$_SESSION['cod_usuario'].")";                
         pg_query($sql);
 
         Auditoria(121, "", $sql);
@@ -338,7 +343,7 @@ class clsSag{
     }
 
     public function ExcluirPeriodoAtualizacao($id) {
-        $sql = "DELETE FROM tb_sag_periodo WHERE cod_chave = ".$id;
+        $sql = "DELETE FROM tb_sag_periodo WHERE cod_periodo = ".$id;
         pg_query($sql);
 
         Auditoria(123, "", $sql);
@@ -392,6 +397,63 @@ class clsSag{
         }
         
         return $retorno;
-    }    
+    }   
+    
+    public function MesMonitoramentoPainel() {
+        $retorno = ""; 
+
+        $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+        $rs = pg_fetch_array(pg_query($sql));
+        $ano_atual = $rs['ano'];
+
+        if (intval($_SESSION['ano_corrente']) < intval($ano_atual)) {            
+            return 6;            
+        } else {
+            $sql = "SELECT DATE_PART('MONTH', CURRENT_TIMESTAMP) AS mes";        
+            $rs = pg_fetch_array(pg_query($sql));
+            $mes_atual = $rs['mes'];
+        }        
+    
+        switch(strval(strtolower($mes_atual))) {
+            case '1':
+                $retorno = 1;
+                break;
+            case '2':
+                $retorno = 1;
+                break;
+            case '3':
+                $retorno = 2;
+                break;
+            case '4':
+                $retorno = 2;
+                break;
+            case '5':
+                $retorno = 3;
+                break;
+            case '6':
+                $retorno = 3;
+                break;
+            case '7':
+                $retorno = 4;
+                break;
+            case '8':
+                $retorno = 4;
+                break;
+            case '9':
+                $retorno = 5;
+                break;
+            case '10':
+                $retorno = 5;
+                break;
+            case '11':
+                $retorno = 6;
+                break;
+            case '12':
+                $retorno = 12;
+                break;
+        }
+        
+        return $retorno;
+    }
 }   
 ?>

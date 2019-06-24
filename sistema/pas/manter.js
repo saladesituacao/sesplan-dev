@@ -169,8 +169,40 @@ function SalvarCompleto(cod_pas, cod) {
                 return false;
             }            
         }
+        /*Preencher o campo "Fim Efefivo" deverá obrigar o preenchimento do campo "Resultado/Ano". Também é necessário que a 
+        análise do bimestre(fim efetivo igual ao campo bimestre da análise) esteja preenchida.*/
+        if (cod_fim_efetivo != '') {
+            if (cod_resultado == '') {
+                js_alert('', 'O campo RESULTADO/ANO não pode ser vazio.');
+                return false;
+            }            
+            var cod_retorno = true;
+            $.ajax({
+                type: 'POST',
+                url: 'manter.php',
+                data: {
+                    acao: 'fn_resultado_ano',
+                    id: cod_pas,                    
+                    cod_fim_efetivo: cod_fim_efetivo                       
+                },
+                async: false,
+                success: function (data) {                                                                                      
+                    if (data != 1) {                        
+                        cod_retorno = false;
+                        js_alert('', 'O campo RESULTADO/ANO não pode ser vazio. Não existe análise para o bimetre selecionado no campo FIM EFETIVO');
+                        return false;
+                    }                                                  
+                },				
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);    				
+                }
+            });
+            if (!cod_retorno) {
+                return false;
+            }            
+        }        
 
-        //NÃO SALVAR SE NÃO HOUVER ANÁLISE NO BIMESTRE
+        //NÃO SALVAR SE NÃO HOUVER ANÁLISE NO BIMESTRE ANTERIOR
         $.ajax({
             type: 'POST',
             url: 'manter.php',
@@ -182,7 +214,7 @@ function SalvarCompleto(cod_pas, cod) {
             success: function (data) { 
                 var ret = parseInt(data);                
                 if (ret == 0) {
-                    js_alert('', 'NÃO EXISTE ANÁLISE CADASTRADA PARA O BIMESTRE ATUAL.');
+                    js_alert('', 'NÃO EXISTE ANÁLISE CADASTRADA.');
 
                     return false;                 
                 }  
@@ -222,7 +254,7 @@ function SalvarCompleto(cod_pas, cod) {
             error: function (xhr, status, error) {
                 alert(xhr.responseText);    				
             }
-        });                        
+        });                  
     } else {
         $.ajax({
             type: 'POST',

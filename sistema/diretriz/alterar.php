@@ -16,6 +16,7 @@ if (empty($verificado)) {
     $txt_diretriz =  limpar_comparacao($rs1['txt_diretriz']); 
     $txt_descricao =  limpar_comparacao($rs1['txt_descricao']); 
     $codigo_diretriz =  limpar_comparacao($rs1['codigo_diretriz']); 
+    $txt_titulo = limpar_comparacao($rs1['txt_titulo']); 
 }
 else {
     $cod_ativo = $_REQUEST['cod_ativo'];
@@ -24,6 +25,7 @@ else {
     $txt_diretriz = $_REQUEST['txt_diretriz'];
     $txt_descricao = $_REQUEST['txt_descricao'];
     $codigo_diretriz = $_REQUEST['codigo_diretriz'];
+    $txt_titulo = $_REQUEST['txt_titulo'];
 }
 ?>
 
@@ -74,16 +76,23 @@ else {
 
         <div class="row">
             <div class="form-group col-md-12">
+                <label for="exampleInputEmail1">Título Diretriz:</label>
+                <input type="text" class="form-control" id="txt_titulo" name="txt_titulo" value="<?=$rs1['txt_titulo']?>">
+            </div>	  
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12">
                 <label for="">Diretriz:</label>
                 <input type="text" class="form-control" id="txt_diretriz" name="txt_diretriz" value="<?=$rs1['txt_diretriz']?>" placeholder="Obrigatório">
             </div>	  
         </div>
 	
         <div class="row">
-        <div class="form-group col-md-12">
-            <label for="exampleInputEmail1">Descrição:</label>        
-            <textarea class="form-control" rows="5" id="txt_descricao" name="txt_descricao"><?=$rs1['txt_descricao']?></textarea>
-        </div>	  
+            <div class="form-group col-md-12">
+                <label for="exampleInputEmail1">Descrição:</label>        
+                <textarea class="form-control" rows="5" id="txt_descricao" name="txt_descricao"><?=$rs1['txt_descricao']?></textarea>
+            </div>	  
         </div>
         
         <div class="row">

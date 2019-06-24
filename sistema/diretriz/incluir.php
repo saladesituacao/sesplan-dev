@@ -38,7 +38,8 @@ if(empty($cod_ativo)) {
 		$cod_ativo = limpar_comparacao($rs1['cod_ativo']);
 		$cod_eixo = limpar_comparacao($rs1['cod_eixo']);
 		$cod_perspectiva = limpar_comparacao($rs1['cod_perspectiva']); 	
-		$cod_diretriz = limpar_comparacao($rs1['cod_diretriz']); 	
+		$cod_diretriz = limpar_comparacao($rs1['cod_diretriz']); 
+		$txt_titulo = limpar_comparacao($rs1['txt_titulo']); 
 	}
 	?>
 	<div class="row">
@@ -83,6 +84,13 @@ if(empty($cod_ativo)) {
   	  <div class="form-group col-md-12">
   	  	<label for="exampleInputEmail1">Código Diretriz:</label>
   	  	<input type="text" class="form-control" id="codigo_diretriz" name="codigo_diretriz" value="<?=$rs1['codigo_diretriz']?>" placeholder="Obrigatório">
+  	  </div>	  
+	</div>
+
+	<div class="row">
+  	  <div class="form-group col-md-12">
+  	  	<label for="exampleInputEmail1">Título Diretriz:</label>
+  	  	<input type="text" class="form-control" id="txt_titulo" name="txt_titulo" value="<?=$rs1['txt_titulo']?>">
   	  </div>	  
 	</div>
 

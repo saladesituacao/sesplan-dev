@@ -12,6 +12,8 @@ function verifica_seguranca()
 
 function permissao_acesso($cod_permissao) 
 {    
+    
+
     //PERFIL DE ADMINISTRADOR
     if (limpar_comparacao($_SESSION['cod_perfil']) == 1) {
         return true;
@@ -26,7 +28,7 @@ function permissao_acesso($cod_permissao)
 }
 
 function permissao_acesso_pagina($cod_permissao)
-{
+{    
     if (!permissao_acesso($cod_permissao)) {
         js_go($_SESSION["txt_caminho_aplicacao"]."/include/pagina_acesso.php");
     }
@@ -44,7 +46,9 @@ function permissao_acesso_unidade($cod_permissao, $cod_orgao)
 {
     $r = false;
 
-    if (strval($cod_orgao) != '') {          
+    if (strval($cod_orgao) != '') {
+        
+    
         //PERFIL DE ADMINISTRADOR
         if (limpar_comparacao($_SESSION['cod_perfil']) == 1) {
             return true;
@@ -54,11 +58,11 @@ function permissao_acesso_unidade($cod_permissao, $cod_orgao)
             $sql_ = " WITH RECURSIVE arvore AS ";
             $sql_ .= "( ";
             $sql_ .=  " SELECT t1.cod_orgao, txt_sigla, cod_orgao_superior ";
-            $sql_ .=  " FROM tb_orgao AS t1 ";
+            $sql_ .=  " FROM SESPLAN.tb_orgao AS t1 ";
             $sql_ .=  " WHERE cod_orgao = ".$cod_orgao;
             $sql_ .= " UNION ALL ";
             $sql_ .= " SELECT t2.cod_orgao, t2.txt_sigla, t2.cod_orgao_superior ";       
-            $sql_ .= " FROM tb_orgao AS t2 ";
+            $sql_ .= " FROM SESPLAN.tb_orgao AS t2 ";
             $sql_ .= " INNER JOIN arvore ON arvore.cod_orgao_superior = t2.cod_orgao ) ";
             $sql_ .= " SELECT arvore.cod_orgao, arvore.txt_sigla FROM arvore ";
             $sql_ .= " ORDER BY arvore.txt_sigla ";

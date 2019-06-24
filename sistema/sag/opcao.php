@@ -35,7 +35,7 @@ permissao_acesso_pagina(76);
             <?php if (permissao_acesso(80)) { ?> 
                 <li class = "list-group-item">
                     <span class="glyphicon glyphicon-search"></span> 
-                    <a href="periodo_atualizacao.php">Período de Atualização</a>                
+                    <a href="periodo.php">Período de Atualização</a>                
                 </li> 
             <?php } ?>                     
         </ul> 

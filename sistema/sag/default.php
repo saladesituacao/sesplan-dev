@@ -9,6 +9,19 @@ if (empty($_REQUEST['log'])) {
 	Auditoria(111, "Listar SAG", "");
 }
 
+if (empty($_SESSION['ano_corrente'])) {
+    /*
+    $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+    $rs = pg_fetch_array(pg_query($sql));  
+    $_SESSION['ano_corrente'] = $rs['ano'];
+    */
+    $_SESSION['ano_corrente'] = "2018";
+}
+
+if (!empty($_REQUEST['cod_ano_corrente'])) {
+    $_SESSION['ano_corrente'] = $_REQUEST['cod_ano_corrente'];
+}
+
 $txt_pesquisa = $_REQUEST['txt_pesquisa'];
 $cod_objetivo_url = $_REQUEST['cod_objetivo_url'];
 $txt_filtro_etapa = $_REQUEST['txt_filtro_etapa'];
@@ -39,26 +52,37 @@ $clsStatus = new clsStatus();
         <input type="hidden" name="log" id="log" value="1" />
         <input type="hidden" name="cod_objetivo_url" id="cod_objetivo_url" value="<?php echo($cod_objetivo_url) ?>" />
         <div id="top" class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-1">                
 				<h2>SAG</h2>
 			</div>
 			<div class="col-sm-6">				
 				<div class="input-group h2">
-					
+                    <select id="cod_ano_corrente" name="cod_ano_corrente" class="chosen-select">
+                        <option value="2019" <?php
+                                        if (strval($_SESSION['ano_corrente']) == "2019") {
+                                            echo("selected");
+                                        }
+                                        ?>>2019</option>
+                        <option value="2018" <?php
+                                        if (strval($_SESSION['ano_corrente']) == "2018") {
+                                            echo("selected");
+                                        }
+                                        ?>>2018</option>
+                    </select>
 				</div>			
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-5">
                 <?php if (permissao_acesso(77)) { ?>
 				    <a href="incluir.php" class="btn btn-primary pull-right h2">Incluir</a>
                 <?php } ?>
 			</div>
-		</div> <!-- /#top -->
+		</div> <!-- /#top -->        
         <div class="row">               
             <div class="col-sm-6">                
                 <select id="txt_filtro_etapa" name="txt_filtro_etapa" data-placeholder="ETAPA" class="chosen-select">
                     <option></option>
                     <?php                        
-                    $q = pg_query("SELECT nr_etapa_trabalho FROM tb_sag WHERE cod_ativo = 1 ORDER BY nr_etapa_trabalho");
+                    $q = pg_query("SELECT DISTINCT nr_etapa_trabalho AS nr_etapa_trabalho FROM tb_sag WHERE cod_ativo = 1 ORDER BY nr_etapa_trabalho");
                     while ($row = pg_fetch_array($q)) 
                     { ?>
                         <option value="<?=$row["nr_etapa_trabalho"]?>"<?php if ($txt_filtro_etapa == $row["nr_etapa_trabalho"]) { echo("selected");}?>><?=$row["nr_etapa_trabalho"] ?></option>
@@ -93,6 +117,7 @@ $clsStatus = new clsStatus();
         $sql .= " INNER JOIN tb_eixo ON tb_eixo.cod_eixo = tb_objetivo.cod_eixo ";
         $sql .= " INNER JOIN tb_programa_trabalho ON tb_programa_trabalho.cod_eixo = tb_eixo.cod_eixo ";
         $sql .= " WHERE tb_eixo.cod_ativo = 1".$condicao;
+        $sql .= " AND EXTRACT(YEAR from tb_sag.dt_inclusao) = ".$_SESSION['ano_corrente'];
         $q1 = pg_query($sql);
         if (pg_num_rows($q1) > 0) { ?>
             <p align="justify">
@@ -108,6 +133,7 @@ $clsStatus = new clsStatus();
                             $sql .= " INNER JOIN tb_perspectiva ON tb_perspectiva.cod_perspectiva = tb_objetivo.cod_perspectiva ";
                             $sql .= " INNER JOIN tb_programa_trabalho ON tb_programa_trabalho.cod_perspectiva = tb_perspectiva.cod_perspectiva ";
                             $sql .= " WHERE tb_perspectiva.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'].$condicao;
+                            $sql .= " AND EXTRACT(YEAR from tb_sag.dt_inclusao) = ".$_SESSION['ano_corrente'];
                             ?>
                             <n />
                             &nbsp;&nbsp;
@@ -123,6 +149,7 @@ $clsStatus = new clsStatus();
                                 $sql .= " INNER JOIN tb_programa_trabalho ON tb_programa_trabalho.cod_diretriz = tb_diretriz.cod_diretriz ";
                                 $sql .= " WHERE tb_diretriz.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'];
                                 $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'].$condicao;
+                                $sql .= " AND EXTRACT(YEAR from tb_sag.dt_inclusao) = ".$_SESSION['ano_corrente'];
                                 ?>
                                 <br />
                                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -137,7 +164,8 @@ $clsStatus = new clsStatus();
                                     $sql .= " INNER JOIN tb_programa_trabalho ON tb_programa_trabalho.cod_objetivo = tb_objetivo.cod_objetivo ";
                                     $sql .= " WHERE tb_objetivo.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'];
                                     $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'];
-                                    $sql .= " AND tb_objetivo.cod_diretriz = ".$rs3['cod_diretriz'].$condicao;                                    
+                                    $sql .= " AND tb_objetivo.cod_diretriz = ".$rs3['cod_diretriz'].$condicao;  
+                                    $sql .= " AND EXTRACT(YEAR from tb_sag.dt_inclusao) = ".$_SESSION['ano_corrente'];                                  
                                     ?>
                                     <br />
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -155,6 +183,7 @@ $clsStatus = new clsStatus();
                                         $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'];
                                         $sql .= " AND tb_objetivo.cod_diretriz = ".$rs3['cod_diretriz'];
                                         $sql .= " AND tb_sag.cod_objetivo = ".$rs4['cod_objetivo'].$condicao;
+                                        $sql .= " AND EXTRACT(YEAR from tb_sag.dt_inclusao) = ".$_SESSION['ano_corrente'];
                                         ?>
                                         <br />
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -170,7 +199,8 @@ $clsStatus = new clsStatus();
                                             $sql .= " WHERE tb_programa_trabalho.cod_ativo = 1 AND tb_objetivo.cod_eixo = ".$rs1['cod_eixo'];
                                             $sql .= " AND tb_objetivo.cod_perspectiva = ".$rs2['cod_perspectiva'];
                                             $sql .= " AND tb_objetivo.cod_diretriz = ".$rs3['cod_diretriz']. " AND tb_sag.cod_objetivo = ".$rs4['cod_objetivo'];
-                                            $sql .= " AND tb_sag.cod_objetivo_ppa = ".$rs5['cod_objetivo_ppa'].$condicao;                                           
+                                            $sql .= " AND tb_sag.cod_objetivo_ppa = ".$rs5['cod_objetivo_ppa'].$condicao;     
+                                            $sql .= " AND EXTRACT(YEAR from tb_sag.dt_inclusao) = ".$_SESSION['ano_corrente'];                                      
                                             ?>
                                             <br />
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -233,6 +263,7 @@ $clsStatus = new clsStatus();
                                                 $sql .= " AND cod_perspectiva = ".$rs2['cod_perspectiva']. " AND cod_diretriz = ".$rs3['cod_diretriz'];
                                                 $sql .= " AND tb_sag.cod_objetivo = ".$rs4['cod_objetivo']. " AND cod_objetivo_ppa = ".$rs5['cod_objetivo_ppa'];
                                                 $sql .= " AND cod_programa_trabalho = ".$rs6['cod_programa_trabalho'].$condicao;
+                                                $sql .= " AND EXTRACT(YEAR from tb_sag.dt_inclusao) = ".$_SESSION['ano_corrente'];
                                                 $qEtapa = pg_query($sql);
                                                 if (pg_num_rows($qEtapa) > 0) { ?>
                                                     <br />  <?php
@@ -275,7 +306,38 @@ $clsStatus = new clsStatus();
                                                                             <td><?php echo($rsEtapa['mes_fim']) ?></td>-->
                                                                             <td><?php echo($rsEtapa['txt_sigla']) ?></td>
                                                                             <td><?php echo($rsEtapa['txt_parceiro']) ?></td>
-                                                                            <td>NÃO</td>
+                                                                            <td>
+                                                                                <?php
+                                                                                if (!empty($rsEtapa['cod_programa_trabalho'])) {
+                                                                                    $sql = "SELECT nr_programa_trabalho FROM tb_programa_trabalho WHERE cod_programa_trabalho = ".$rsEtapa['cod_programa_trabalho'];                                                                                    
+                                                                                    $qProg = pg_query($sql); 
+                                                                                    if (pg_num_rows($qProg) > 0 ) {
+                                                                                        $rowProg = pg_fetch_array($qProg);
+                                                                                        $nr_programa_trabalho = trim($rowProg['nr_programa_trabalho']);                                                            
+                                                                                        $nr_1 = substr($nr_programa_trabalho, 0, 2);
+                                                                                        $nr_2 = substr($nr_programa_trabalho, 3, 3);
+                                                                                        $nr_3 = substr($nr_programa_trabalho, 7, 4);
+                                                                                        $nr_4 = substr($nr_programa_trabalho, 12, 4);
+                                                                                        $nr_5 = substr($nr_programa_trabalho, 17, 4);
+
+                                                                                        $sql = "SELECT empenhado FROM tab_siggo_sesplan WHERE cofuncao  = '".$nr_1."' ";
+                                                                                        $sql .= " AND cosubfuncao = '".$nr_2."' AND coprograma = '".$nr_3."' ";
+                                                                                        $sql .= " AND coprojeto = '".$nr_4."' AND cosubtitulo = '".$nr_5."'";   
+                                                                                        $sql .= " AND CAST(inmes as integer) = (SELECT DATE_PART('MONTH', CURRENT_TIMESTAMP))";                                                                                                                                                                                                                                                                                                                    
+                                                                                        $qStage = pg_query($sql); 
+                                                                                        if (pg_num_rows($qStage) > 0 ) {
+                                                                                            echo('SIM');
+                                                                                        } else {
+                                                                                            echo('NÃO');
+                                                                                        }
+                                                                                    } else {
+                                                                                        echo('NÃO');
+                                                                                    }
+                                                                                } else {
+                                                                                    echo('NÃO');
+                                                                                }
+                                                                                ?>
+                                                                            </td>
                                                                             <td>
                                                                                 <?php
                                                                                 $cod_status = $clsSag->RetornaSituacaoSAG($rsEtapa['cod_sag']);
@@ -339,7 +401,7 @@ $clsStatus = new clsStatus();
 <script src="manter.js" type="text/javascript"></script>
 <script type="text/javascript">    
     function SubmitForm() {    
-        self.location.href = 'default.php?txt_filtro_etapa=' + $('#txt_filtro_etapa').val() + '&txt_filtro_responsavel=' + $('#txt_filtro_responsavel').val() + '&cod_objetivo_url=' + $('#cod_objetivo_url').val();
+        self.location.href = 'default.php?txt_filtro_etapa=' + $('#txt_filtro_etapa').val() + '&txt_filtro_responsavel=' + $('#txt_filtro_responsavel').val() + '&cod_objetivo_url=' + $('#cod_objetivo_url').val() + '&cod_ano_corrente=' + $('#cod_ano_corrente').val();
     }
 
     function LimparForm() {    

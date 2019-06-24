@@ -54,7 +54,8 @@ $txt_pesquisa = isset($_REQUEST["txt_pesquisa"]) ? $_REQUEST["txt_pesquisa"] : n
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Instrumento de Planejamento</th>								
+								<th>Instrumento de Planejamento</th>
+								<th>Descrição</th>								
 								<th>Ativo</th>
                                 <th>Exibir no Painel</th>
 								<th class="actions">Ações</th>
@@ -66,7 +67,8 @@ $txt_pesquisa = isset($_REQUEST["txt_pesquisa"]) ? $_REQUEST["txt_pesquisa"] : n
 							?>
 								<tr>
 									<td><?php echo($rs1['cod_modulo']) ?></td>
-									<td><?php echo($rs1['txt_modulo']) ?></td>									
+									<td><?php echo($rs1['txt_modulo']) ?></td>
+									<td><?php echo($rs1['txt_descricao']) ?></td>									
 									<td><?php echo(destacar_ativo($rs1['cod_ativo'])) ?></td>
                                     <td><?php echo(destacar_ativo($rs1['cod_exibir_consulta'])) ?></td>
 									<td class="actions">																		

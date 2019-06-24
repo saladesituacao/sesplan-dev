@@ -74,5 +74,12 @@ class clsPerfil {
             Auditoria(118, "", $sql);
         }                  
     }
+
+    public function PlanoAcao() {
+        //VERIFICAR SE O USUÁRIO ACESSA APENAS O MÓDULO DE PLANO DE AÇÃO.
+        if (limpar_comparacao($_SESSION['cod_perfil']) == 5) {
+            js_go("../sistema/plano_acao/default.php");
+        }
+    }
 }
 ?>

@@ -38,6 +38,8 @@ function cabecalho() {
 
         <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/jquery.maskedinput.js" type="text/javascript"></script>
         <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/jquery.moneymask.js" type="text/javascript"></script>        
+        <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/jquery.mask.min.js" type="text/javascript"></script>        
+        <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/mask.js" type="text/javascript"></script>        
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -69,9 +71,7 @@ function cabecalho() {
 
             <!-- Google Font -->
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-
-            <!-- Estilos Painel -->
-            <link href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/css/style_painel.css" rel="stylesheet">
+            
         <?php
         }        
         ?>   
@@ -86,17 +86,32 @@ function cabecalho() {
         <link rel="stylesheet" type="text/css" href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/css/jquery.dataTables.min.css">
         <script type="text/javascript" language="javascript" src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/jquery.dataTables.min.js"></script>
         
+         <!-- Switchery -->
+        <link href="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/css/switchery.min.css" rel="stylesheet">            
+
+        <script type="text/javascript">       
+            (function ($) {
+                $(function () {
+                    $('.data').mask('00/00/0000', { reverse: false });
+                    $('.dinheiro').mask('000.000.000.000,00', { reverse: true, maxlength: 18 });
+                    $('.cpf').mask('000.000.000-00', { reverse: false });
+                    $('.cnpj').mask('00.000.000/0000-00', { reverse: false });
+                    $('.cep').mask('00.000-000', { reverse: false });
+                    $('.numero').mask('00000000000000000000', { reverse: true, maxlength: 20 });
+                });
+            })(jQuery);
+        </script>
+
       </head>
 
-        <body>          
-            
-            <div class="container">
+        <body>                      
+            <div class="container-fluid">
             <div style="background-image:url(<?php echo($_SESSION["txt_caminho_aplicacao"]) ?>/include/imagens/fundoSESPLANmarcadagua.jpg);" class="img-responsive">              
                <?php menu(); ?>
     
                <div class="container">
                     <center>
-                        <h5><strong>FERRAMENTA DE MONITORAMENTO E AVALIAÇÃO DO PLANEJAMENTO ESTRATÉGICO</strong></h5>
+                        <h3><strong>Secretaria de Estado de Saúde do Distrito Federal</strong></h3>
                     </center>
                 </div>                    
 <?php

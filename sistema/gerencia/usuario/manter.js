@@ -1,5 +1,26 @@
 $(document).ready(function($){        
-    $('.cpf').mask('999.999.999-99');    
+    $('.cpf').mask('999.999.999-99'); 
+
+
+ $( "#cod_regiao" ).change(function() {
+        var cod_regiao = $( "#cod_regiao" ).val();
+        
+        $.ajax({
+            type: 'POST',
+            url: 'html.php',            
+            data: {
+                acao: 'div_hospital',
+                cod_regiao: cod_regiao
+            },
+            async: false,
+            success: function (data) {                             
+                $('#div_hospital').html(data);
+            }
+        });
+    });
+
+
+
   });
 
   function ValidarIncluir() {
@@ -13,6 +34,9 @@ $(document).ready(function($){
     var txt_matricula = $('#txt_matricula').val();
     var cod_cargo = $('#cod_cargo').val();
     var cod_orgao = $('#cod_orgao').val();
+    var cod_regiao = $('#cod_regiao').val();
+    var cod_hospital = $('#cod_hospital').val();
+    var cod_notificacao = $('#cod_notificacao').val();
 
     if(retorno && txt_login == '') {
         js_alert('', 'Campo LOGIN não pode ser vazio.');
@@ -46,6 +70,10 @@ $(document).ready(function($){
         js_alert('', 'Campo ATIVO não pode ser vazio.');
         retorno = false;
     }    
+    if(retorno && cod_notificacao == '') {
+        js_alert('', 'Campo RECEBER ALERTAS não pode ser vazio.');
+        retorno = false;
+    }   
 
     if(retorno) 
     {
@@ -63,7 +91,10 @@ $(document).ready(function($){
                 txt_login: txt_login,
                 txt_matricula: txt_matricula,
                 cod_cargo: cod_cargo,
-                cod_orgao: cod_orgao
+                cod_orgao: cod_orgao,
+                cod_regiao: cod_regiao,
+                cod_hospital: cod_hospital,
+                cod_notificacao: cod_notificacao
             },
             async: false,
             success: function (data) {                              
@@ -100,6 +131,8 @@ function ValidarAlterar() {
     var txt_matricula = $('#txt_matricula').val();    
     var cod_cargo = $('#cod_cargo').val();  
     var cod_orgao = $('#cod_orgao').val();    
+    var cod_regiao = $('#cod_regiao').val(); 
+    var cod_hospital = $('#cod_hospital').val(); 
 
     if(retorno && txt_login == '') {
         js_alert('', 'Campo LOGIN não pode ser vazio.');
@@ -150,7 +183,9 @@ function ValidarAlterar() {
                 txt_login: txt_login,
                 txt_matricula: txt_matricula,
                 cod_cargo: cod_cargo,
-                cod_orgao: cod_orgao
+                cod_orgao: cod_orgao,
+                cod_regiao: cod_regiao,
+                cod_hospital: cod_hospital
             },
             async: false,
             success: function (data) {                              
@@ -234,12 +269,12 @@ function ExcluirUnidade(cod_usuario, cod_orgao) {
         content: 'DESEJA EXCLUIR A UNIDADE?',
         buttons: {
             SIM: function () {
-                $.ajax({
+                $.ajax({ 
                     type: 'POST',
                     url: 'manter.php',
                     data: {
-                        acao: 'excluir_unidade',
-                        id: cod_usuario, 
+                        acao: 'excluir_unidade', 
+                        id: cod_usuario,  
                         cod_orgao: cod_orgao              				
                     },
                     async: false,
@@ -256,4 +291,4 @@ function ExcluirUnidade(cod_usuario, cod_orgao) {
             }
         }
     });
-}
+} 

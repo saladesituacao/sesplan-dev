@@ -1,11 +1,10 @@
 <?php 
 session_start();
-$dominio= $_SERVER['HTTP_HOST'];
-$url = "http://" . $dominio;
- 
+
 //LOCAL
-$_SESSION["txt_host"] = $url;
+$_SESSION["txt_host"] = "";
 $_SESSION["url_api_mgi"] = "";
+
 
 $_SESSION["txt_pagina_login"] = $_SESSION["txt_host"]."/sesplan_branch/sesplan/index.html";
 $_SESSION["txt_caminho_aplicacao"] = $_SESSION["txt_host"]."/sesplan_branch/sesplan/sistema";

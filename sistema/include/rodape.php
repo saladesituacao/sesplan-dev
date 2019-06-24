@@ -29,6 +29,16 @@ function rodape($dbcon) {
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">    
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/ui.datepicker-pt-BR.js" type="text/javascript"></script>
+
+    <!-- Switchery -->
+    <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/switchery.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/Chart.min.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="<?php echo($_SESSION["txt_caminho_aplicacao"]); ?>/include/js/custom.min.js"></script>
+        
   </body>
 </html>
 

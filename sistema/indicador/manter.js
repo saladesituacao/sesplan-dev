@@ -1,10 +1,86 @@
 $(document).ready(function() {
     CarregarFormularioAlterar();       
-    CampoFormula();    
+    CampoFormula();        
 });
 
 function MarcarAba(cod_aba) {
     $('#cod_periodo').val(cod_aba);
+}
+
+function fn_hospital() {
+    var cod_regiao = $('#cod_regiao').val();
+    var acao = $('#acao').val();  
+    var json2;  
+    var div = '';
+    if (cod_regiao != '') {
+        if (cod_regiao == 2 || cod_regiao == 5) {   
+            var cod_tipo = 0;
+            if (cod_regiao == 2) {
+                cod_tipo = 1;
+            }               
+
+            $.ajax({
+                type: 'POST',
+                url: 'manter.php',
+                data: {
+                    acao: 'form_hospital',
+                    cod_tipo_hospital: cod_tipo                    
+                },
+                async: false,
+                success: function (data) {   
+                    var json = $.parseJSON(data); 
+                    json2 = json;                    
+                    //console.log(json);
+                    var ct = 0;                    
+                    for (i = 0; i < json.length; i++) {
+                        if (i == 0) {
+                            div += '<br />';
+                        }
+                        if (ct == 0) {
+                            div += '<div class="row">';                            
+                        }
+                        
+                        div += '<div class="col-md-3"><input type="checkbox" class="form-check-input" title="'+ json[i].txt_hospital +'" id="cod_hospital_'+ json[i].cod_hospital +'" name="cod_hospital[]" value="'+ json[i].cod_hospital +'">&nbsp;'+ json[i].txt_sigla_hospital +'</div>';                        
+
+                        ct += 1;                        
+                        if(ct == 4) {
+                            div += '</div>'; 
+                            ct = 0;
+                        }
+                    }
+                },				
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);    				
+                }
+            });
+        }        
+    } 
+    $('#div_hospital').html(div);
+
+    if (acao == 'alterar') {
+        for (j = 0; j < json2.length; j++) {
+            $.ajax({
+                type: 'POST',
+                url: 'manter.php',
+                data: {
+                    acao: 'form_hospital_alterar',
+                    id: $('#id').val(),
+                    cod_hospital: json2[j].cod_hospital                  
+                },
+                async: false,
+                success: function (data) {   
+                    if (data != '') {
+                        $('#cod_hospital_' + json2[j].cod_hospital).prop("checked", true);
+                    } else {
+                        $('#cod_hospital_' + json2[j].cod_hospital).prop("checked", false);
+                    }
+                },				
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);    				
+                }
+            });            
+        }
+    }
 }
 
 function ValidarIncluir() {
@@ -57,24 +133,22 @@ function ValidarIncluir() {
         var qtd_campos = 0;        
         switch(txt_monitoramento.toLowerCase()) {
             case 'mensal':
-                qtd_campos = 12/1;            
-                
+                qtd_campos = 12/1;                            
                 break;
             case 'bimestral':
                 qtd_campos = 12/2;
-    
                 break;
             case 'trimestral':
-                qtd_campos = 12/3;
-    
+                qtd_campos = 12/3;    
                 break;
             case 'quadrimestral':
-                qtd_campos = 12/4;
-    
+                qtd_campos = 12/4;    
                 break;
             case 'semestral':
-                qtd_campos = 12/6;
-    
+                qtd_campos = 12/6;    
+                break;
+            case 'anual':
+                qtd_campos = 12/12;    
                 break;
             default:
                 qtd_campos = 0;                
@@ -97,7 +171,7 @@ function ValidarIncluir() {
         return retorno;
     }  else {
         $('#frm1').attr('action', 'manter.php');
-        if ($('#acao').val() != 'alterar') {
+        if ($('#acao').val() != 'alterar') {            
             $('#acao').val('incluir');       
         } else {
             $('#acao').val('alterar');  
@@ -207,6 +281,107 @@ function ExcluirDetalhe(cod_chave, cod_periodo) {
     });
 }
 
+function BloquearAnalise(periodo) {    
+    var id = $('#id').val();    
+
+    var x=document.getElementsByTagName("input");
+    var i=0;    
+    for (i=0;i<=x.length-1;i++) {
+        if (x[i].type=="checkbox" && x[i].id=="cod_bloquear_analise_"+periodo) {
+            if(x[i].checked) {
+                $.confirm({
+                    title: '',
+                    content: 'CONFIRMA QUE DESEJA NÃO ANALISAR O PERÍODO SELECIONADO?',
+                    buttons: {
+                        SIM: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: 'manter.php',
+                                data: {
+                                    acao: 'bloquear_analise',
+                                    id: id,
+                                    cod_periodo: periodo              				
+                                },
+                                async: false,
+                                success: function (data) {                                              
+                                    js_go('analise.php?id=' + $('#id').val() + '&periodo=' + periodo);                     
+                                },				
+                                error: function (xhr, status, error) {
+                                    alert(xhr.responseText);    				
+                                }
+                            });
+                        },
+                        NÃO: function () {
+                            js_go('analise.php?id=' + $('#id').val() + '&periodo=' + periodo);
+                        }
+                    }
+                });
+            } else {
+                $.confirm({
+                    title: '',
+                    content: 'DESEJA REMOVER O BLOQUEIO DO PERÍODO SELECIONADO?',
+                    buttons: {
+                        SIM: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: 'manter.php',
+                                data: {
+                                    acao: 'desbloquear_analise',
+                                    id: id,
+                                    cod_periodo: periodo              				
+                                },
+                                async: false,
+                                success: function (data) {                                              
+                                    js_go('analise.php?id=' + $('#id').val() + '&periodo=' + periodo);                     
+                                },				
+                                error: function (xhr, status, error) {
+                                    alert(xhr.responseText);    				
+                                }
+                            });
+                        },
+                        NÃO: function () {
+                            js_go('analise.php?id=' + $('#id').val() + '&periodo=' + periodo);
+                        }
+                    }
+                });                
+            }
+        }
+    }    
+}
+
+function SalvarTemp() {   
+    var cod_periodo = $('#cod_periodo').val(); 
+    var txt_analise = $('#txt_analise' + cod_periodo).val(); 
+    var txt_analise_2 = ''; 
+    var cod_responsavel_tecnico_2_existe = $('#cod_responsavel_tecnico_2_existe' + cod_periodo).val();
+    var txt_encaminhamento = $('#txt_encaminhamento' + cod_periodo).val();
+    if (cod_responsavel_tecnico_2_existe.toString() == '1') {
+        txt_analise_2 = $('#txt_analise_2' + cod_periodo).val(); 
+    }
+    
+    $.ajax({
+        type: 'POST',
+        url: 'manter.php',
+        data: {
+            acao: 'salvar_temp',
+            id: $('#id').val(),
+            cod_periodo: cod_periodo,
+            txt_analise: txt_analise,
+            txt_analise_2: txt_analise_2,
+            txt_encaminhamento: txt_encaminhamento            
+        },
+        async: false,
+        success: function (data) {                                                                          
+            js_go('analise.php?id=' + $('#id').val() + '&periodo=' + cod_periodo);  
+            return true;                                             
+        },				
+        error: function (xhr, status, error) {
+            alert(xhr.responseText);    				
+            return false;
+        }
+    });
+}
+
 function ValidarCamposAnalise() {   
     var cod_periodo = $('#cod_periodo').val(); 
     var txt_analise = $('#txt_analise' + cod_periodo).val(); 
@@ -220,9 +395,22 @@ function ValidarCamposAnalise() {
     var dt_extracao = $('#dt_extracao' + cod_periodo).val();    
     var txt_meta_parcial = $('#txt_meta_parcial' + cod_periodo).val();   
     var absoluto = $('#absoluto').val();   
+    var cod_bloquear_analise = '';
     var data = new Date();      
     var mes = data.getMonth(); // 0-11 (zero=janeiro)
     mes = mes + 1;    
+    
+    var x=document.getElementsByTagName("input");
+    var i=0;    
+    for (i=0;i<=x.length-1;i++) {
+        if (x[i].type=="checkbox" && x[i].id=="cod_bloquear_analise_"+cod_periodo) {
+            if(x[i].checked) {
+                //js_alert('', 'ANÁLISE BLOQUEADA PARA ESTE PERÍODO.');
+                SalvarTemp();
+                return false;
+            }
+        }
+    }
 
     if (txt_meta_parcial == undefined) {
         txt_meta_parcial = '';
@@ -330,31 +518,30 @@ function ValidarCamposAnalise() {
         var hosp_extracao = ''; 
 
         cod_hosp_qtd = $('#cod_hosp_qtd').val();        
-        var ct_hosp = 1;
-
-        while (parseInt(ct_hosp) <= parseInt(cod_hosp_qtd)) {
-            hosp_numerador = $('#hosp_cod_numerador_regiao' + cod_periodo + '_' + ct_hosp).val();
-            hosp_denominador = $('#hosp_cod_denominador_regiao' + cod_periodo + '_' + ct_hosp).val();
-            hosp_extracao = $('#hosp_dt_extracao_regiao' + cod_periodo + '_' + ct_hosp).val();           
+        //var ct_hosp = 1;
+        var cod_hosp_ind = $('#cod_hosp_ind' + cod_periodo).val();
+        var a_cod_hosp_ind = cod_hosp_ind.split(',');
+        for (i = 0; i < a_cod_hosp_ind.length; i++) { 
+            hosp_numerador = $('#hosp_cod_numerador_regiao' + cod_periodo + '_' + a_cod_hosp_ind[i]).val();
+            hosp_denominador = $('#hosp_cod_denominador_regiao' + cod_periodo + '_' + a_cod_hosp_ind[i]).val();
+            hosp_extracao = $('#hosp_dt_extracao_regiao' + cod_periodo + '_' + a_cod_hosp_ind[i]).val();  
 
             if (hosp_numerador != '') {
-                hosp_cod_numerador_regiao += '[' + ct_hosp + '_' + hosp_numerador + ']';
+                hosp_cod_numerador_regiao += '[' + a_cod_hosp_ind[i] + '_' + hosp_numerador + ']';
             }      
             if (hosp_denominador != '') {
-                hosp_cod_denominador_regiao += '[' + ct_hosp + '_' + hosp_denominador + ']';
+                hosp_cod_denominador_regiao += '[' + a_cod_hosp_ind[i] + '_' + hosp_denominador + ']';
             }     
             if (hosp_extracao != '') {
-                hosp_dt_extracao_regiao += '[' + ct_hosp + '_' + hosp_extracao + ']';
+                hosp_dt_extracao_regiao += '[' + a_cod_hosp_ind[i] + '_' + hosp_extracao + ']';
             }     
 
             if (hosp_numerador != '' && hosp_denominador != '' && hosp_extracao == '') {
                 js_alert('', 'Campo DATA EXTRAÇÃO da RA não pode ser vazio.');
                 return false;
             }
-
-            ct_hosp += 1;
         }
-       
+
         var cod_urd_qtd = 0;
         var urd_cod_numerador_regiao = '';           
         var urd_numerador = '';     
@@ -363,11 +550,10 @@ function ValidarCamposAnalise() {
         var urd_dt_extracao_regiao = '';
         var urd_extracao = ''; 
 
-        //cod_urd_qtd = $('#cod_urd_qtd').val();        
-        cod_urd_qtd = 6;
-        var ct_urd = 3;
+        cod_urd_qtd = $('#cod_urd_qtd').val(); 
+        var ct_urd = 1;               
 
-        while (parseInt(ct_urd) >= 3 && parseInt(ct_urd) <= parseInt(cod_urd_qtd)) {
+        while (parseInt(ct_urd) <= parseInt(cod_urd_qtd)) {
             urd_numerador = $('#urd_cod_numerador_regiao' + cod_periodo + '_' + ct_urd).val();
             urd_denominador = $('#urd_cod_denominador_regiao' + cod_periodo + '_' + ct_urd).val();
             urd_extracao = $('#urd_dt_extracao_regiao' + cod_periodo + '_' + ct_urd).val();
@@ -434,11 +620,10 @@ function ValidarCamposAnalise() {
         var urd_dt_extracao_regiao = '';
         var urd_extracao = ''; 
 
-        //cod_urd_qtd = $('#cod_urd_qtd').val();        
-        cod_urd_qtd = 6;
-        var ct_urd = 3;
+        cod_urd_qtd = $('#cod_urd_qtd').val(); 
+        var ct_urd = 1;                    
 
-        while (parseInt(ct_urd) >= 3 && parseInt(ct_urd) <= parseInt(cod_urd_qtd)) {
+        while (parseInt(ct_urd) <= parseInt(cod_urd_qtd)) {
             urd_numerador = $('#urd_cod_numerador_regiao' + cod_periodo + '_' + ct_urd).val();
             urd_denominador = $('#urd_cod_denominador_regiao' + cod_periodo + '_' + ct_urd).val();
             urd_extracao = $('#urd_dt_extracao_regiao' + cod_periodo + '_' + ct_urd).val();
@@ -508,30 +693,29 @@ function ValidarCamposAnalise() {
         var hosp_extracao = ''; 
 
         cod_hosp_qtd = $('#cod_hosp_qtd').val();        
-        var ct_hosp = 1;
-
-        while (parseInt(ct_hosp) <= parseInt(cod_hosp_qtd)) {
-            hosp_numerador = $('#hosp_cod_numerador_regiao' + cod_periodo + '_' + ct_hosp).val();
-            hosp_denominador = $('#hosp_cod_denominador_regiao' + cod_periodo + '_' + ct_hosp).val();
-            hosp_extracao = $('#hosp_dt_extracao_regiao' + cod_periodo + '_' + ct_hosp).val();           
+        //var ct_hosp = 1;
+        var cod_hosp_ind = $('#cod_hosp_ind' + cod_periodo).val();
+        var a_cod_hosp_ind = cod_hosp_ind.split(',');
+        for (i = 0; i < a_cod_hosp_ind.length; i++) { 
+            hosp_numerador = $('#hosp_cod_numerador_regiao' + cod_periodo + '_' + a_cod_hosp_ind[i]).val();
+            hosp_denominador = $('#hosp_cod_denominador_regiao' + cod_periodo + '_' + a_cod_hosp_ind[i]).val();
+            hosp_extracao = $('#hosp_dt_extracao_regiao' + cod_periodo + '_' + a_cod_hosp_ind[i]).val();  
 
             if (hosp_numerador != '') {
-                hosp_cod_numerador_regiao += '[' + ct_hosp + '_' + hosp_numerador + ']';
+                hosp_cod_numerador_regiao += '[' + a_cod_hosp_ind[i] + '_' + hosp_numerador + ']';
             }      
             if (hosp_denominador != '') {
-                hosp_cod_denominador_regiao += '[' + ct_hosp + '_' + hosp_denominador + ']';
+                hosp_cod_denominador_regiao += '[' + a_cod_hosp_ind[i] + '_' + hosp_denominador + ']';
             }     
             if (hosp_extracao != '') {
-                hosp_dt_extracao_regiao += '[' + ct_hosp + '_' + hosp_extracao + ']';
+                hosp_dt_extracao_regiao += '[' + a_cod_hosp_ind[i] + '_' + hosp_extracao + ']';
             }     
 
             if (hosp_numerador != '' && hosp_denominador != '' && hosp_extracao == '') {
                 js_alert('', 'Campo DATA EXTRAÇÃO da RA não pode ser vazio.');
                 return false;
             }
-
-            ct_hosp += 1;
-        }
+        }        
 
         var cod_hosp_qtd_conv = 0;
         var hosp_cod_numerador_regiao_conv = '';           
@@ -542,30 +726,29 @@ function ValidarCamposAnalise() {
         var hosp_extracao_conv = ''; 
 
         cod_hosp_qtd_conv = $('#cod_hosp_qtd_conv').val();        
-        var ct_hosp_conv = 12;
-
-        while (parseInt(ct_hosp_conv) <= parseInt(cod_hosp_qtd_conv)) {
-            hosp_numerador_conv = $('#hosp_cod_numerador_regiao_conv' + cod_periodo + '_' + ct_hosp_conv).val();
-            hosp_denominador_conv = $('#hosp_cod_denominador_regiao_conv' + cod_periodo + '_' + ct_hosp_conv).val();
-            hosp_extracao_conv = $('#hosp_dt_extracao_regiao_conv' + cod_periodo + '_' + ct_hosp_conv).val();           
+        //var ct_hosp_conv = 12;
+        var cod_hosp_ind_conv = $('#cod_hosp_ind_conv' + cod_periodo).val();
+        var a_cod_hosp_ind_conv = cod_hosp_ind_conv.split(',');
+        for (i = 0; i < a_cod_hosp_ind_conv.length; i++) {
+            hosp_numerador_conv = $('#hosp_cod_numerador_regiao_conv' + cod_periodo + '_' + a_cod_hosp_ind_conv[i]).val();
+            hosp_denominador_conv = $('#hosp_cod_denominador_regiao_conv' + cod_periodo + '_' + a_cod_hosp_ind_conv[i]).val();
+            hosp_extracao_conv = $('#hosp_dt_extracao_regiao_conv' + cod_periodo + '_' + a_cod_hosp_ind_conv[i]).val();           
 
             if (hosp_numerador_conv != '') {
-                hosp_cod_numerador_regiao_conv += '[' + ct_hosp_conv + '_' + hosp_numerador_conv + ']';
+                hosp_cod_numerador_regiao_conv += '[' + a_cod_hosp_ind_conv[i] + '_' + hosp_numerador_conv + ']';
             }      
             if (hosp_denominador_conv != '') {
-                hosp_cod_denominador_regiao_conv += '[' + ct_hosp_conv + '_' + hosp_denominador_conv + ']';
+                hosp_cod_denominador_regiao_conv += '[' + a_cod_hosp_ind_conv[i] + '_' + hosp_denominador_conv + ']';
             }     
             if (hosp_extracao_conv != '') {
-                hosp_dt_extracao_regiao_conv += '[' + ct_hosp_conv + '_' + hosp_extracao_conv + ']';
+                hosp_dt_extracao_regiao_conv += '[' + a_cod_hosp_ind_conv[i] + '_' + hosp_extracao_conv + ']';
             }   
             
             if (hosp_numerador_conv != '' && hosp_denominador_conv != '' && hosp_extracao_conv == '') {
                 js_alert('', 'Campo DATA EXTRAÇÃO da RA não pode ser vazio.');
                 return false;
             }
-
-            ct_hosp_conv += 1;
-        }
+        }        
     } 
    
     $.ajax({
@@ -605,7 +788,8 @@ function ValidarCamposAnalise() {
             cod_hosp_qtd_conv: cod_hosp_qtd_conv,
             hosp_cod_numerador_regiao_conv: hosp_cod_numerador_regiao_conv,
             hosp_cod_denominador_regiao_conv: hosp_cod_denominador_regiao_conv,
-            hosp_dt_extracao_regiao_conv: hosp_dt_extracao_regiao_conv
+            hosp_dt_extracao_regiao_conv: hosp_dt_extracao_regiao_conv,
+            cod_bloquear_analise: cod_bloquear_analise
         },
         async: false,
         success: function (data) {                                                                          
@@ -813,6 +997,11 @@ function MetaMonitoramento(data) {
             qtd_ct = 6;
             qtd_soma = qtd_ct;
             break;
+        case 'anual':
+            qtd_campos = 12/12;
+            qtd_ct = 12;
+            qtd_soma = qtd_ct;
+            break;
         default:
             qtd_campos = 0;
             qtd_ct = qtd_campos;
@@ -942,7 +1131,9 @@ function CarregarFormularioAlterar() {
 
         //DADOS MGI        
         $('#cod_indicador').val(cod_indicador);
-        setIndicador(cod_indicador);        
+        setIndicador(cod_indicador);    
+        
+        fn_hospital();
     }
 }
 

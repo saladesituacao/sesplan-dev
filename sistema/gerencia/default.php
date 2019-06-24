@@ -28,11 +28,29 @@ Auditoria(3, "Listar Tabelas de Apoio", "");
                     <a href="cargo/default.php">Cargos</a>                
                 </li>      
             <?php } ?>
+            <?php if (permissao_acesso(103)) { ?>
+                <li class = "list-group-item">
+                    <span class="glyphicon glyphicon-search"></span> 
+                    <a href="estrategia/default.php">Estratégia Vinculada</a>                
+                </li>      
+            <?php } ?>
             <?php if (permissao_acesso(33)) { ?>
                 <li class = "list-group-item">
                     <span class="glyphicon glyphicon-search"></span> 
                     <a href="instrumento/default.php">Instrumento de Planejamento</a>                
                 </li>    
+            <?php } ?>
+            <?php if (permissao_acesso(107)) { ?>
+                <li class = "list-group-item">
+                    <span class="glyphicon glyphicon-search"></span> 
+                    <a href="modelo_mensagem/default.php">Modelos de Mensagem</a>                
+                </li>    
+            <?php } ?>            
+            <?php if (permissao_acesso(46)) { ?>
+                <li class = "list-group-item">
+                    <span class="glyphicon glyphicon-search"></span> 
+                    <a href="perfil/default.php">Perfis de Usuários</a>                
+                </li>   
             <?php } ?>
             <?php if (permissao_acesso(38)) { ?>
                 <li class = "list-group-item">
@@ -40,18 +58,24 @@ Auditoria(3, "Listar Tabelas de Apoio", "");
                     <a href="produto_etapa/default.php">Produto da Etapa</a>                
                 </li>    
             <?php } ?>
+            <?php if (permissao_acesso(111)) { ?>
+                <li class = "list-group-item">
+                    <span class="glyphicon glyphicon-search"></span> 
+                    <a href="programa/default.php">Programas</a>                
+                </li>   
+            <?php } ?>
             <?php if (permissao_acesso(42)) { ?>
                 <li class = "list-group-item">
                     <span class="glyphicon glyphicon-search"></span> 
                     <a href="unidade_medida/default.php">Unidade de Medida</a>                
                 </li>    
-            <?php } ?>
-            <?php if (permissao_acesso(46)) { ?>
+            <?php } ?>  
+            <?php if (permissao_acesso(115)) { ?>
                 <li class = "list-group-item">
                     <span class="glyphicon glyphicon-search"></span> 
-                    <a href="perfil/default.php">Perfis de Usuários</a>                
+                    <a href="saiba/default.php">Saiba +</a>                
                 </li>   
-            <?php } ?>
+            <?php } ?>          
             <?php if (permissao_acesso(88)) { ?>
                 <li class = "list-group-item">
                     <span class="glyphicon glyphicon-search"></span> 

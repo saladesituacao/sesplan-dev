@@ -51,6 +51,8 @@ class clsIndicador{
     public $hosp_cod_denominador_regiao_conv;
     public $hosp_dt_extracao_regiao_conv;
     public $cod_acumulativo;
+    public $cod_bloquear_analise;
+    public $cod_hospital;
 
     public function ListaIndicador($id) {
         $sql = "SELECT * FROM tb_indicador WHERE cod_chave = ".$id;
@@ -106,6 +108,9 @@ class clsIndicador{
                 case 'semestral':
                     $campo = "campo_6, campo_12";        
                     break;
+                case 'anual':
+                    $campo = "campo_12";        
+                    break;
                 default:
                     return 0;                
             }      
@@ -121,7 +126,13 @@ class clsIndicador{
     
             $sql = "INSERT INTO tb_indicador_meta(cod_indicador, ".$campo.")VALUES(".$cod_chave.", ".$valor.")";        
             pg_query($sql);
-        }        
+        }   
+        if (!empty($this->cod_hospital)) {
+            foreach ($this->cod_hospital as $valor) {                
+                $sql = "INSERT INTO tb_indicador_hospital(cod_chave, cod_hospital) VALUES(".$cod_chave.", ".$valor.")";                
+                pg_query($sql);
+            }                          
+        }     
     }
 
     function AlterarIndicador($cod_chave) {        
@@ -170,6 +181,9 @@ class clsIndicador{
                 case 'semestral':
                     $campo = "campo_6, campo_12";        
                     break;
+                case 'anual':
+                    $campo = "campo_12";        
+                    break;
                 default:
                     return 0;                
             }            
@@ -184,8 +198,18 @@ class clsIndicador{
             $valor = str_replace("[", "", $valor);
     
             $sql = "INSERT INTO tb_indicador_meta(cod_indicador, ".$campo.")VALUES(".$cod_chave.", ".$valor.")";            
-            pg_query($sql);
-        }        
+            pg_query($sql);            
+        }  
+        
+        $sql = "DELETE FROM tb_indicador_hospital WHERE cod_chave = ".$cod_chave;
+        pg_query($sql);
+
+        if (!empty($this->cod_hospital)) {
+            foreach ($this->cod_hospital as $valor) {                
+                $sql = "INSERT INTO tb_indicador_hospital(cod_chave, cod_hospital) VALUES(".$cod_chave.", ".$valor.")";                    
+                pg_query($sql);
+            }                          
+        }
     }
 
     public function ExcluirIndicador() {
@@ -246,7 +270,8 @@ class clsIndicador{
     }   
 
     function IndicadorVinculado_2($cod_indicador, $cod_chave) {
-        $q = pg_query("SELECT cod_indicador FROM tb_indicador WHERE cod_indicador = '".$cod_indicador."' AND cod_chave <> ".$cod_chave );
+        $q = pg_query("SELECT cod_indicador FROM tb_indicador WHERE cod_indicador = '".$cod_indicador."' 
+                        AND cod_chave <> ".$cod_chave." AND TO_CHAR(dt_inclusao, 'YYYY') <> TO_CHAR(dt_inclusao, 'YYYY') " );
         if (pg_num_rows($q) > 0) {
             return true;
         }
@@ -255,9 +280,20 @@ class clsIndicador{
         }
     }   
 
-    function ListaIndicadores() {
+    function ListaIndicadores() {        
+        $cabecalho = array(
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: '.$_SESSION["token"]
+        );
         $url = $_SESSION["url_api_mgi"]."/api/indicador";
-        return json_decode(file_get_contents($url));
+        $ch = curl_init($url);                            
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $cabecalho);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);        
+        $resposta = curl_exec($ch);                    
+        curl_close($ch);
+
+        return json_decode($resposta);
     }    
     
     function VerificaIndicadorAtivo($id) {
@@ -323,6 +359,7 @@ class clsIndicador{
     }
 
     public function SituacaoAnalise($polaridade, $meta, $resultado, $variacao) {
+        
         //$meta = trim(str_replace(".", "", $meta));
         //$meta = trim(str_replace(",", ".", $meta));
 
@@ -331,27 +368,27 @@ class clsIndicador{
 
         //$retorno = (($resultado * 100) / $meta);
         //$retorno = number_format($retorno, 2, '.', '');
-
-        $variacao = trim(str_replace(".", "", $variacao));
-        $variacao = trim(str_replace(",", ".", $variacao));        
-        $retorno = floatval($variacao);
-
-        //echo($retorno);
-        //exit();
+        
+        if (strstr($variacao, ",")) {
+            $variacao = trim(str_replace(".", "", $variacao));
+            $variacao = trim(str_replace(",", ".", $variacao)); 
+        }               
+        $retorno = floatval($variacao);        
+                       
         if(trim(strtolower($polaridade)) == 'maior - melhor') {                        
             if ($retorno > 0) {
                 //SUPERADO
                 $retorno = 20;
             }
-            elseif($retorno > -5 && $retorno <= 0) {
+            elseif($retorno >= -4.99 && $retorno <= 0) {
                 //ESPERADO
                 $retorno = 19;
             }
-            elseif($retorno > -25 && $retorno <= -5) {
+            elseif($retorno > -24.99 && $retorno <= -5) {
                 //ALERTA
                 $retorno = 16;
             }
-            elseif($retorno >-50 && $retorno <= -25) { 
+            elseif($retorno >=-49.99 && $retorno <= -25) { 
                 //CRÍTICO
                 $retorno = 18;
             }
@@ -361,7 +398,7 @@ class clsIndicador{
             }
             else {
                 $retorno = "";
-            }
+            }            
         }
         else {                                    
             if ($retorno < 0) {
@@ -387,8 +424,7 @@ class clsIndicador{
             else {
                 $retorno = "";
             }
-        }        
-
+        }                
         return $retorno;
     }    
 
@@ -419,17 +455,37 @@ class clsIndicador{
         }           
     }
 
-    public function VariacaoMeta($meta, $resultado) {              
+    public function VariacaoMeta($meta, $resultado) {                  
         $meta = trim(str_replace(".", "", $meta));
         $meta = trim(str_replace(",", ".", $meta));
 
         $resultado = trim(str_replace(".", "", $resultado));        
-        $resultado = trim(str_replace(",", ".", $resultado));        
-
+        $resultado = trim(str_replace(",", ".", $resultado));                
         $retorno = ($resultado / $meta - 1) * 100;       
-        $retorno = @number_format($retorno, 2, ',', '.');
-        
+                
+        if (!$retorno < 0) {
+            $retorno = @number_format($retorno, 2, ',', '.');            
+        }      
+       
         return $retorno;
+    }
+
+    public function SalvarTemp() {        
+        $q1 = pg_query("SELECT * FROM tb_indicador_analise_temp WHERE cod_chave = ".$this->cod_id." AND cod_periodo = ".$this->cod_periodo);
+        if (pg_num_rows($q1) > 0) {
+            $sql = "UPDATE tb_indicador_analise_temp SET txt_analise = '" .trim($this->txt_analise)."', txt_encaminhamento = '".trim($this->txt_encaminhamento)."', ";
+            $sql .= " cod_usuario = ".$_SESSION["cod_usuario"].", txt_analise_2 = '" .trim($this->txt_analise_2)."' ";            
+            $sql .= " WHERE cod_chave = ".$this->cod_id. " AND cod_periodo = ".$this->cod_periodo;        
+            pg_query($sql);            
+            Auditoria(81, "", $sql);
+        } else {
+            $sql = "INSERT INTO tb_indicador_analise_temp(cod_chave, cod_periodo, txt_analise, txt_analise_2, txt_encaminhamento, ";
+            $sql .= " cod_usuario) ";
+            $sql .= " VALUES(".$this->cod_id.", ".$this->cod_periodo.", '".trim($this->txt_analise)."', ";
+            $sql .= " '".trim($this->txt_analise_2)."', '".trim($this->txt_encaminhamento)."', ".$_SESSION["cod_usuario"].")";
+            pg_query($sql);             
+            Auditoria(80, "", $sql);
+        }               
     }
 
     public function IncluirAnalise() {       
@@ -460,8 +516,8 @@ class clsIndicador{
                 }            
             }           
             
-            $txt_variacao = $clsIndicador->VariacaoMeta($txt_meta_parcial, $cod_resultado);         
-            $cod_status = $clsIndicador->SituacaoAnalise($this->txt_polaridade, $txt_meta_parcial, $cod_resultado, $txt_variacao);   
+            $txt_variacao = $clsIndicador->VariacaoMeta($txt_meta_parcial, $cod_resultado);                     
+            $cod_status = $clsIndicador->SituacaoAnalise($this->txt_polaridade, $txt_meta_parcial, $cod_resultado, $txt_variacao);               
         }                     
 
         if (empty($cod_status)) {
@@ -498,8 +554,7 @@ class clsIndicador{
             $sql .= " cod_resultado = '".trim($cod_resultado)."', dt_extracao = '".trim(DataBanco($this->dt_extracao))."', ";
             $sql .= "  txt_variacao = '".$txt_variacao."', txt_analise_2 = '" .trim($this->txt_analise_2)."' ";
             $sql .= " WHERE cod_chave = ".$this->cod_id. " AND cod_periodo = ".$this->cod_periodo;        
-            pg_query($sql);
-            
+            pg_query($sql);            
             Auditoria(81, "", $sql);
         }
         else {                        
@@ -509,10 +564,13 @@ class clsIndicador{
             $sql .= " '".trim($this->txt_encaminhamento)."', ".$_SESSION["cod_usuario"].", '".trim($this->cod_numerador)."', ";
             $sql .= " '".trim($this->cod_denominador)."', '".trim($cod_resultado)."', ".$cod_status.", '".trim(DataBanco($this->dt_extracao))."', ";
             $sql .= " '".trim($txt_variacao)."', '".trim($this->txt_analise_2)."')";            
-            pg_query($sql); 
-            
+            pg_query($sql);             
             Auditoria(80, "", $sql);
         }
+
+        //REMOVER TEMPORÁRIO
+        $sql = "DELETE FROM tb_indicador_analise_temp WHERE cod_chave = ".$this->cod_id. " AND cod_periodo = ".$this->cod_periodo;
+        pg_query($sql);
 
         //ANÁLISE REGIÃO
         if (limpar_comparacao($this->cod_regiao_tipo) == 3) {
@@ -878,19 +936,38 @@ class clsIndicador{
                     pg_query($sql);                               
                 }
             }            
-        }
+        }        
     }
 
-    public function ExcluirAnalise() {
-        $sql = "DELETE FROM tb_indicador_analise WHERE cod_chave = ".$this->cod_id. " AND cod_periodo = ".$this->cod_periodo;
-        pg_query($sql);
+    public function BloquearAnalise() {        
+        $clsIndicador = new clsIndicador();
+        $clsIndicador->cod_id = $this->cod_id;
+        $clsIndicador->cod_periodo = $this->cod_periodo;
+        $clsIndicador->ExcluirAnalise();
 
+        $sql = "INSERT INTO tb_indicador_analise_bloquear(cod_chave, cod_periodo) VALUES(".$this->cod_id.", ".$this->cod_periodo.")";       
+        pg_query($sql);    
+        Auditoria(133, "", $sql);        
+    }
+
+    public function DesbloquearAnalise() {
+        $sql = "DELETE FROM tb_indicador_analise_bloquear WHERE cod_chave = ".$this->cod_id." AND cod_periodo = ".$this->cod_periodo;
+        pg_query($sql);
+        Auditoria(134, "", $sql);
+    }    
+
+    public function ExcluirAnalise() {
+        $sql = "DELETE FROM tb_indicador_analise_bloquear WHERE cod_chave = ".$this->cod_id. " AND cod_periodo = ".$this->cod_periodo;
+        pg_query($sql);
         Auditoria(83, "", $sql);
 
         $sql = "DELETE FROM tb_indicador_analise_regiao WHERE cod_chave = ".$this->cod_id. " AND cod_periodo = ".$this->cod_periodo;
         pg_query($sql);
-
         Auditoria(83, "", $sql);
+
+        $sql = "DELETE FROM tb_indicador_analise WHERE cod_chave = ".$this->cod_id. " AND cod_periodo = ".$this->cod_periodo;
+        pg_query($sql);
+        Auditoria(83, "", $sql);        
     }
 
     public function QueryConsultaArvore($cod_id) {
@@ -906,24 +983,22 @@ class clsIndicador{
     public function TipoMonitoramento($txt_monitoramento) {
         switch(strtolower($txt_monitoramento)) {
             case 'mensal':
-                return 12/1;            
-                
+                return 12/1;                            
                 break;
             case 'bimestral':
-                return 12/2;
-    
+                return 12/2;    
                 break;
             case 'trimestral':
-                return 12/3;
-    
+                return 12/3;    
                 break;
             case 'quadrimestral':
-                return 12/4;
-    
+                return 12/4;    
                 break;
             case 'semestral':
                 return 12/6;
-    
+                break;
+            case 'anual':
+                return 12/12;
                 break;
             default:
                 return 0;                
@@ -942,8 +1017,8 @@ class clsIndicador{
         }        
     }
 
-    public function IncluirPeriodoAtualizacao($dt_inicio, $dt_fim) {
-        $rs=pg_fetch_array(pg_query("SELECT MAX(cod_chave) FROM tb_indicador_periodo"));
+    public function IncluirPeriodoAtualizacao($cod_ano, $dt_inicio, $dt_fim) {
+        $rs=pg_fetch_array(pg_query("SELECT MAX(cod_periodo) FROM tb_indicador_periodo"));
         if (!isset($rs[0])) {
             $id = 1;
         } else {
@@ -951,8 +1026,8 @@ class clsIndicador{
         }
 
 
-        $sql = "INSERT INTO tb_indicador_periodo(cod_chave, dt_inicio, dt_fim, cod_usuario) ";
-        $sql .= " VALUES(".$id.", '".trim(DataBanco($dt_inicio))."', '".trim(DataBanco($dt_fim))."', ".$_SESSION['cod_usuario'].")";        
+        $sql = "INSERT INTO tb_indicador_periodo(cod_periodo, cod_ano, dt_inicio, dt_fim, cod_usuario) ";
+        $sql .= " VALUES(".$id.", ".$cod_ano.", '".trim(DataBanco($dt_inicio))."', '".trim(DataBanco($dt_fim))."', ".$_SESSION['cod_usuario'].")";        
         pg_query($sql);
 
         Auditoria(67, "", $sql);
@@ -968,7 +1043,7 @@ class clsIndicador{
     }
 
     public function ExcluirPeriodoAtualizacao($id) {
-        $sql = "DELETE FROM tb_indicador_periodo WHERE cod_chave = ".$id;
+        $sql = "DELETE FROM tb_indicador_periodo WHERE cod_periodo = ".$id;
         pg_query($sql);
 
         Auditoria(69, "", $sql);
@@ -995,41 +1070,29 @@ class clsIndicador{
         return $q; 
     }
 
-    public function RegraPeriodo() {
-        $retorno = true;
-        
-        $clsIndicador = new clsIndicador();
-        $q2 = $clsIndicador->ListaPeriodo();        
-        if (pg_num_rows($q2) > 0) {
-            $rs = pg_fetch_array($q2);
+    public function RegraPeriodoAnalise($id) {
+        $retorno = false;
 
-            if (strtotime("now") > strtotime($rs['dt_fim']) || strtotime("now") < strtotime($rs['dt_inicio'])) {
-                $retorno = false;
-            }                 
-        } 
+        $sql = "SELECT TO_CHAR(CURRENT_TIMESTAMP, 'DD/MM/YYYY') AS dt_atual";
+        $rs = pg_fetch_array(pg_query($sql));  
+        $dt_atual = $rs['dt_atual'];
 
-        return $retorno;
-    }
+        $sql = "SELECT TO_CHAR(dt_inclusao, 'YYYY') AS dt_inclusao FROM tb_indicador WHERE cod_chave = ".$id;
+        $rs = pg_fetch_array(pg_query($sql));
+        $cod_ano = $rs['dt_inclusao'];
 
-    public function RegraPeriodoAnalise() {
-        $retorno = true;
-        
-        $clsIndicador = new clsIndicador();
-        $q2 = $clsIndicador->ListaPeriodo();        
-        if (pg_num_rows($q2) > 0) {
-            $rs = pg_fetch_array($q2);
+        $sql = "SELECT count(*) AS qtd FROM tb_indicador_periodo WHERE cod_ano = ".$cod_ano." AND ";
+        $sql .= " (TO_DATE('".$dt_atual."', 'DD/MM/YYYY') >= CAST(dt_inicio AS DATE) ";
+        $sql .= " AND TO_DATE('".$dt_atual."', 'DD/MM/YYYY') <= CAST(dt_fim AS DATE) )";        
+        $rs = pg_fetch_array(pg_query($sql));
+        $qtd = $rs['qtd'];
 
-            if (strtotime("now") > strtotime($rs['dt_fim']) || strtotime("now") < strtotime($rs['dt_inicio'])) {
-                $retorno = false;
-            }           
-            
-            if (!empty($rs['dt_reabrir'])) {
-                $retorno = true;
-            }
-        } 
+        if ($qtd > 0) {
+            $retorno = true;
+        }         
 
         return $retorno;
-    }
+    }    
 
     public function RetornaNumeradorRA($id, $periodo, $cod_regiao_tipo, $cod_ra) {
         $sql = "SELECT cod_numerador FROM tb_indicador_analise_regiao WHERE cod_chave = ".$id." AND cod_periodo = ".$periodo." AND cod_regiao_tipo = ".$cod_regiao_tipo." AND cod_ra = ".$cod_ra;
@@ -1233,6 +1296,109 @@ class clsIndicador{
         } else {
             return '';
         }        
+    }
+
+    public function RetornaTextoAnalise($id, $periodo) {
+        $sql = "SELECT txt_analise FROM tb_indicador_analise WHERE cod_chave = ".$id." AND cod_periodo = ".$periodo;
+        $q = pg_query($sql);
+        if (pg_num_rows($q) > 0) {
+            $rs = pg_fetch_array($q);
+
+            return $rs['txt_analise'];
+        } else {
+            return '';
+        }        
+    }
+
+    public function MesMonitoramentoPainel($periodicidade) { 
+        $retorno = ""; 
+        $r = "";  
+        $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+        $rs = pg_fetch_array(pg_query($sql));
+        $ano_atual = $rs['ano'];
+
+        if (intval($_SESSION['ano_corrente']) < intval($ano_atual)) {
+            $mes_atual = 12;
+        } else {
+            $sql = "SELECT DATE_PART('MONTH', CURRENT_TIMESTAMP) AS mes";        
+            $rs = pg_fetch_array(pg_query($sql));
+            $mes_atual = $rs['mes'];
+        }        
+
+        if (!empty($_SESSION['mes_corrente'])) {
+            $mes_atual = $_SESSION['mes_corrente'];
+        }
+
+        switch(strtolower($periodicidade)) {
+            case 'mensal':
+                return $mes_atual;
+                break;
+            case 'bimestral':  
+                if (2 <= intval($mes_atual)) {
+                    $r .= '[2]';
+                }   
+                if (4 <= intval($mes_atual)) {
+                    $r .= '[4]';
+                } 
+                if (6 <= intval($mes_atual)) {
+                    $r .= '[6]';
+                } 
+                if (8 <= intval($mes_atual)) {
+                    $r .= '[8]';
+                } 
+                if (10 <= intval($mes_atual)) {
+                    $r .= '[10]';
+                } 
+                if (12 <= intval($mes_atual)) {
+                    $r .= '[12]';
+                }                            
+                break;
+            case 'trimestral':
+                if (3 <= intval($mes_atual)) {
+                    $r .= '[3]';
+                }  
+                if (6 <= intval($mes_atual)) {
+                    $r .= '[6]';
+                }  
+                if (9 <= intval($mes_atual)) {
+                    $r .= '[9]';
+                } 
+                if (12 <= intval($mes_atual)) {
+                    $r .= '[12]';
+                }                   
+                break;
+            case 'quadrimestral':
+                if (4 <= intval($mes_atual)) {
+                    $r .= '[4]';
+                } 
+                if (8 <= intval($mes_atual)) {
+                    $r .= '[8]';
+                } 
+                if (12 <= intval($mes_atual)) {
+                    $r .= '[12]';
+                } 
+                break;
+            case 'semestral':
+            if (6 <= intval($mes_atual)) {
+                $r .= '[6]';
+            } 
+            if (12 <= intval($mes_atual)) {
+                $r .= '[12]';
+            } 
+                break;
+            case 'anual':
+                return 12;
+                break;
+        }             
+
+        if ($r != "") {
+            $r = str_replace('][', ',', $r);
+            $r = str_replace(']', '', $r);
+            $r = str_replace('[', '', $r);
+            $arr = explode(",", trim($r));           
+            $retorno = max($arr);
+        }
+        return trim($retorno);
     }
 }
 ?>

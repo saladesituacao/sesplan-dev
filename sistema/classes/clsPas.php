@@ -91,8 +91,9 @@ class clsPas{
 
     public function IncluirConsideracao() {
         $q1 = pg_query("SELECT * FROM tb_pas_analise WHERE cod_pas = ".$this->cod_pas. " AND cod_bimestre = ".$this->cod_bimeste);
-        if (pg_num_rows($q1) > 0) {            
-            $q = pg_query("SELECT dt_reabrir FROM tb_pas_periodo");
+        if (pg_num_rows($q1) > 0) {
+            /*
+            $q = pg_query("SELECT dt_reabrir FROM tb_pas_periodo");            
             if (pg_num_rows($q) > 0) {
                 $rs1 = pg_fetch_array($q);  
                 
@@ -108,8 +109,8 @@ class clsPas{
                     Auditoria(105, "", $sql);                    
                 }            
             }
-
-            $sql = "UPDATE tb_pas_analise SET txt_justificativa = '".trim($this->txt_consideracao)."', cod_usuario = ".$_SESSION['cod_usuario'];
+            */
+            $sql = "UPDATE tb_pas_analise SET txt_justificativa = '".trim(str_replace("'", "''", $this->txt_consideracao))."', cod_usuario = ".$_SESSION['cod_usuario'];
             $sql .= " WHERE cod_pas = ".$this->cod_pas. " AND cod_bimestre = ".$this->cod_bimeste;
             pg_query($sql);
 
@@ -117,7 +118,7 @@ class clsPas{
         }
         else {
             $sql = "INSERT INTO tb_pas_analise(cod_pas, cod_bimestre, txt_justificativa, cod_usuario) ";
-            $sql .= " VALUES(".$this->cod_pas.", ".$this->cod_bimeste.", '".trim($this->txt_consideracao)."', ".$_SESSION['cod_usuario'].")";
+            $sql .= " VALUES(".$this->cod_pas.", ".$this->cod_bimeste.", '".trim(str_replace("'", "''", $this->txt_consideracao))."', ".$_SESSION['cod_usuario'].")";
             pg_query($sql); 
 
             Auditoria(103, "", $sql);            
@@ -145,33 +146,41 @@ class clsPas{
         return $q; 
     }
 
-    public function RegraPeriodo() {
-        $retorno = true;
+    public function RegraPeriodo($cod_pas) {
+        $retorno = false;
+
+        $sql = "SELECT TO_CHAR(CURRENT_TIMESTAMP, 'DD/MM/YYYY') AS dt_atual";
+        $rs = pg_fetch_array(pg_query($sql));  
+        $dt_atual = $rs['dt_atual'];
+
+        $sql = "SELECT TO_CHAR(dt_inclusao, 'YYYY') AS dt_inclusao FROM tb_pas WHERE cod_pas = ".$cod_pas;
+        $rs = pg_fetch_array(pg_query($sql));
+        $cod_ano = $rs['dt_inclusao'];
+
+        $sql = "SELECT count(*) AS qtd FROM tb_pas_periodo WHERE cod_ano = ".$cod_ano." AND ";
+        $sql .= " (TO_DATE('".$dt_atual."', 'DD/MM/YYYY') >= CAST(dt_inicio AS DATE) ";
+        $sql .= " AND TO_DATE('".$dt_atual."', 'DD/MM/YYYY') <= CAST(dt_fim AS DATE) )";
         
-        $clsPas = new clsPas();
-        $q2 = $clsPas->ListaPeriodo();        
-        if (pg_num_rows($q2) > 0) {
-            $rs = pg_fetch_array($q2);
-            $d = date("d/m/Y");                        
-            if (($d > FormataData($rs['dt_fim']) || $d < FormataData($rs['dt_inicio'])) && empty($rs['dt_reabrir'])) {
-                $retorno = false;                
-            }                 
-        } 
+        $rs = pg_fetch_array(pg_query($sql));
+        $qtd = $rs['qtd'];
+
+        if ($qtd > 0) {
+            $retorno = true;
+        }         
 
         return $retorno;
     }
 
-    public function IncluirPeriodoAtualizacao($dt_inicio, $dt_fim) {
-        $rs=pg_fetch_array(pg_query("SELECT MAX(cod_chave) FROM tb_pas_periodo"));
+    public function IncluirPeriodoAtualizacao($cod_ano, $dt_inicio, $dt_fim) {
+        $rs=pg_fetch_array(pg_query("SELECT MAX(cod_periodo) FROM tb_pas_periodo"));
         if (!isset($rs[0])) {
             $id = 1;
         } else {
             $id = intval($rs[0]) + 1;
         }
 
-
-        $sql = "INSERT INTO tb_pas_periodo(cod_chave, dt_inicio, dt_fim, cod_usuario) ";
-        $sql .= " VALUES(".$id.", '".trim(DataBanco($dt_inicio))."', '".trim(DataBanco($dt_fim))."', ".$_SESSION['cod_usuario'].")";        
+        $sql = "INSERT INTO tb_pas_periodo(cod_periodo, cod_ano, dt_inicio, dt_fim, cod_usuario) ";
+        $sql .= " VALUES(".$id.", ".$cod_ano.", '".trim(DataBanco($dt_inicio))."', '".trim(DataBanco($dt_fim))."', ".$_SESSION['cod_usuario'].")";
         pg_query($sql);
 
         Auditoria(93, "", $sql);
@@ -187,7 +196,7 @@ class clsPas{
     }
 
     public function ExcluirPeriodoAtualizacao($id) {
-        $sql = "DELETE FROM tb_pas_periodo WHERE cod_chave = ".$id;
+        $sql = "DELETE FROM tb_pas_periodo WHERE cod_periodo = ".$id;
         pg_query($sql);
 
         Auditoria(95, "", $sql);
@@ -318,7 +327,19 @@ class clsPas{
             return  '6';
         }
 
-        $mes_atual = intval(date('m'));
+        $sql = "SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano";
+        $rs = pg_fetch_array(pg_query($sql));
+        $ano_atual = $rs['ano'];
+
+        $sql = "SELECT DATE_PART('YEAR', dt_inclusao) AS ano FROM tb_pas WHERE cod_pas = ".$cod_pas;
+        $rs = pg_fetch_array(pg_query($sql));
+        $ano_pas = $rs['ano'];
+
+        if ($ano_atual == $ano_pas ) {
+            $mes_atual = intval(date('m'));
+        } else if($ano_atual > $ano_pas) {
+            $mes_atual = intval(12);
+        }        
         $retorno = '';
         
         if (strval($mes_atual) == '1' || strval($mes_atual) == '2') {
@@ -363,22 +384,27 @@ class clsPas{
                 if (empty($cod_inicio_efetivo) && empty($cod_fim_efetivo)) {
                     $retorno = '';
                 }
-            }       
+            } 
+             
+            if ($ano_pas < $ano_atual && empty($cod_fim_efetivo)) {
+                $retorno = "5";
+            }                                
         }
-        
-        
+                
         //ATRASADA
         //Este status aparece quando o campo “Início previsto” é inferior a data atual e o campo “início efetivo” não foi preenchido. 
         //Este status também aparece quando o campo “fim previsto” tem data inferior ao campo “fim efetivo”; 
-        //O fim previso menor que a data atual.       
+        //O fim previso menor que a data atual.            
         if ($retorno == '' && (($cod_inicio_previsto < $mes_atual) && (empty($cod_inicio_efetivo))
-        || ($cod_fim_previsto < $cod_fim_efetivo) || ($cod_fim_previsto < $mes_atual)))              
+        || ($cod_fim_previsto < $cod_fim_efetivo) || ($cod_fim_previsto < $mes_atual)
+        || ($cod_inicio_previsto < $mes_atual && !empty($cod_inicio_efetivo) && empty($cod_fim_efetivo))
+        ))              
         {
             $retorno = "5";            
            
             if (!empty($cod_fim_efetivo)) {
                 $retorno = '';
-            }
+            }            
         }       
        
         //CONCLUÍDO
@@ -386,7 +412,24 @@ class clsPas{
         if ($retorno == '' && !empty($cod_fim_efetivo) && !empty($cod_fim_previsto) && ($cod_fim_efetivo <= $cod_fim_previsto || !empty($cod_fim_previsto)))
         {            
             $retorno = "4";
-        }                        
+        } 
+        
+        //ANDAMENTO FORA DO PRAZO. Deverá aparecer quando for prorrogado ou postergado.
+        if ($retorno == "2") {
+            $rs = pg_fetch_array(pg_query("SELECT cod_controle FROM tb_pas WHERE cod_pas = ".$cod_pas));            
+            if (limpar_comparacao($rs['cod_controle']) == 3 || limpar_comparacao($rs['cod_controle']) == 4) {
+                $retorno = "3";
+            }                
+        }
+
+        //NÃO CONCLUÍDA
+        //Alterar o status de "atrasada" para "não concluída" quando o ano mudar.            
+        if ($retorno == "5" || $retorno == "1") {                
+            $rs = pg_fetch_array(pg_query("SELECT DATE_PART('YEAR', CURRENT_TIMESTAMP) AS ano"));
+            if (limpar_comparacao($rs['ano']) > limpar_comparacao($_SESSION['ano_corrente'])) {
+                $retorno = "25";
+            }
+        }
        
         return $retorno;
     }
@@ -419,25 +462,42 @@ class clsPas{
             $sql .= " VALUES(".$this->cod_pas.", ".$_SESSION['cod_usuario'].", '".trim($this->txt_justificativa)."', ".$this->cod_autorizar.", ";
             $sql .= " ".$this->cod_usuario_autorizar.", ".$this->dt_autorizar." ) ";            
             pg_query($sql);
-
             Auditoria(99, "", $sql);
 
             $sql = "UPDATE tb_pas SET cod_controle = ".$this->cod_controle." WHERE cod_pas=".$this->cod_pas;
             pg_query($sql);
-
             Auditoria(87, "", $sql);
         } else {
+            //GRAVAR HISTÓRICO
+            $sql = "INSERT INTO tb_pas_controle_historico_2 (cod_pas, cod_usuario, dt_inclusao, txt_justificativa, cod_usuario_autorizar, cod_autorizar, dt_autorizar, 
+            cod_controle, cod_inicio_previsto, cod_fim_previsto)
+            SELECT cod_pas, cod_usuario, dt_inclusao, txt_justificativa, cod_usuario_autorizar, cod_autorizar, dt_autorizar, 
+            (SELECT cod_controle FROM tb_pas WHERE cod_pas=".$this->cod_pas."), (SELECT cod_inicio_previsto FROM tb_pas WHERE cod_pas=".$this->cod_pas."),
+            (SELECT cod_fim_previsto FROM tb_pas WHERE cod_pas=".$this->cod_pas.")  
+            FROM SESPLAN.tb_pas_controle_historico WHERE cod_pas = ".$this->cod_pas;
+            pg_query($sql);
+
             $sql = "UPDATE tb_pas_controle_historico SET cod_usuario = ".$_SESSION['cod_usuario'].", txt_justificativa = '".trim($this->txt_justificativa)."', ";
             $sql .= " cod_autorizar = ".$this->cod_autorizar.", cod_usuario_autorizar = ".$this->cod_usuario_autorizar.", dt_autorizar = ".$this->dt_autorizar;
             $sql .= " WHERE cod_pas = ".$this->cod_pas;
             pg_query($sql);
-
             Auditoria(101, "", $sql);
 
             $sql = "UPDATE tb_pas SET cod_controle = ".$this->cod_controle." ".$update." WHERE cod_pas=".$this->cod_pas;
             pg_query($sql);
 
             Auditoria(87, "", $sql);
+        }
+    }
+
+    public function fn_resultado_ano() {
+        $sql = "SELECT cod_pas FROM tb_pas_analise WHERE cod_pas = ".$this->cod_pas." AND 
+        cod_bimestre = ".$this->cod_fim_efetivo." AND txt_justificativa != ''";
+        $q = pg_query($sql);
+        if (pg_num_rows($q) == 0) {
+            return "0";
+        } else {
+            return "1";
         }
     }
 }   

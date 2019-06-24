@@ -14,6 +14,7 @@ if(isset($_REQUEST["acao"]))
         $cod_eixo = $_REQUEST['cod_eixo'];
 		$cod_perspectiva = $_REQUEST['cod_perspectiva'];
 		$codigo_diretriz = trim($_REQUEST['codigo_diretriz']);
+		$txt_titulo = trim($_REQUEST['txt_titulo']);
 	
 		$txt_diretriz = trim($txt_diretriz);
         $txt_descricao = trim($txt_descricao);            
@@ -26,7 +27,7 @@ if(isset($_REQUEST["acao"]))
 		}
 		if($erro == "" && $codigo_diretriz == "") {			
 			$erro = "O campo CÓDIGO DIRETRIZ não pode ser vazio.";
-		}
+		}		
         if($erro == "" && $txt_diretriz == "") {			
 			$erro = "O campo DIRETRIZ não pode ser vazio.";
 		}
@@ -48,10 +49,10 @@ if(isset($_REQUEST["acao"]))
 				$cod_diretriz = 1;
 			} else {
 				$cod_diretriz = intval($rs[0]) + 1;
-            }
-            
-            $sql = "INSERT INTO tb_diretriz(cod_diretriz, cod_eixo, cod_perspectiva, txt_diretriz, txt_descricao, cod_ativo, codigo_diretriz)";
-            $sql .= " VALUES (".$cod_diretriz.", ".$cod_eixo.", ".$cod_perspectiva.", '".$txt_diretriz."', '".$txt_descricao."', ".$cod_ativo.", '".trim($codigo_diretriz)."')";
+            }						
+
+            $sql = "INSERT INTO tb_diretriz(cod_diretriz, cod_eixo, cod_perspectiva, txt_diretriz, txt_descricao, cod_ativo, codigo_diretriz, txt_titulo)";
+            $sql .= " VALUES (".$cod_diretriz.", ".$cod_eixo.", ".$cod_perspectiva.", '".$txt_diretriz."', '".$txt_descricao."', ".$cod_ativo.", '".trim($codigo_diretriz)."', '".trim($txt_titulo)."')";
 			$resultado = @pg_query($sql);
 			if($resultado)
 			{
@@ -82,6 +83,7 @@ if(isset($_REQUEST["acao"]))
         $cod_eixo = $_REQUEST['cod_eixo'];
 		$cod_perspectiva = $_REQUEST['cod_perspectiva'];
 		$codigo_diretriz = trim($_REQUEST['codigo_diretriz']);
+		$txt_titulo = trim($_REQUEST['txt_titulo']);
 	
 		$txt_diretriz = trim($txt_diretriz);
         $txt_descricao = trim($txt_descricao);                    
@@ -110,8 +112,8 @@ if(isset($_REQUEST["acao"]))
 			}
 		}
 		
-		if($erro == "") {			
-            $sql = "UPDATE tb_diretriz SET cod_eixo = ".$cod_eixo.", cod_perspectiva = ".$cod_perspectiva.", txt_diretriz='".$txt_diretriz."', txt_descricao = '".$txt_descricao."', cod_ativo = ".$cod_ativo.", codigo_diretriz = '".trim($codigo_diretriz)."' WHERE cod_diretriz = ".$cod_diretriz;
+		if($erro == "") {							
+            $sql = "UPDATE tb_diretriz SET cod_eixo = ".$cod_eixo.", cod_perspectiva = ".$cod_perspectiva.", txt_diretriz='".$txt_diretriz."', txt_descricao = '".$txt_descricao."', cod_ativo = ".$cod_ativo.", codigo_diretriz = '".trim($codigo_diretriz)."', txt_titulo = '".trim($txt_titulo)."' WHERE cod_diretriz = ".$cod_diretriz;
 			$resultado = @pg_query($sql);
 			if($resultado)
 			{

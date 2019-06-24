@@ -57,6 +57,7 @@ $txt_pesquisa = $_REQUEST['txt_pesquisa'];
 						<thead>
 							<tr>
 								<th>Código Diretriz</th>
+								<th>Título Diretriz</th>
 								<th>Eixo</th>
 								<th>Perspectiva</th>
 								<th>Diretriz</th>
@@ -71,6 +72,7 @@ $txt_pesquisa = $_REQUEST['txt_pesquisa'];
 							?>
 								<tr>
 									<td><?php echo($rs1['codigo_diretriz']) ?></td>
+									<td><?php echo($rs1['txt_titulo']) ?></td>
 									<td><?php echo($rs1['txt_eixo']) ?></td>
 									<td><?php echo($rs1['txt_perspectiva']) ?></td>
 									<td><?php echo($rs1['txt_diretriz']) ?></td>

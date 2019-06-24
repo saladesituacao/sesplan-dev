@@ -286,9 +286,9 @@ function CalculoTotalVariacao() {
     var nr_mes_1 = $('#nr_mes_1' + cod_bimestre).val();
     var nr_mes_2 = $('#nr_mes_2' + cod_bimestre).val(); 
     var total_geral = 0;     
-    var total = parseInt(nr_mes_1) + parseInt(nr_mes_2);;
-    
-    if (nr_mes_1 != '' && nr_mes_2 != '') {       
+    var total = parseInt(nr_mes_1) + parseInt(nr_mes_2) || 0;       
+        
+    if (nr_mes_1 != '' && nr_mes_2 != '') {            
         if (parseInt(cod_acumulativo) == 1) {                       
             $.ajax({
                 type: 'POST',
@@ -318,12 +318,12 @@ function CalculoTotalVariacao() {
                 
         $('#cod_total' + cod_bimestre).val(total);        
         $('#cod_total_geral' + cod_bimestre).val(total_geral);        
-
-        if (total != '') {
-            var meta = $('#nr_meta' + cod_bimestre).val();
+        
+        if (total != '' || total.toString() == '0') {            
+            var meta = $('#nr_meta' + cod_bimestre).val();            
             var resultado = ((parseInt(total_geral) / parseInt(meta) - 1) * 100);
             resultado = parseFloat(resultado.toFixed(2));  
-            resultado = resultado.toString().replace(".", ",");          
+            resultado = resultado.toString().replace(".", ",");
 
             $('#txt_variacao' + cod_bimestre).val(resultado + '%');
             
@@ -336,7 +336,7 @@ function CalculoTotalVariacao() {
                         txt_variacao: resultado                        
                     },
                     async: false,
-                    success: function (data) {  
+                    success: function (data) {                          
                         var a_data = data.split('|'); 
 
                         var div = '<div id = "div_status">';

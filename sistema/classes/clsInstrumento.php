@@ -4,7 +4,8 @@ class clsInstrumento {
     public $txt_modulo;
     public $cod_ativo;
     public $cod_exibir_consulta;
-    public $cod_status;    
+    public $cod_status;   
+    public $txt_descricao; 
 
     public function ConsultaPorId($cod_modulo) {
         if (!empty($cod_modulo)) {
@@ -33,8 +34,8 @@ class clsInstrumento {
             $id = intval($rs[0]) + 1;
         }
 
-        $sql = "INSERT INTO tb_modulo(cod_modulo, txt_modulo, cod_ativo, cod_exibir_consulta) ";
-        $sql .= " VALUES(".$id.", '".trim($this->txt_modulo)."', ".$this->cod_ativo.", ".$this->cod_exibir_consulta.")";
+        $sql = "INSERT INTO tb_modulo(cod_modulo, txt_modulo, cod_ativo, cod_exibir_consulta, txt_descricao) ";
+        $sql .= " VALUES(".$id.", '".trim($this->txt_modulo)."', ".$this->cod_ativo.", ".$this->cod_exibir_consulta.", '".trim($this->txt_descricao)."')";
         pg_query($sql);
 
         Auditoria(12, "", $sql);
@@ -54,7 +55,7 @@ class clsInstrumento {
 
     public function AlterarModulo() {
         $sql = "UPDATE tb_modulo SET txt_modulo = '".trim($this->txt_modulo)."', cod_ativo = ".$this->cod_ativo;
-        $sql .= " , cod_exibir_consulta = ".$this->cod_exibir_consulta;
+        $sql .= " , cod_exibir_consulta = ".$this->cod_exibir_consulta.", txt_descricao = '".trim($this->txt_descricao)."'";
         $sql .= " WHERE cod_modulo = ".$this->cod_modulo;
         pg_query($sql);
 

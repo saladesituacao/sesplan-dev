@@ -40,6 +40,10 @@ $cod_urd_qtd = $_REQUEST['cod_urd_qtd'];
 $cod_hosp_qtd = $_REQUEST['cod_hosp_qtd'];
 $cod_regiao_tipo = $_REQUEST['cod_regiao_tipo'];
 $cod_acumulativo = $_REQUEST['cod_acumulativo'];
+$cod_bloquear_analise = $_REQUEST['cod_bloquear_analise'];
+$cod_ano = $_REQUEST['cod_ano'];
+$cod_tipo_hospital = $_REQUEST['cod_tipo_hospital'];
+$cod_hospital = $_REQUEST['cod_hospital'];
 
 if ($acao == 'incluir' || $acao == 'alterar') {
     switch(strtolower($txt_monitoramento)) {
@@ -58,6 +62,9 @@ if ($acao == 'incluir' || $acao == 'alterar') {
         case 'semestral':
             $qtd_campos = 12/6;        
             break;
+        case 'anual':
+            $qtd_campos = 12/12;        
+            break;
     }
     $ct = 1;
     while ($ct <= 12) {
@@ -70,7 +77,7 @@ if ($acao == 'incluir' || $acao == 'alterar') {
 }
 
 switch ($acao) {
-    case 'incluir':        
+    case 'incluir':                            
         $clsIndicador = new clsIndicador();
         $clsIndicador->cod_indicador = $cod_indicador;        
         $clsIndicador->cod_objetivo = $cod_objetivo;
@@ -86,6 +93,7 @@ switch ($acao) {
         $clsIndicador->cod_responsavel_2 = $cod_responsavel_2;
         $clsIndicador->cod_regiao = $cod_regiao;
         $clsIndicador->cod_acumulativo = $cod_acumulativo;  
+        $clsIndicador->cod_hospital = $cod_hospital;
         $clsIndicador->IncluirIndicador();
     
         js_go('default.php');
@@ -107,6 +115,7 @@ switch ($acao) {
         $clsIndicador->cod_responsavel_2 = $cod_responsavel_2;
         $clsIndicador->cod_regiao = $cod_regiao; 
         $clsIndicador->cod_acumulativo = $cod_acumulativo;
+        $clsIndicador->cod_hospital = $cod_hospital;
         $clsIndicador->AlterarIndicador($cod_id);
 
         //REDIRECIONAR
@@ -145,6 +154,16 @@ switch ($acao) {
         $clsIndicador->ExcluirDetalhe();
         break;
     
+    case 'salvar_temp':
+        $clsIndicador = new clsIndicador();
+        $clsIndicador->cod_id = $cod_id;
+        $clsIndicador->cod_periodo = $cod_periodo;
+        $clsIndicador->txt_analise = $txt_analise;
+        $clsIndicador->txt_analise_2 = $txt_analise_2;
+        $clsIndicador->txt_encaminhamento = $txt_encaminhamento;
+        $clsIndicador->SalvarTemp();  
+        break;
+
     case 'incluir_analise':
         $clsIndicador = new clsIndicador();
         $clsIndicador->cod_id = $cod_id;
@@ -179,7 +198,8 @@ switch ($acao) {
         $clsIndicador->hosp_dt_extracao_regiao = $_REQUEST['hosp_dt_extracao_regiao'];        
         $clsIndicador->hosp_cod_numerador_regiao_conv = $_REQUEST['hosp_cod_numerador_regiao_conv'];        
         $clsIndicador->hosp_cod_denominador_regiao_conv = $_REQUEST['hosp_cod_denominador_regiao_conv'];                
-        $clsIndicador->hosp_dt_extracao_regiao_conv = $_REQUEST['hosp_dt_extracao_regiao_conv'];        
+        $clsIndicador->hosp_dt_extracao_regiao_conv = $_REQUEST['hosp_dt_extracao_regiao_conv']; 
+        $clsIndicador->cod_bloquear_analise = $cod_bloquear_analise;       
         $clsIndicador->IncluirAnalise();
         break;
 
@@ -190,6 +210,20 @@ switch ($acao) {
         $clsIndicador->ExcluirAnalise();
         break;
 
+    case 'bloquear_analise':
+        $clsIndicador = new clsIndicador();
+        $clsIndicador->cod_id = $cod_id;
+        $clsIndicador->cod_periodo = $cod_periodo;
+        $clsIndicador->BloquearAnalise();        
+        break;
+
+    case 'desbloquear_analise':
+        $clsIndicador = new clsIndicador();
+        $clsIndicador->cod_id = $cod_id;
+        $clsIndicador->cod_periodo = $cod_periodo;
+        $clsIndicador->DesbloquearAnalise();        
+        break;    
+
     case "tabela_indicador":
         $clsIndicador = new clsIndicador();
         $retorno_array = $clsIndicador->ConsultaIndicador($cod_id);
@@ -198,12 +232,8 @@ switch ($acao) {
         
     case "incluir_periodo_atualizacao":
         $clsIndicador = new clsIndicador();
-        if (empty($cod_id)) {
-            $clsIndicador->IncluirPeriodoAtualizacao($dt_inicio, $dt_fim);
-        } else {
-            $clsIndicador->AlterarPeriodoAtualizacao($cod_id, $dt_inicio, $dt_fim);
-        }        
-        js_go("periodo_atualizacao.php");
+        $clsIndicador->IncluirPeriodoAtualizacao($cod_ano, $dt_inicio, $dt_fim);        
+        js_go("periodo.php");
         break;
 
     case "excluir_periodo_atualizacao":
@@ -269,6 +299,32 @@ switch ($acao) {
             } 
         }                
         echo(json_encode($arr));
+        break;
+
+    case 'form_hospital':
+        if ($cod_tipo_hospital > 0 ) {
+            $condicao = " AND cod_tipo = ".$cod_tipo_hospital;
+        }
+        $sql = "SELECT * FROM tb_hospital WHERE cod_ativo = 1 ".$condicao." ORDER BY cod_hospital";        
+        $query = pg_query($sql);        
+        $arr = array();
+
+        if(pg_num_rows($query) > 0) {
+            while($row = pg_fetch_assoc($query)) {
+                $arr[] = $row;  
+            } 
+        }                
+        echo(json_encode($arr));
+        break;
+
+    case 'form_hospital_alterar':
+        $sql = "SELECT cod_chave FROM tb_indicador_hospital WHERE cod_chave = ".$cod_id." AND cod_hospital = ".$cod_hospital;        
+        $query = pg_query($sql); 
+        if(pg_num_rows($query) > 0) {
+            echo("ok");
+        } else {
+            echo("");
+        }
         break;
 }
 ?>
